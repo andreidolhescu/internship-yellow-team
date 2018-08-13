@@ -7,7 +7,7 @@ https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubunt
 
 
 1. Clone the repo using this command:
-`git clone git@github.com:andreidolhescu/internship-blue-team.git`
+`git clone git@github.com:andreidolhescu/internship-yellow-team.git`
 
 2. Then go to the cloned directory and install dependences using this command:
 `npm install`
