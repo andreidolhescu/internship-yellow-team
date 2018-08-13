@@ -1,11 +1,8 @@
-
-Make sure you have PostgreSql, pgAdmin, NodeJs and NPM already installed before you start.
-PostgreSQL and pgAdmin tutorial: 
-http://www.indjango.com/ubuntu-install-postgresql-and-pgadmin/
-NodeJs and NPM tutorial:
-https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-16-04
-SSH Key tutorial:
-https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+Make sure you have PostgreSql, pgAdmin, NodeJs and NPM, Git already installed before you start.
+- PostgreSQL and pgAdmin tutorial: http://www.indjango.com/ubuntu-install-postgresql-and-pgadmin/
+- NodeJs and NPM tutorial: https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-16-04
+- SSH key tutorial: https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+- Git tutorial: https://www.atlassian.com/git/tutorials/install-git#linux
 
 
 1. Clone the repo using this command:
