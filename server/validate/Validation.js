@@ -4,7 +4,6 @@ module.exports.IsMail = function(email)
     return r0.test(String(email).toLowerCase());
 };
 
-
 module.exports.IsName = function(name)
 {
     var r1 = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/;
