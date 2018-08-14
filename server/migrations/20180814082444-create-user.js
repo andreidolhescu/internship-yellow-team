@@ -29,12 +29,10 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       Points: {
-        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
       PathforImage: {
-        allowNull: false,
         type: Sequelize.STRING
       },
       createdAt: {
