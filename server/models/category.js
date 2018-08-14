@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     {
     	allowNull: false,
     	type: DataTypes.STRING,
-    }
+    },
   }, {});
   Category.associate = function(models) {
     // associations can be defined here
