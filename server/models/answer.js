@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     	foreignKey: 'quizoptionId',
     	onDelete: 'CASCADE'
     });
-    Answer.belongsTo(models.Users, {
+    Answer.belongsTo(models.User, {
     	foreignKey: 'userId',
     	onDelete: 'CASCADE'
     });

@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     	onDelete: 'CASCADE'
     });
 
-  	Chapter.hasMany(models.Question, {
+  	Chapter.hasMany(models.Quiz, {
   		foreignKey: 'chapterId',
   		as: 'questions'
   	});
