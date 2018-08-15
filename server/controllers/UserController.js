@@ -40,7 +40,7 @@ module.exports = {
                   });
     },
 
-    // get all entries from Test table
+    // get all entries from User table
     list (req, res) {
         return UserModel
             .all()
@@ -51,7 +51,7 @@ module.exports = {
     // get an entry by id
     getById (req, res) {
         return UserModel
-            .findById(req.params.testId)
+            .findById(req.params.userId)
             .then(user => {
                 if (!user) {
                   return res.status(404).send({
@@ -66,7 +66,7 @@ module.exports = {
     // update an entry
     update (req, res) {
         return UserModel
-            .findById(req.params.testId)
+            .findById(req.params.userId)
             .then(user => {
                 if (!user) {
                     return res.status(404).send({
@@ -87,7 +87,7 @@ module.exports = {
     // delete an entry
     destroy (req, res) {
         return TestModel
-            .findById(req.params.testId)
+            .findById(req.params.userId)
             .then(user => {
                 if (!user) {
                     return res.status(404).send({
