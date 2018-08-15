@@ -4,7 +4,7 @@ var err;
 validate.IsMail()
 
 module.exports = {
-    // insert name into Test table
+    // insert user into user table
     create (req, res) {
         err = ""
 
