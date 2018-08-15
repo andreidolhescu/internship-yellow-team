@@ -12,6 +12,6 @@ module.exports.IsName = function(name)
 
 module.exports.IsPassword = function(password)
 {
-    var r2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#_])[A-Za-z\d$@$!%*?&#_]{8,15}/;
+    var r2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?,.:;&#_])[A-Za-z\d$@$!%*?,.:;&#_]{8,15}$/;
     return r2.test(String(password));
 }

@@ -20,10 +20,10 @@ module.exports = (app) => {
     app.delete('/api/test/:testId', testController.destroy);
 
 
-    app.post('/api/user', UserController.create);
-    app.get('/api/user', UserController.list);
-    app.get('/api/user/:userId', UserController.getById);
-    app.put('/api/user/:userId', UserController.update);
-    app.delete('/api/user/:userId', UserController.destroy);
+    app.post('/api/register', UserController.create);
+    app.get('/api/register', UserController.list);
+    app.get('/api/register/:userId', UserController.getById);
+    app.put('/api/register/:userId', UserController.update);
+    app.delete('/api/register/:userId', UserController.destroy);
     // end examples
 }
