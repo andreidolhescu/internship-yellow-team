@@ -3,6 +3,7 @@ const cors = require('cors'); // do not remove this
 const testController = require('../controllers').testController;
 const UserController = require('../controllers').UserController;
 const CategoryController = require('../controllers').CategoryController;
+const ChapterController = require('../controllers').ChapterController;
 
 module.exports = (app) => {
 
@@ -32,6 +33,12 @@ module.exports = (app) => {
     app.get('/api/category/:id', CategoryController.getById);
     app.put('/api/category/:id', CategoryController.update);
     app.delete('/api/category/:id', CategoryController.destroy);
+
+    app.post('/api/chapter', ChapterController.create);
+    app.get('/api/chapter', ChapterController.list);
+    app.get('/api/chapter/:chapterId', ChapterController.getById);
+    app.put('/api/chapter/:chapterId', ChapterController.update);
+    app.delete('/api/chapter/:chapterId', ChapterController.destroy);
 
     // end examples
 }

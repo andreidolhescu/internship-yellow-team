@@ -2,7 +2,6 @@ const UserModel = require('../models').User;
 const bcrypt = require('bcrypt');
 var validate = require('../validate/Validation');
 var err;
-validate.IsMail()
 
 module.exports = {
     // insert user into user table

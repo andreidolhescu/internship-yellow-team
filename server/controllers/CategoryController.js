@@ -16,7 +16,8 @@ module.exports = {
 
             CategoryModel.findAll({
                 where: {
-                    CategoryName: req.body.CategoryName
+                    CategoryName: req.body.CategoryName,
+                    Background: req.body.Background
                 }
             }).then((category => {
                 if (category.length) {
@@ -96,7 +97,8 @@ module.exports = {
                         if (String(err) == String("")) {
                             return category
                                 .update({
-                                    CategoryName: req.body.CategoryName
+                                    CategoryName: req.body.CategoryName,
+                                    Background: req.body.Background
                                 })
                                 .then(() => res.status(200).send(category))
                                 .catch((error) => res.status(400).send(error));
