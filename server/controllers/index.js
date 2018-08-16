@@ -5,6 +5,7 @@ const CourseController = require('./CourseController');
 const ChapterController = require('./ChapterController');
 const QuizController = require('./QuizController');
 const QuizOptionsController = require('./QuizOptionsController');
+const AnswerController = require('./AnswerController');
 // export all your controllers here
 
 module.exports = {
@@ -15,5 +16,6 @@ module.exports = {
     ChapterController,
     QuizController,
     QuizOptionsController,
+    AnswerController,
 };
 // Test

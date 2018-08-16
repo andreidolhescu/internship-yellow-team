@@ -7,6 +7,7 @@ const CourseController = require('../controllers').CourseController;
 const ChapterController = require('../controllers').ChapterController;
 const QuizController = require('../controllers').QuizController;
 const QuizOptionsController = require('../controllers').QuizOptionsController;
+const AnswerController = require('../controllers').AnswerController;
 
 module.exports = (app) => {
 
@@ -66,6 +67,13 @@ module.exports = (app) => {
     app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.update);
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.destroy);
     
+    //routes for answer controller -> WHAT ROUTES??????
+    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId/answer', QuizOptionsController.create);
+    /*app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions', QuizOptionsController.list);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.getById);
+    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.update);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.destroy);
+*/
 
     // end examples
 }
