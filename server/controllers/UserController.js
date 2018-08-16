@@ -65,6 +65,18 @@ module.exports = {
 
     // update an entry
     update (req, res) {
+        err = ""
+
+        if(!validate.IsName(req.body.FirstName))
+            err += "Invalid First Name!"
+        if(!validate.IsName(req.body.LastName))
+            err += "Invalid Last Name!"
+        if(!validate.IsPassword(req.body.Password))
+            err += "Invalid Password!"
+        if(!validate.IsMail(req.body.Email))
+            err += "Invalid Email!"
+
+
         return UserModel
             .findById(req.params.userId)
             .then(user => {
@@ -74,12 +86,26 @@ module.exports = {
                     });
                 }
 
+                if(String(err) == String(""))
+        {
                 return user
                     .update({
-                        name: req.body.name || user.name,
+                        FirstName: req.body.FirstName,
+                        LastName: req.body.LastName,
+                        Password: req.body.Password,
+                        Email: req.body.Email,
+                        UserRole: req.body.UserRole,
+                        Points: req.body.Points,
+                        PathforImage: req.body.PathforImage
                     })
                     .then(() => res.status(200).send(user))
                     .catch((error) => res.status(400).send(error));
+                }
+                else
+                    return res.status(404).send({
+                    message: err,
+                  });
+                    
             })
             .catch((error) => res.status(400).send(error));
     },
