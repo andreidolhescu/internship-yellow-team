@@ -4,6 +4,7 @@ const testController = require('../controllers').testController;
 const UserController = require('../controllers').UserController;
 const CategoryController = require('../controllers').CategoryController;
 const ChapterController = require('../controllers').ChapterController;
+const LoginController = require('../controllers').LoginController;
 
 module.exports = (app) => {
 
@@ -39,6 +40,8 @@ module.exports = (app) => {
     app.get('/api/chapter/:chapterId', ChapterController.getById);
     app.put('/api/chapter/:chapterId', ChapterController.update);
     app.delete('/api/chapter/:chapterId', ChapterController.destroy);
+
+    app.post('/api/login', LoginController.login);
 
     // end examples
 }
