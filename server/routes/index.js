@@ -2,6 +2,7 @@ const cors = require('cors'); // do not remove this
 
 const testController = require('../controllers').testController;
 const UserController = require('../controllers').UserController;
+const CategoryController = require('../controllers').CategoryController;
 
 module.exports = (app) => {
 
@@ -25,5 +26,12 @@ module.exports = (app) => {
     app.get('/api/user/:userId', UserController.getById);
     app.put('/api/user/:userId', UserController.update);
     app.delete('/api/user/:userId', UserController.destroy);
+
+    app.post('/api/category', CategoryController.create);
+    app.get('/api/category', CategoryController.list);
+    app.get('/api/category/:id', CategoryController.getById);
+    app.put('/api/category/:id', CategoryController.update);
+    app.delete('/api/category/:id', CategoryController.destroy);
+
     // end examples
 }

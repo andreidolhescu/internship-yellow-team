@@ -1,4 +1,5 @@
 const UserModel = require('../models').User;
+const bcrypt = require('bcrypt');
 var validate = require('../validate/Validation');
 var err;
 validate.IsMail()
@@ -33,11 +34,12 @@ module.exports = {
 
         if(String(err) == String(""))
         {
+            var hash = bcrypt.hashSync(req.body.Password, 10);
             return UserModel
             .create({
                 FirstName: req.body.FirstName,
                 LastName: req.body.LastName,
-                Password: req.body.Password,
+                Password: hash,
                 Email: req.body.Email,
                 UserRole: req.body.UserRole,
                 Points: req.body.Points,
@@ -115,11 +117,12 @@ module.exports = {
 
                 if(String(err) == String(""))
         {
+                var hash = bcrypt.hashSync(req.body.Password, 10);
                 return user
                     .update({
                         FirstName: req.body.FirstName,
                         LastName: req.body.LastName,
-                        Password: req.body.Password,
+                        Password: hash,
                         Email: req.body.Email,
                         UserRole: req.body.UserRole,
                         Points: req.body.Points,
