@@ -11,6 +11,9 @@ module.exports = {
       CategoryName: {
         type: Sequelize.STRING
       },
+      Backgroung: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
