@@ -5,7 +5,20 @@ validate.IsMail()
 
 module.exports = {
     // insert user into user table
-    create (req, res) {
+    create: (req, res) => {
+        return UserModel.findAll({
+            where: {
+                Email: req.body.Email
+            }
+        })
+        .then((user => {
+            if(user.length) {
+                return res.status(400).send({
+                    message: "User already exists!"
+                });
+            }
+
+        
         err = ""
 
         if(!validate.IsName(req.body.FirstName))
@@ -28,8 +41,7 @@ module.exports = {
                 Email: req.body.Email,
                 UserRole: req.body.UserRole,
                 Points: req.body.Points,
-                PathforImage: req.body.PathforImage,
-
+                PathforImage: req.body.PathforImage
             })
             .then(todo => res.status(201).send(todo))
             .catch(error => res.status(400).send(error));
@@ -38,7 +50,10 @@ module.exports = {
             return res.status(404).send({
                     message: err,
                   });
+        }))
+        .catch(error => res.status(400).send(error))
     },
+    
 
     // get all entries from User table
     list (req, res) {
