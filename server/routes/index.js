@@ -3,7 +3,11 @@ const cors = require('cors'); // do not remove this
 const testController = require('../controllers').testController;
 const UserController = require('../controllers').UserController;
 const CategoryController = require('../controllers').CategoryController;
+const CourseController = require('../controllers').CourseController;
 const ChapterController = require('../controllers').ChapterController;
+const QuizController = require('../controllers').QuizController;
+const QuizOptionsController = require('../controllers').QuizOptionsController;
+const AnswerController = require('../controllers').AnswerController;
 
 module.exports = (app) => {
 
@@ -28,17 +32,48 @@ module.exports = (app) => {
     app.put('/api/user/:userId', UserController.update);
     app.delete('/api/user/:userId', UserController.destroy);
 
+    //routes for category controller
     app.post('/api/category', CategoryController.create);
     app.get('/api/category', CategoryController.list);
-    app.get('/api/category/:id', CategoryController.getById);
-    app.put('/api/category/:id', CategoryController.update);
-    app.delete('/api/category/:id', CategoryController.destroy);
+    app.get('/api/category/:categoryId', CategoryController.getById);
+    app.put('/api/category/:categoryId', CategoryController.update);
+    app.delete('/api/category/:categoryId', CategoryController.destroy);
 
-    app.post('/api/chapter', ChapterController.create);
-    app.get('/api/chapter', ChapterController.list);
-    app.get('/api/chapter/:chapterId', ChapterController.getById);
-    app.put('/api/chapter/:chapterId', ChapterController.update);
-    app.delete('/api/chapter/:chapterId', ChapterController.destroy);
+    //routes for course controller
+    app.post('/api/category/:categoryId/course', CourseController.create);
+    app.get('/api/category/:categoryId/course', CourseController.list);
+    app.get('/api/category/:categoryId/course/:courseId', CourseController.getById);
+    app.put('/api/category/:categoryId/course/:courseId', CourseController.update);
+    app.delete('/api/category/:categoryId/course/:courseId', CourseController.destroy);
+
+    //routes for chapter controller
+    app.post('/api/category/:categoryId/course/:courseId/chapter', ChapterController.create);
+    app.get('/api/category/:categoryId/course/:courseId/chapter', ChapterController.list);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId', ChapterController.getById);
+    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId', ChapterController.update);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId', ChapterController.destroy);
+
+    //routes for quiz controller
+    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz', QuizController.create);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz', QuizController.list);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', QuizController.getById);
+    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', QuizController.update);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', QuizController.destroy);
+
+    //routes for quiz options controller
+    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions', QuizOptionsController.create);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions', QuizOptionsController.list);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.getById);
+    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.update);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.destroy);
+    
+    //routes for answer controller -> WHAT ROUTES??????
+    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId/answer', QuizOptionsController.create);
+    /*app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions', QuizOptionsController.list);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.getById);
+    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.update);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.destroy);
+*/
 
     // end examples
 }
