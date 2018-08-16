@@ -36,9 +36,9 @@ module.exports = (app) => {
 
     app.post('/api/chapter', ChapterController.create);
     app.get('/api/chapter', ChapterController.list);
-    app.get('/api/chapter/:id', ChapterController.getById);
-    app.put('/api/chapter/:id', ChapterController.update);
-    app.delete('/api/chapter/:id', ChapterController.destroy);
+    app.get('/api/chapter/:chapterId', ChapterController.getById);
+    app.put('/api/chapter/:chapterId', ChapterController.update);
+    app.delete('/api/chapter/:chapterId', ChapterController.destroy);
 
     // end examples
 }

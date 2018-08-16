@@ -1,7 +1,7 @@
 const ChapterModel = require('../models').Chapter;
 
 module.exports = {
-    // insert user into chapter table
+    // insert chapter into chapter table
     create (req, res) {
         return ChapterModel
             .create({
@@ -13,7 +13,7 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    // get all entries from Test table
+    // get all entries from Chapter table
     list (req, res) {
         return ChapterModel
             .all()
@@ -24,7 +24,7 @@ module.exports = {
     // get an entry by id
     getById (req, res) {
         return ChapterModel
-            .findById(req.params.testId)
+            .findById(req.params.chapterId)
             .then(chapter => {
                 if (!chapter) {
                   return res.status(404).send({
