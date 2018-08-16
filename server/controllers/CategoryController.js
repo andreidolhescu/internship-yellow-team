@@ -1,0 +1,118 @@
+// this controller it's just an example, 
+// remove or keep it for guidance
+
+const CategoryModel = require('../models').Category;
+var err = '';
+
+
+module.exports = {
+    create(req, res) {
+        err = '';
+
+        if (String(req.body.CategoryName).length == 0)
+            err += 'Undefined Category.';
+
+        if (String(err).length == 0) {
+
+            CategoryModel.findAll({
+                where: {
+                    CategoryName: req.body.CategoryName
+                }
+            }).then((category => {
+                if (category.length) {
+                    return res.status(404).send({
+                        message: "Category already exist",
+                    });
+                }
+                return CategoryModel
+                    .create(
+                        {
+                            CategoryName: req.body.CategoryName
+                        })
+                    .then(todo => res.status(201).send(todo))
+                    .catch(error => res.status(400).send(error));
+            }))
+        }
+        else {
+            return res.status(404).send({
+                message: err,
+            });
+        }
+    },
+
+    // get all entries from Test table
+    list(req, res) {
+        return CategoryModel
+            .all()
+            .then(todos => res.status(200).send(todos))
+            .catch(error => res.status(400).send(error));
+    },
+
+    // get an entry by id
+    getById(req, res) {
+        return CategoryModel
+            .findById(req.params.testId)
+            .then(test => {
+                if (!test) {
+                    return res.status(404).send({
+                        message: 'Test Not Found',
+                    });
+                }
+                return res.status(200).send(test);
+            })
+            .catch(error => res.status(400).send(error));
+    },
+
+    // update an entry
+    update(req, res) {
+        err = '';
+
+        if (String(req.body.CategoryName).length == 0)
+            err += 'Undefined Category.';
+
+        if (String(err).length == 0) {
+            CategoryModel
+                .findById(req.params.id)
+                .then(test => {
+                    if (!test) {
+                        return res.status(404).send({
+                            message: 'Category Not Found',
+                        });
+                    }
+
+                    return test
+                        .update({
+                            CategoryName: req.body.CategoryName,
+                        })
+                        .then(() => res.status(200).send(test))
+                        .catch((error) => res.status(400).send(error));
+                })
+                .catch((error) => res.status(400).send(error));
+        }
+        else {
+            return res.status(404).send({
+                message: err,
+            });
+        }
+    },
+
+    // delete an entry
+    destroy(req, res) {
+        return CategoryModel
+            .findById(req.params.testId)
+            .then(test => {
+                if (!test) {
+                    return res.status(404).send({
+                        message: 'Test Not Found',
+                    });
+                }
+
+                return test
+                    .destroy()
+                    .then(() => res.status(200).send())
+                    .catch((error) => res.status(400).send(error));
+            })
+            .catch((error) => res.status(400).send(error));
+    }
+
+};
