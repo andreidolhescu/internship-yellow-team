@@ -16,11 +16,6 @@ module.exports = {
                     message: "Course already exists!"
                 });
             }
-        console.log(req.body.Summary)
-        console.log(req.body.Description)
-        console.log(req.body.Tags)
-        console.log(req.body.Image)
-        console.log(req.params.categoryId)
         return CourseModel.create({
             Title: req.body.Title,
             Summary: req.body.Summary,

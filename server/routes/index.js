@@ -5,6 +5,7 @@ const UserController = require('../controllers').UserController;
 const CategoryController = require('../controllers').CategoryController;
 const CourseController = require('../controllers').CourseController;
 const ChapterController = require('../controllers').ChapterController;
+const QuizController = require('../controllers').QuizController;
 
 module.exports = (app) => {
 
@@ -49,6 +50,14 @@ module.exports = (app) => {
     app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId', ChapterController.getById);
     app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId', ChapterController.update);
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId', ChapterController.destroy);
+
+    //routes for quiz controller
+    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz', QuizController.create);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz', QuizController.list);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', QuizController.getById);
+    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', QuizController.update);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', QuizController.destroy);
+
 
     // end examples
 }
