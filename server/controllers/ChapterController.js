@@ -7,7 +7,7 @@ module.exports = {
             .create({
                 Title: req.body.Title,
                 Content: req.body.Content,
-                courseId: req.body.courseId
+                courseId: req.params.courseId
             })
             .then(todo => res.status(201).send(todo))
             .catch(error => res.status(400).send(error));
@@ -51,7 +51,7 @@ module.exports = {
                     .update({
                         Title: req.body.Title,
 			            Content: req.body.Content,
-			            courseId: req.body.courseId
+			            courseId: req.params.courseId
                     })
                     .then(() => res.status(200).send(chapter))
                     .catch((error) => res.status(400).send(error));
