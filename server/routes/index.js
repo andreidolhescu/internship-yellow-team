@@ -44,11 +44,11 @@ module.exports = (app) => {
     app.delete('/api/category/:categoryId/course/:courseId', CourseController.destroy);
 
     //routes for chapter controller
-    app.post('/api/chapter', ChapterController.create);
-    app.get('/api/chapter', ChapterController.list);
-    app.get('/api/chapter/:chapterId', ChapterController.getById);
-    app.put('/api/chapter/:chapterId', ChapterController.update);
-    app.delete('/api/chapter/:chapterId', ChapterController.destroy);
+    app.post('/api/category/:categoryId/course/:courseId/chapter', ChapterController.create);
+    app.get('/api/category/:categoryId/course/:courseId/chapter', ChapterController.list);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId', ChapterController.getById);
+    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId', ChapterController.update);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId', ChapterController.destroy);
 
     // end examples
 }
