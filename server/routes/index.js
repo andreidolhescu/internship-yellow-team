@@ -3,6 +3,7 @@ const cors = require('cors'); // do not remove this
 const testController = require('../controllers').testController;
 const UserController = require('../controllers').UserController;
 const CategoryController = require('../controllers').CategoryController;
+const CourseController = require('../controllers').CourseController;
 const ChapterController = require('../controllers').ChapterController;
 
 module.exports = (app) => {
@@ -28,12 +29,21 @@ module.exports = (app) => {
     app.put('/api/user/:userId', UserController.update);
     app.delete('/api/user/:userId', UserController.destroy);
 
+    //routes for category controller
     app.post('/api/category', CategoryController.create);
     app.get('/api/category', CategoryController.list);
-    app.get('/api/category/:id', CategoryController.getById);
-    app.put('/api/category/:id', CategoryController.update);
-    app.delete('/api/category/:id', CategoryController.destroy);
+    app.get('/api/category/:categoryId', CategoryController.getById);
+    app.put('/api/category/:categoryId', CategoryController.update);
+    app.delete('/api/category/:categoryId', CategoryController.destroy);
 
+    //routes for course controller
+    app.post('/api/category/:categoryId/course', CourseController.create);
+    app.get('/api/category/:categoryId/course', CourseController.list);
+    app.get('/api/category/:categoryId/course/:courseId', CourseController.getById);
+    app.put('/api/category/:categoryId/course/:courseId', CourseController.update);
+    app.delete('/api/category/:categoryId/course/:courseId', CourseController.destroy);
+
+    //routes for chapter controller
     app.post('/api/chapter', ChapterController.create);
     app.get('/api/chapter', ChapterController.list);
     app.get('/api/chapter/:chapterId', ChapterController.getById);

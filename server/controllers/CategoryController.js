@@ -17,7 +17,6 @@ module.exports = {
             CategoryModel.findAll({
                 where: {
                     CategoryName: req.body.CategoryName,
-                    Background: req.body.Background
                 }
             }).then((category => {
                 if (category.length) {
@@ -28,7 +27,8 @@ module.exports = {
                 return CategoryModel
                     .create(
                         {
-                            CategoryName: req.body.CategoryName
+                            CategoryName: req.body.CategoryName,
+                            Background: req.body.Background
                         })
                     .then(todo => res.status(201).send(todo))
                     .catch(error => res.status(400).send(error));
@@ -52,14 +52,14 @@ module.exports = {
     // get an entry by id
     getById(req, res) {
         return CategoryModel
-            .findById(req.params.testId)
-            .then(test => {
-                if (!test) {
+            .findById(req.params.categoryId)
+            .then(category => {
+                if (!category) {
                     return res.status(404).send({
-                        message: 'Test Not Found',
+                        message: 'Category Not Found',
                     });
                 }
-                return res.status(200).send(test);
+                return res.status(200).send(category);
             })
             .catch(error => res.status(400).send(error));
     },
@@ -86,7 +86,7 @@ module.exports = {
                 }
 
                 return CategoryModel
-                    .findById(req.params.id)
+                    .findById(req.params.categoryId)
                     .then(category => {
                         if (!category) {
                             return res.status(404).send({
@@ -114,46 +114,14 @@ module.exports = {
     },
 
 
-    /*update(req, res) {
-        err = '';
-
-        if (String(req.body.CategoryName).length == 0)
-            err += 'Undefined Category.';
-
-        if (String(err).length == 0) {
-            CategoryModel
-                .findById(req.params.id)
-                .then(test => {
-                    if (!test) {
-                        return res.status(404).send({
-                            message: 'Category Not Found',
-                        });
-                    }
-
-                    return test
-                        .update({
-                            CategoryName: req.body.CategoryName,
-                        })
-                        .then(() => res.status(200).send(test))
-                        .catch((error) => res.status(400).send(error));
-                })
-                .catch((error) => res.status(400).send(error));
-        }
-        else {
-            return res.status(404).send({
-                message: err,
-            });
-        }
-    },*/
-
     // delete an entry
     destroy(req, res) {
         return CategoryModel
-            .findById(req.params.testId)
-            .then(test => {
-                if (!test) {
+            .findById(req.params.categoryId)
+            .then(category => {
+                if (!cateogry) {
                     return res.status(404).send({
-                        message: 'Test Not Found',
+                        message: 'Category Not Found',
                     });
                 }
 
