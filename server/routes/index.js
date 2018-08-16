@@ -3,6 +3,8 @@ const cors = require('cors'); // do not remove this
 const testController = require('../controllers').testController;
 const UserController = require('../controllers').UserController;
 const CategoryController = require('../controllers').CategoryController;
+const ImageController = require('../controllers').ImageController;
+
 
 module.exports = (app) => {
 
@@ -34,4 +36,17 @@ module.exports = (app) => {
     app.delete('/api/category/:id', CategoryController.destroy);
 
     // end examples
+
+
+    //============= image section ===========
+
+
+    app.post('/api/image', ImageController.create);
+    app.get('/api/image', ImageController.list);
+    app.get('/api/image/:id', ImageController.getById);
+    app.put('/api/image/:id', ImageController.update);
+    app.delete('/api/image/:id', ImageController.destroy);
+
+    //========================================
+    
 }
