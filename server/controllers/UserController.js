@@ -142,7 +142,7 @@ module.exports = {
 
     // delete an entry
     destroy (req, res) {
-        return TestModel
+        return UserModel
             .findById(req.params.userId)
             .then(user => {
                 if (!user) {
