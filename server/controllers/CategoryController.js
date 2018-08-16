@@ -64,7 +64,55 @@ module.exports = {
     },
 
     // update an entry
+
     update(req, res) {
+        err = '';
+
+        if (String(req.body.CategoryName).length == 0)
+            err += 'Undefined Category.';
+
+
+            CategoryModel.findAll({
+            where: {
+                CategoryName: req.body.CategoryName
+            }
+        })
+            .then((category => {
+                if (category.length) {
+                    return res.status(400).send({
+                        message: "Category already exists!"
+                    });
+                }
+
+                return CategoryModel
+                    .findById(req.params.id)
+                    .then(category => {
+                        if (!category) {
+                            return res.status(404).send({
+                                message: 'Category Not Found',
+                            });
+                        }
+
+                        if (String(err) == String("")) {
+                            return category
+                                .update({
+                                    CategoryName: req.body.CategoryName
+                                })
+                                .then(() => res.status(200).send(category))
+                                .catch((error) => res.status(400).send(error));
+                        }
+                        else
+                            return res.status(404).send({
+                                message: err,
+                            });
+
+                    })
+            }))
+            .catch((error) => res.status(400).send(error));
+    },
+
+
+    /*update(req, res) {
         err = '';
 
         if (String(req.body.CategoryName).length == 0)
@@ -94,7 +142,7 @@ module.exports = {
                 message: err,
             });
         }
-    },
+    },*/
 
     // delete an entry
     destroy(req, res) {
