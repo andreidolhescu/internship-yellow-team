@@ -14,7 +14,7 @@ module.exports = {
         .then((user => {
             if(user.length) {
                 return res.status(400).send({
-                    message: "User already exists!"
+                    message: "Email already exists!"
                 });
             }
 
@@ -92,6 +92,18 @@ module.exports = {
             err += "Invalid Email!"
 
 
+        UserModel.findAll({
+            where: {
+                Email: req.body.Email
+            }
+        })
+        .then((user => {
+            if(user.length) {
+                return res.status(400).send({
+                    message: "Email already exists!"
+                });
+            }
+
         return UserModel
             .findById(req.params.userId)
             .then(user => {
@@ -122,6 +134,7 @@ module.exports = {
                   });
                     
             })
+        }))
             .catch((error) => res.status(400).send(error));
     },
 
