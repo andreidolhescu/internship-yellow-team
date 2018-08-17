@@ -119,7 +119,7 @@ module.exports = {
         return CategoryModel
             .findById(req.params.categoryId)
             .then(category => {
-                if (!cateogry) {
+                if (!category) {
                     return res.status(404).send({
                         message: 'Category Not Found',
                     });

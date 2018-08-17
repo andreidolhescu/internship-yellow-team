@@ -1,6 +1,8 @@
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const jsonwebtoken = require('jsonwebtoken');
+const config = require('./server/config/config.json')
 
 // Set up the express app
 const app = express();
@@ -14,6 +16,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Require our routes into the application.
 require('./server/routes')(app);
+
+app.set('superSecret', config.secret); // secret variable
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('*', (req, res) => res.status(200).send({

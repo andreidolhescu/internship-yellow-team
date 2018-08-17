@@ -5,6 +5,7 @@ const UserController = require('../controllers').UserController;
 const CategoryController = require('../controllers').CategoryController;
 const CourseController = require('../controllers').CourseController;
 const ChapterController = require('../controllers').ChapterController;
+const LoginController = require('../controllers').LoginController;
 const QuizController = require('../controllers').QuizController;
 const QuizOptionsController = require('../controllers').QuizOptionsController;
 const AnswerController = require('../controllers').AnswerController;
@@ -26,7 +27,7 @@ module.exports = (app) => {
     app.delete('/api/test/:testId', testController.destroy);
 
 
-    app.post('/api/register', UserController.create);
+    app.post('/api/register', UserController.register);
     app.get('/api/user', UserController.list);
     app.get('/api/user/:userId', UserController.getById);
     app.put('/api/user/:userId', UserController.update);
@@ -74,6 +75,8 @@ module.exports = (app) => {
     app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.update);
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.destroy);
 */
+
+    app.post('/api/login', LoginController.login);
 
     // end examples
 }
