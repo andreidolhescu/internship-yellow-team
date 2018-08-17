@@ -4,20 +4,41 @@ module.exports = {
     // insert chapter into chapter table
     create (req, res) {
         return ChapterModel
-            .create({
-                Title: req.body.Title,
-                Content: req.body.Content,
+            .findAll({
+            where: {
                 courseId: req.params.courseId
-            })
-            .then(todo => res.status(201).send(todo))
+                }
+        })
+            .then(chapter => {
+                if(chapter == "")
+                {
+                    return res.status(404).send({
+                    message: 'There are no chapters for this course!',
+
+                    });
+                }
+                if (!chapter) {
+                  return res.status(404).send({
+                    message: 'Chapter not found!',
+                  });
+                }
+                return res.status(200).send(chapter);
+              })
             .catch(error => res.status(400).send(error));
     },
 
-    // get all entries from Chapter table
+    // get all entries from Chapter table for a courseid
     list (req, res) {
         return ChapterModel
-            .all()
-            .then(todos => res.status(200).send(todos))
+            .findById(req.params.courseId)
+            .then(course => {
+                if (!course) {
+                  return res.status(404).send({
+                    message: 'Course Not Found',
+                  });
+                }
+                return res.status(200).send(course);
+              })
             .catch(error => res.status(400).send(error));
     },
 
@@ -36,7 +57,7 @@ module.exports = {
               .catch(error => res.status(400).send(error));
     },
 
-    // update an entry
+    // update an entry -> TODO: Only for admins
     update (req, res) {
         return ChapterModel
             .findById(req.params.chapterId)
@@ -59,7 +80,7 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry
+    // delete an entry -> TODO: Only for Admins
     destroy (req, res) {
         return ChapterModel
             .findById(req.params.chapterId)

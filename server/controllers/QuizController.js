@@ -9,7 +9,7 @@ module.exports = {
         })
         .then(todo => res.status(201).send(todo))
         .catch(error => {
-        	console.log("dssdv", error)
+        	console.log("Eroare: ", error)
         	return res.status(400).send(error);
         });
     },
@@ -17,8 +17,26 @@ module.exports = {
     // get all entries from Quiz table
     list (req, res) {
         return QuizModel
-            .all()
-            .then(todos => res.status(200).send(todos))
+            .findAll({
+            where: {
+                chapterId: req.params.chapterId
+                }
+        })
+            .then(quiz => {
+                if(quiz == "")
+                {
+                    return res.status(404).send({
+                    message: 'There are not quizzes for this chapter!',
+
+                    });
+                }
+                if (!quiz) {
+                  return res.status(404).send({
+                    message: 'Quiz not found!',
+                  });
+                }
+                return res.status(200).send(quiz);
+              })
             .catch(error => res.status(400).send(error));
     },
 
@@ -37,7 +55,7 @@ module.exports = {
               .catch(error => res.status(400).send(error));
     },
 
-    // update an entry
+    // update an entry -> TODO: Only for admins
     update (req, res) {
         return QuizModel
             .findById(req.params.quizId)
@@ -61,7 +79,7 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry
+    // delete an entry -> TODO: Only for admins
     destroy (req, res) {
         return QuizModel
             .findById(req.params.quizId)

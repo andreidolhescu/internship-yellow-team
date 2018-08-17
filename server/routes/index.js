@@ -77,6 +77,6 @@ module.exports = (app) => {
 */
 
     app.post('/api/login', LoginController.login);
-
+    app.get('/api/login', LoginController.GetToken, UserController.list);
     // end examples
 }
