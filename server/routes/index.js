@@ -9,6 +9,7 @@ const LoginController = require('../controllers').LoginController;
 const QuizController = require('../controllers').QuizController;
 const QuizOptionsController = require('../controllers').QuizOptionsController;
 const AnswerController = require('../controllers').AnswerController;
+const MailController = require('../controllers').MailController;
 
 module.exports = (app) => {
 
@@ -78,5 +79,8 @@ module.exports = (app) => {
 
     app.post('/api/login', LoginController.login);
     app.get('/api/login', LoginController.GetToken, UserController.list);
+
+    app.post('/api/mail',MailController.SendMail);
+    app.get('/api/mail',MailController.GetOK);
     // end examples
 }

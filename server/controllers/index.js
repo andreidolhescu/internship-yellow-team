@@ -7,6 +7,7 @@ const LoginController = require('./LoginController');
 const QuizController = require('./QuizController');
 const QuizOptionsController = require('./QuizOptionsController');
 const AnswerController = require('./AnswerController');
+const MailController = require('./MailController');
 // export all your controllers here
 
 module.exports = {
@@ -18,6 +19,7 @@ module.exports = {
     LoginController,
     QuizController,
     QuizOptionsController,
-    AnswerController
+    AnswerController,
+    MailController
 };
 // Test
