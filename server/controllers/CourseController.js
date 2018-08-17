@@ -26,24 +26,42 @@ module.exports = {
         })
         .then(todo => res.status(201).send(todo))
         .catch(error => {
-        	console.log("dssdv", error)
+        	console.log("Error: ", error)
         	return res.status(400).send(error);
         });
 
         
         }))
         .catch(error => {
-        	console.log("dssdv", error)
+        	console.log("Error: ", error)
         	return res.status(400).send(error);
         });
     },
     
 
-    // get all entries from Course table
+    // get all entries from Course table for a category Id
     list (req, res) {
         return CourseModel
-            .all()
-            .then(todos => res.status(200).send(todos))
+        .findAll({
+            where: {
+                categoryId: req.params.categoryId
+                }
+        })
+            .then(course => {
+                if(course == "")
+                {
+                    return res.status(404).send({
+                    message: 'There are not courses for this category!',
+
+                    });
+                }
+                if (!course) {
+                  return res.status(404).send({
+                    message: 'Course not found!',
+                  });
+                }
+                return res.status(200).send(course);
+              })
             .catch(error => res.status(400).send(error));
     },
 
@@ -62,7 +80,7 @@ module.exports = {
               .catch(error => res.status(400).send(error));
     },
 
-    // update an entry
+    // update an entry -> TODO: only for admins
     update (req, res) {
         CourseModel.findAll({
             where: {
@@ -104,7 +122,7 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry
+    // delete an entry -> TODO: Only for admins
     destroy (req, res) {
         return CourseModel
             .findById(req.params.courseId)

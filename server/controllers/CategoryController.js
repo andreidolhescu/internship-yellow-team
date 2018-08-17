@@ -1,11 +1,9 @@
-// this controller it's just an example, 
-// remove or keep it for guidance
-
 const CategoryModel = require('../models').Category;
 var err = '';
 
 
 module.exports = {
+    //TODO: Only for admins
     create(req, res) {
         err = '';
 
@@ -41,7 +39,7 @@ module.exports = {
         }
     },
 
-    // get all entries from Test table
+    // get all entries from Category table
     list(req, res) {
         return CategoryModel
             .all()
@@ -65,7 +63,6 @@ module.exports = {
     },
 
     // update an entry
-
     update(req, res) {
         err = '';
 
@@ -114,7 +111,7 @@ module.exports = {
     },
 
 
-    // delete an entry
+    // delete an entry -> TODO: Only for admins
     destroy(req, res) {
         return CategoryModel
             .findById(req.params.categoryId)
@@ -125,7 +122,7 @@ module.exports = {
                     });
                 }
 
-                return test
+                return category
                     .destroy()
                     .then(() => res.status(200).send())
                     .catch((error) => res.status(400).send(error));
