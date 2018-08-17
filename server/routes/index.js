@@ -10,6 +10,7 @@ const QuizController = require('../controllers').QuizController;
 const QuizOptionsController = require('../controllers').QuizOptionsController;
 const AnswerController = require('../controllers').AnswerController;
 const MailController = require('../controllers').MailController;
+const ResetPasswordController = require('../controllers').ResetPasswordController;
 
 module.exports = (app) => {
 
@@ -68,7 +69,7 @@ module.exports = (app) => {
     app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.getById);
     app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.update);
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.destroy);
-    
+
     //routes for answer controller -> WHAT ROUTES??????
     app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId/answer', QuizOptionsController.create);
     /*app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions', QuizOptionsController.list);
@@ -76,11 +77,15 @@ module.exports = (app) => {
     app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.update);
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.destroy);
 */
-
+    //Login Route
     app.post('/api/login', LoginController.login);
     app.get('/api/login', LoginController.GetToken, UserController.list);
 
-    app.post('/api/mail',MailController.SendMail);
-    app.get('/api/mail',MailController.GetOK);
-    // end examples
+    //Mail send Rout
+    app.post('/api/mail', MailController.SendMail);
+    app.get('/api/mail', MailController.GetOK);
+
+    //ResetPassword Rout
+    app.post('/api/reset', ResetPasswordController.SendToken)
+    app.post('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.NewPassword);
 }
