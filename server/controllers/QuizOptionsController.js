@@ -10,16 +10,34 @@ module.exports = {
         })
         .then(todo => res.status(201).send(todo))
         .catch(error => {
-        	console.log("dssdv", error)
+        	console.log("Eroare: ", error)
         	return res.status(400).send(error);
         });
     },
 
-    // get all entries from QuizOptions table
+    // get all entries from QuizOptions table for a QuizID
     list (req, res) {
         return QuizOptionsModel
-            .all()
-            .then(todos => res.status(200).send(todos))
+            .findAll({
+            where: {
+                quizId: req.params.quizId
+                }
+            })
+            .then(quizOption => {
+                if(quizOption == "")
+                {
+                    return res.status(404).send({
+                    message: 'There are not quiz options for this quiz!',
+
+                    });
+                }
+                if (!quizOption) {
+                  return res.status(404).send({
+                    message: 'Quiz Option not found!',
+                  });
+                }
+                return res.status(200).send(quizOption);
+              })
             .catch(error => res.status(400).send(error));
     },
 
@@ -38,7 +56,7 @@ module.exports = {
               .catch(error => res.status(400).send(error));
     },
 
-    // update an entry
+    // update an entry -> TODO: Only for admins
     update (req, res) {
         return QuizOptionsModel
             .findById(req.params.quizOptionsId)
@@ -63,7 +81,7 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry
+    // delete an entry -> TODO: Only for admins
     destroy (req, res) {
         return QuizOptionsModel
             .findById(req.params.quizOptionsId)
