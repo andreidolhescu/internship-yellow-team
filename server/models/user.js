@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       type: DataTypes.STRING,
     },
-    UserRole:
+    Admin:
     {
       type: DataTypes.BOOLEAN,
     },

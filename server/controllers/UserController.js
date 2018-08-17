@@ -5,7 +5,7 @@ var err;
 
 module.exports = {
     // insert user into user table
-    create: (req, res) => {
+    register: (req, res) => {
         return UserModel.findAll({
             where: {
                 Email: req.body.Email
@@ -40,7 +40,7 @@ module.exports = {
                 LastName: req.body.LastName,
                 Password: hash,
                 Email: req.body.Email,
-                UserRole: req.body.UserRole,
+                Admin: req.body.Admin,
                 Points: req.body.Points,
                 PathforImage: req.body.PathforImage
             })
@@ -64,7 +64,7 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    // get an entry by id
+    // get user by id
     getById (req, res) {
         return UserModel
             .findById(req.params.userId)
@@ -123,7 +123,7 @@ module.exports = {
                         LastName: req.body.LastName,
                         Password: hash,
                         Email: req.body.Email,
-                        UserRole: req.body.UserRole,
+                        Admin: req.body.Admin,
                         Points: req.body.Points,
                         PathforImage: req.body.PathforImage
                     })
@@ -140,7 +140,7 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry
+    // delete an entry IF ADMIN -> TODO
     destroy (req, res) {
         return UserModel
             .findById(req.params.userId)
