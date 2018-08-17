@@ -1,24 +1,18 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Quizzes', {
+    return queryInterface.createTable('UserTokens', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      Question: {
-        type: Sequelize.STRING(70)
+      mail: {
+        type: Sequelize.STRING
       },
-      chapterId: {
-        type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
-        references: {
-          model: 'Chapters',
-          key: 'id',
-          as: 'quizId'
-        }
+      token: {
+        type: Sequelize.STRING(500)
       },
       createdAt: {
         allowNull: false,
@@ -31,6 +25,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Quizzes');
+    return queryInterface.dropTable('UserTokens');
   }
 };
