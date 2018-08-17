@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   var Quiz = sequelize.define('Quiz', {
     Question: 
     {
-    	type: DataTypes.STRING,
+    	type: DataTypes.STRING(70),
     }
   }, {});
   Quiz.associate = function(models) {

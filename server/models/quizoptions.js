@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   var QuizOptions = sequelize.define('QuizOptions', {
     Option: 
     {
-    	type: DataTypes.STRING,
+    	type: DataTypes.STRING(70),
     },
     isCorrect: 
     {
