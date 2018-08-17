@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'courseId',
       onDelete: 'CASCADE'
     });
+    Image.belongsTo(models.User, {
+      foreignKey: 'userId',
+      onDelete: 'CASCADE'
+    });
   };
   return Image;
 };

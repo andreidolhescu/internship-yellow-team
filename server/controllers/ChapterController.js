@@ -1,4 +1,5 @@
 const ChapterModel = require('../models').Chapter;
+const CourseModel = require('../models').Course;
 
 module.exports = {
     // insert chapter into chapter table
@@ -17,10 +18,18 @@ module.exports = {
     list (req, res) {
         return ChapterModel
             .findAll({
-            where: {
-                courseId: req.params.courseId
-                    }
-        })
+       where: {
+           courseId: req.params.courseId
+       },
+       include: [{
+           model: CourseModel,
+           where:
+           {
+               categoryId: req.params.categoryId
+           }
+       }]//
+
+   })
             .then(chapter => {
                 if(chapter == "")
                 {
@@ -36,7 +45,10 @@ module.exports = {
                 return res.status(200).send(chapter);
               })
 
-            .catch(error => res.status(400).send(error));
+            .catch(error => {
+            console.log("Error: ", error)
+            return res.status(400).send(error);
+        });
     },
 
     // get an entry by id

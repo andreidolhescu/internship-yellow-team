@@ -25,13 +25,12 @@ module.exports = (sequelize, DataTypes) => {
     {
       type: DataTypes.INTEGER,
     },
-    PathforImage: 
-    {
-      type: DataTypes.STRING
-    },
   }, {});
   User.associate = function(models) {
-    // associations can be defined here
+    User.hasMany(models.Image, {
+      foreignKey: 'userId',
+      as: 'images'
+    });
   };
   return User;
 };

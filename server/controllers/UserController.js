@@ -41,8 +41,7 @@ module.exports = {
                 Password: hash,
                 Email: req.body.Email,
                 Admin: req.body.Admin,
-                Points: req.body.Points,
-                PathforImage: req.body.PathforImage
+                Points: req.body.Points
             })
             .then(todo => res.status(201).send(todo))
             .catch(error => res.status(400).send(error));
@@ -124,8 +123,7 @@ module.exports = {
                         Password: hash,
                         Email: req.body.Email,
                         Admin: req.body.Admin,
-                        Points: req.body.Points,
-                        PathforImage: req.body.PathforImage
+                        Points: req.body.Points
                     })
                     .then(() => res.status(200).send(user))
                     .catch((error) => res.status(400).send(error));

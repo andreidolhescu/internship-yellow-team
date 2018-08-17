@@ -13,11 +13,22 @@ module.exports = {
       },
       courseId: {
         type: Sequelize.INTEGER,
+        defaultValue: null,
         onDelete: 'CASCADE',
         references: {
           model: 'Courses',
           key: 'id',
           as: 'courseId'
+        }
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        defaultValue: null,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Users',
+          key: 'id',
+          as: 'userId'
         }
       },
       createdAt: {

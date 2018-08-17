@@ -24,9 +24,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
-      Image: {
-        type: Sequelize.STRING,
-      },
       categoryId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
