@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     mail: 
     {
     	type: DataTypes.STRING,
-    }
+    },
     token: {
     	type: DataTypes.STRING(500),
     }

@@ -11,6 +11,7 @@ const QuizOptionsController = require('../controllers').QuizOptionsController;
 const AnswerController = require('../controllers').AnswerController;
 const MailController = require('../controllers').MailController;
 const ResetPasswordController = require('../controllers').ResetPasswordController;
+const UserTokenController = require('../controllers').UserTokenController;
 
 module.exports = (app) => {
 
@@ -86,6 +87,10 @@ module.exports = (app) => {
     app.get('/api/mail', MailController.GetOK);
 
     //ResetPassword Rout
-    app.post('/api/reset', ResetPasswordController.SendToken)
+    app.post('/api/reset', ResetPasswordController.SendToken);
     app.post('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.NewPassword);
+
+    //Add user token and mail for reset password
+    app.post('/api/reset/add', UserTokenController.createWithParameters);
+    app.get('/api/reset/all', UserTokenController.list);
 }

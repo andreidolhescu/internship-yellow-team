@@ -1,7 +1,28 @@
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const settings = require('../config/Index');
-const MailController = require('../controllers').MailController;
+const UserTokens = require('../models').UserTokens;
+
+const GetMailByToken = (token, callback) => {
+    var ob =
+    {
+        token: token
+    };
+    return UserTokens
+        .findOne({
+
+            where: {
+                token: token,
+            }
+        })
+        .then(userTokens => {
+            if (userTokens == null) {
+                callback("nullable");
+            }
+            else
+            {
+            callback(userTokens.mail);
+            }
+        });
+};
 
 module.exports =
     {
@@ -13,12 +34,37 @@ module.exports =
         },
 
         VerifyToken(req, res, next) {
-            var mail = req.body.mail;
+
             var token = req.params.token;
 
+            //De extras din baza de date mail-ul pentru comparare!
+            //var UserTokenController = require('../controllers').UserTokenController;
+            var mail;
+
+            GetMailByToken(token, function (a) {
+                mail = a
+                if (mail != "nullable")
+                {
+                    jwt.verify(token, mail, function (err, decoded) {
+                        if (err) {
+                            return res.json({ success: false, message: 'Failed to authenticate token.' });
+                        } else {
+                            req.decoded = decoded;
+                            next();
+                        }
+                    });
+                }
+                else {
+                    return res.json({ success: false, message: 'Nu exista asa token!' });
+                }
+            });
+            /*console.log("\n\n", mail, "\n\n");
+
+
+            console.log('\n\nRezultatul\n\n', mail);
             jwt.verify(token, mail, function (err, decoded) {
                 if (err) {
-                    console.log("\n\nFunctia 2\n\n", err);
+                    //console.log("\n\nFunctia 2\n\n", err);
                     console.log("Token - ", token);
                     return res.json({ success: false, message: 'Failed to authenticate token.' });
                 } else {
@@ -26,7 +72,7 @@ module.exports =
                     req.decoded = decoded;
                     next();
                 }
-            });
+            });*/
         },
 
         SendToken(req, res) {
@@ -40,7 +86,11 @@ module.exports =
                 expiresIn: 3600
             });
 
-            //MailController.SendMail()
+            const MailController = require('../controllers').MailController;
+            MailController.SendMailWithParameters(mail, "Forgot Password", token);
+            const UserTokenController = require('../controllers').UserTokenController;
+            // NU merge ?
+            UserTokenController.createWithParameters(mail, token);
 
             return res.json({
                 success: true,
