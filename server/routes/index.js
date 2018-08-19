@@ -88,9 +88,12 @@ module.exports = (app) => {
 
     //ResetPassword Rout
     app.post('/api/reset', ResetPasswordController.SendToken);
-    app.post('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.NewPassword);
+    app.get('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.Redirect);
+    app.get('/api/reset/:token/change',ResetPasswordController.VerifyToken, ResetPasswordController.ChangePassword);
+    app.post('/api/reset/:token/change',ResetPasswordController.VerifyToken, ResetPasswordController.NewPassword);
 
     //Add user token and mail for reset password
-    app.post('/api/reset/add', UserTokenController.createWithParameters);
+    //app.post('/api/reset/add', UserTokenController.createWithParameters);
     app.get('/api/reset/all', UserTokenController.list);
+    app.get('/api/reset/:id', UserTokenController.destroy);
 }

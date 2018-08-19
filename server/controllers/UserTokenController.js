@@ -2,7 +2,7 @@ const UserTokens = require('../models').UserTokens;
 
 module.exports = {
     // insert name into Test table
-    create(req, res) {
+    /*create(req, res) {
         return UserTokens
             .create({
                 mail: req.body.mail,
@@ -10,11 +10,11 @@ module.exports = {
             })
             .then(todo => res.status(201).send(todo))
             .catch(error => res.status(400).send(error));
-    },
+    },*/
 
     createWithParameters(mail, token) {
         return UserTokens
-            .create({
+            /*.create({
                 mail: mail,
                 token: token
             })
@@ -23,7 +23,22 @@ module.exports = {
             })
             .catch({
                 message : "Eroare"
-            });
+            });*/
+            .findOne({ mail: mail })
+            .then(function (obj) {
+                if (obj) { // update
+                    return obj.update({
+                        token:token
+                    });
+                }
+                else { // insert
+                    return UserTokens.create({
+                        mail: mail,
+                        token: token
+                    });
+                }
+            }
+        )
     },
 
     // get all entries from Test table
