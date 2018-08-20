@@ -8,13 +8,13 @@ module.exports = {
     register: (req, res) => {
         return UserModel.findAll({
             where: {
-                Email: req.body.Email
+                Mail: req.body.Mail
             }
         })
         .then((user => {
             if(user.length) {
                 return res.status(400).send({
-                    message: "Email already exists!"
+                    message: "Mail already exists!"
                 });
             }
 
@@ -27,8 +27,8 @@ module.exports = {
             err += "Invalid Last Name!"
         if(!validate.IsPassword(req.body.Password))
             err += "Invalid Password!"
-        if(!validate.IsMail(req.body.Email))
-            err += "Invalid Email!"
+        if(!validate.IsMail(req.body.Mail))
+            err += "Invalid Mail!"
 
 
         if(String(err) == String(""))
@@ -39,7 +39,7 @@ module.exports = {
                 FirstName: req.body.FirstName,
                 LastName: req.body.LastName,
                 Password: hash,
-                Email: req.body.Email,
+                Mail: req.body.Mail,
                 Admin: req.body.Admin,
                 Points: req.body.Points
             })
@@ -88,19 +88,19 @@ module.exports = {
             err += "Invalid Last Name!"
         if(!validate.IsPassword(req.body.Password))
             err += "Invalid Password!"
-        if(!validate.IsMail(req.body.Email))
-            err += "Invalid Email!"
+        if(!validate.IsMail(req.body.Mail))
+            err += "Invalid Mail!"
 
 
         UserModel.findAll({
             where: {
-                Email: req.body.Email
+                Mail: req.body.Mail
             }
         })
         .then((user => {
             if(user.length) {
                 return res.status(400).send({
-                    message: "Email already exists!"
+                    message: "Mail already exists!"
                 });
             }
 
@@ -121,7 +121,7 @@ module.exports = {
                         FirstName: req.body.FirstName,
                         LastName: req.body.LastName,
                         Password: hash,
-                        Email: req.body.Email,
+                        Mail: req.body.Mail,
                         Admin: req.body.Admin,
                         Points: req.body.Points
                     })

@@ -1,4 +1,6 @@
 const QuizModel = require('../models').Quiz;
+const CourseModel = require('../models').Course;
+const ChapterModel = require('../models').Chapter;
 
 module.exports = {
     // insert quiz into Quiz table
@@ -20,7 +22,21 @@ module.exports = {
             .findAll({
             where: {
                 chapterId: req.params.chapterId
-                }
+                },
+            include: [{
+                model:ChapterModel,
+                where:
+                {
+                    courseId: req.params.courseId
+                },
+                include: [{
+                    model: CourseModel,
+                    where:
+                    {
+                        categoryId: req.params.categoryId
+                    }
+                }]
+            }]
         })
             .then(quiz => {
                 if(quiz == "")
