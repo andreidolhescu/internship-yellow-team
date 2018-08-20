@@ -1,10 +1,13 @@
 const CategoryModel = require('../models').Category;
+const settings = require('../config/Index');
+const JWT = require('jsonwebtoken');
 var err = '';
 
 
 module.exports = {
     //TODO: Only for admins
     create(req, res) {
+
         err = '';
 
         if (String(req.body.CategoryName).length == 0)
@@ -70,7 +73,7 @@ module.exports = {
             err += 'Undefined Category.';
 
 
-            CategoryModel.findAll({
+        CategoryModel.findAll({
             where: {
                 CategoryName: req.body.CategoryName
             }

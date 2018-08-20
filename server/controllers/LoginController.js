@@ -3,6 +3,20 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const settings = require('../config/Index');
 
+const getUser = (mail, res) =>
+    UserModel.findOne({
+        where: {
+            Mail: mail
+        }
+    }).then(userTokens => {
+        if (userTokens != null) {
+            return res(userTokens);
+        }
+        else {
+            return res("null");
+        };
+    });
+
 module.exports =
     {
         login(req, res) {
@@ -37,8 +51,10 @@ module.exports =
                     }
 
                     const token = jwt.sign(payload, settings.SecurityToken, {
-                        expiresIn: 60
+                        expiresIn: 3600
                     });
+                    req.headers['x-access-token'] = token;
+                    req.headers['id'] = 1;
 
                     return res.json({
                         success: true,
@@ -61,8 +77,11 @@ module.exports =
                 return res.status(400).send(err);
             });
         },
+
+        //Daca este logat merge pentru toti.
         GetToken(req, res, next) {
             var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
             if (token) {
                 jwt.verify(token, settings.SecurityToken, function (err, decoded) {
                     if (err) {
@@ -71,7 +90,10 @@ module.exports =
                         return res.json({ success: false, message: 'Failed to authenticate token.' });
                     } else {
                         // if everything is good, save to request for use in other routes
+                        //console.log(result);\
+                        // Aici deducem mail-ul persoanei care a intrat
                         req.decoded = decoded;
+                        //console.log(decoded.Mail);
                         next();
                     }
                 });
@@ -82,7 +104,40 @@ module.exports =
                 });
             }
         },
-        
+
+        //Daca esti logat, merge doar pentru admini
+        GetUserRole(req, res, next) {
+            var token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+            jwt.verify(token, settings.SecurityToken, function (err, decoded) {
+                if (err) {
+                    return res.json({ success: false, message: 'Failed to authenticate token.' });
+                } else {
+                    // Aici deducem mail-ul persoanei care a intrat
+                    getUser(decoded.Mail, function (result) {
+                        if (result != "null") {
+                            if (result.Admin) {
+                                req.decoded = decoded;
+                                next();
+                            }
+                            else {
+                                return res.status(404).send({
+                                    message: "You don't have access!"
+                                })
+                            }
+                        }
+                        else {
+                            return res.status(404).send({
+                                message: "Nu a fost gasit nimic!"
+                            })
+                        }
+                    })
+
+
+                }
+            });
+        },
+
         ItsValidToken(req, res) {
             return res.status(200).send({
                 message: "Functia ItsValidToken, Functia 3",

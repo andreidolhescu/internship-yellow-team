@@ -40,9 +40,9 @@ module.exports = (app) => {
     //routes for category controller
     //app.post('/api/category', CategoryController.create);
     //Creare categorie doar de admin
-    app.post('/api/category', CategoryController.create);
+    app.post('/api/category', LoginController.GetUserRole, CategoryController.create);
 
-    app.get('/api/category', CategoryController.list);
+    app.get('/api/category', LoginController.GetToken, CategoryController.list);
     app.get('/api/category/:categoryId', CategoryController.getById);
     app.put('/api/category/:categoryId', CategoryController.update);
     app.delete('/api/category/:categoryId', CategoryController.destroy);
@@ -85,14 +85,14 @@ module.exports = (app) => {
 
     //routes for image controller
 
-    
+
     //Login Route
     app.post('/api/login', LoginController.login);
     app.get('/api/login', LoginController.GetToken, UserController.list);
 
     //Mail send Rout
-    app.post('/api/mail', MailController.SendMail);
-    app.get('/api/mail', MailController.GetOK);
+    /*app.post('/api/mail', MailController.SendMail);
+    app.get('/api/mail', MailController.GetOK);*/
 
     //ResetPassword Rout
     app.post('/api/reset', ResetPasswordController.SendToken);
