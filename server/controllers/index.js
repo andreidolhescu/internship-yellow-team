@@ -9,6 +9,8 @@ const QuizOptionsController = require('./QuizOptionsController');
 const AnswerController = require('./AnswerController');
 const MailController = require('./MailController');
 const ResetPasswordController = require('./ResetPasswordController');
+const UserTokenController = require('./UserTokenController');
+const ImageController = require('./ImageController');
 // export all your controllers here
 
 module.exports = {
@@ -22,6 +24,8 @@ module.exports = {
     QuizOptionsController,
     AnswerController,
     MailController,
-    ResetPasswordController
+    ResetPasswordController,
+    UserTokenController,
+    ImageController
 };
 // Test

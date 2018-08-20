@@ -11,6 +11,8 @@ const QuizOptionsController = require('../controllers').QuizOptionsController;
 const AnswerController = require('../controllers').AnswerController;
 const MailController = require('../controllers').MailController;
 const ResetPasswordController = require('../controllers').ResetPasswordController;
+const UserTokenController = require('../controllers').UserTokenController;
+const ImageController = require('../controllers').ImageController;
 
 module.exports = (app) => {
 
@@ -36,7 +38,10 @@ module.exports = (app) => {
     app.delete('/api/user/:userId', UserController.destroy);
 
     //routes for category controller
+    //app.post('/api/category', CategoryController.create);
+    //Creare categorie doar de admin
     app.post('/api/category', CategoryController.create);
+
     app.get('/api/category', CategoryController.list);
     app.get('/api/category/:categoryId', CategoryController.getById);
     app.put('/api/category/:categoryId', CategoryController.update);
@@ -77,6 +82,10 @@ module.exports = (app) => {
     app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.update);
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.destroy);
 */
+
+    //routes for image controller
+
+    
     //Login Route
     app.post('/api/login', LoginController.login);
     app.get('/api/login', LoginController.GetToken, UserController.list);
@@ -86,6 +95,13 @@ module.exports = (app) => {
     app.get('/api/mail', MailController.GetOK);
 
     //ResetPassword Rout
-    app.post('/api/reset', ResetPasswordController.SendToken)
-    app.post('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.NewPassword);
+    app.post('/api/reset', ResetPasswordController.SendToken);
+    app.get('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.Redirect);
+    app.get('/api/reset/:token/change', ResetPasswordController.VerifyToken, ResetPasswordController.ChangePassword);
+    app.post('/api/reset/:token/change', ResetPasswordController.VerifyToken, ResetPasswordController.NewPassword);
+
+    //Add user token and mail for reset password
+    //app.post('/api/reset/add', UserTokenController.createWithParameters);
+    app.get('/api/reset/all', UserTokenController.list);
+    app.get('/api/reset/:id', UserTokenController.destroy);
 }

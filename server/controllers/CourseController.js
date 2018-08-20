@@ -20,8 +20,7 @@ module.exports = {
             Title: req.body.Title,
             Summary: req.body.Summary,
             Description: req.body.Description,
-            Tags: req.body.Tags, // TO DO: A table for tags
-            Image: req.body.Image,
+            Tags: req.body.Tags,
             categoryId: req.params.categoryId
         })
         .then(todo => res.status(201).send(todo))
@@ -109,8 +108,7 @@ module.exports = {
                     Title: req.body.Title,
 		            Summary: req.body.Summary,
 		            Description: req.body.Description,
-		            Tags: req.body.Tags, // TO DO: A table for tags
-		            Image: req.body.Image,
+		            Tags: req.body.Tags,
 		            categoryId: req.params.categoryId
                 })
                 .then(() => res.status(200).send(course))

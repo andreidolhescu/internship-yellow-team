@@ -1,11 +1,9 @@
-const QuizModel = require('../models').Quiz;
-const CourseModel = require('../models').Course;
-const ChapterModel = require('../models').Chapter;
+const ImageModel = require('../models').Image;
 
 module.exports = {
-    // insert quiz into Quiz table
+    // insert image into Image table -> TREBUIE FACUT SEPARARE INTRE CURS SI USER
     create: (req, res) => {
-        return QuizModel.create({
+        return ImageModel.create({
             Question: req.body.Question,
             chapterId: req.params.chapterId
         })
@@ -22,21 +20,7 @@ module.exports = {
             .findAll({
             where: {
                 chapterId: req.params.chapterId
-                },
-            include: [{
-                model:ChapterModel,
-                where:
-                {
-                    courseId: req.params.courseId
-                },
-                include: [{
-                    model: CourseModel,
-                    where:
-                    {
-                        categoryId: req.params.categoryId
-                    }
-                }]
-            }]
+                }
         })
             .then(quiz => {
                 if(quiz == "")

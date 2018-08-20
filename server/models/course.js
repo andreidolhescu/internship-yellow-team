@@ -20,10 +20,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    Image:
-    {
-      type: DataTypes.STRING,
     }
   }, {});
   Course.associate = models => {

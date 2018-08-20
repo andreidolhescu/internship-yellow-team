@@ -1,4 +1,7 @@
 const QuizOptionsModel = require('../models').QuizOptions;
+const QuizModel = require('../models').Quiz;
+const CourseModel = require('../models').Course;
+const ChapterModel = require('../models').Chapter;
 
 module.exports = {
     // insert quizoption into QuizOptions table
@@ -21,7 +24,27 @@ module.exports = {
             .findAll({
             where: {
                 quizId: req.params.quizId
-                }
+                },
+                include: [{
+                    model: QuizModel,
+                    where: {
+                        chapterId: req.params.chapterId
+                    },
+                    include: [{
+                        model:ChapterModel,
+                        where:
+                        {
+                            courseId: req.params.courseId
+                        },
+                        include: [{
+                            model: CourseModel,
+                            where:
+                            {
+                                categoryId: req.params.categoryId
+                            }
+                        }]
+                    }]
+                }]    
             })
             .then(quizOption => {
                 if(quizOption == "")
@@ -38,7 +61,10 @@ module.exports = {
                 }
                 return res.status(200).send(quizOption);
               })
-            .catch(error => res.status(400).send(error));
+            .catch(error => {
+            console.log("Error: ", error)
+            return res.status(400).send(error);
+        })
     },
 
     // get an entry by id

@@ -20,7 +20,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      Email: {
+      Mail: {
         allowNull: false,
         type: Sequelize.STRING
       },
@@ -31,9 +31,6 @@ module.exports = {
       Points: {
         type: Sequelize.INTEGER,
         defaultValue: 0
-      },
-      PathforImage: {
-        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
