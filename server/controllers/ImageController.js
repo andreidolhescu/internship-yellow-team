@@ -1,77 +1,113 @@
 const ImageModel = require('../models').Image;
+const UserModel = require('../models').User;
+const CourseModel = require('../models').Course;
+const Sequelize = require('sequelize');
+// const Op = sequelize.Op;
 
 module.exports = {
     // insert image into Image table -> TREBUIE FACUT SEPARARE INTRE CURS SI USER
     create: (req, res) => {
         return ImageModel.create({
-            Question: req.body.Question,
-            chapterId: req.params.chapterId
+            path: req.body.path,
+            courseId: req.params.courseId,
+            userId: req.params.userId
         })
-        .then(todo => res.status(201).send(todo))
+        .then(image => res.status(201).send(image))
         .catch(error => {
         	console.log("Eroare: ", error)
         	return res.status(400).send(error);
         });
     },
 
-    // get all entries from Quiz table
+    // get all entries from Image table
     list (req, res) {
-        return QuizModel
-            .findAll({
-            where: {
-                chapterId: req.params.chapterId
-                }
-        })
-            .then(quiz => {
-                if(quiz == "")
-                {
-                    return res.status(404).send({
-                    message: 'There are not quizzes for this chapter!',
-
-                    });
-                }
-                if (!quiz) {
-                  return res.status(404).send({
-                    message: 'Quiz not found!',
-                  });
-                }
-                return res.status(200).send(quiz);
-              })
+        return ImageModel
+            .all()
+            .then(images => res.status(200).send(images))
             .catch(error => res.status(400).send(error));
+    },
+
+    userlist (req, res) {
+    	return ImageModel
+        .findAll({
+            where: {
+                userId: {
+                	[Sequelize.Op.ne]: null
+                	}
+                },
+        	include:[
+        		{
+        		model:UserModel,// as:'u',
+        		// attributes: ['id'],
+        		// where:{userId: !null},
+    		    required:false
+        		}]
+        })
+
+    	.then(image => res.status(201).send(image))
+        .catch(error => {
+        	console.log("Eroare: ", error)
+        	return res.status(400).send(error);
+        });
+    },
+
+    curslist (req, res) {
+    	return ImageModel
+    	.findAll({
+            where: {
+                courseId: {
+                	[Sequelize.Op.ne]: null
+                	}
+                },
+        	include:[
+        		{
+        		model:CourseModel,// as:'u',
+        		// attributes: ['id'],
+        		// where:{userId: !null},
+    		    required:false
+        		}]
+        })
+
+    	.then(image => res.status(201).send(image))
+        .catch(error => {
+        	console.log("Eroare: ", error)
+        	return res.status(400).send(error);
+        });
     },
 
     // get an entry by id
     getById (req, res) {
-        return QuizModel
-            .findById(req.params.quizId)
-            .then(quiz => {
-                if (!quiz) {
+        return ImageModel
+            .findById(req.params.imageId)
+            .then(image => {
+                if (!image) {
                   return res.status(404).send({
-                    message: 'Quiz Not Found',
+                    message: 'Image Not Found',
                   });
                 }
-                return res.status(200).send(quiz);
+                return res.status(200).send(image);
               })
               .catch(error => res.status(400).send(error));
     },
 
-    // update an entry -> TODO: Only for admins
+    // update an entry
     update (req, res) {
-        return QuizModel
-            .findById(req.params.quizId)
-            .then(quiz => {
-                if (!quiz) {
+        return ImageModel
+            .findById(req.params.imageId)
+            .then(image => {
+                if (!image) {
                     return res.status(404).send({
-                        message: 'Quiz Not Found',
+                        message: 'Image Not Found',
                     });
                 }
                 
-            return quiz
+            return image
                 .update({
-                    Question: req.body.Question,
-                    chapterId: req.params.chapterId
+                    path: req.body.path,
+            		courseId: req.params.courseId,
+            		userId: req.params.userId
                 })
-                .then(() => res.status(200).send(quiz))
+                .then(() => res.status(200).send(image))
                 .catch((error) => res.status(400).send(error));
             
                     
@@ -79,18 +115,18 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry -> TODO: Only for admins
+    // delete an entry
     destroy (req, res) {
-        return QuizModel
-            .findById(req.params.quizId)
-            .then(quiz => {
-                if (!quiz) {
+        return ImageModel
+            .findById(req.params.imageId)
+            .then(image => {
+                if (!image) {
                     return res.status(404).send({
-                        message: 'Quiz Not Found',
+                        message: 'Image Not Found',
                     });
                 }
 
-                return quiz
+                return image
                     .destroy()
                     .then(() => res.status(200).send())
                     .catch((error) => res.status(400).send(error));
