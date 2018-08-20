@@ -12,6 +12,7 @@ const AnswerController = require('../controllers').AnswerController;
 const MailController = require('../controllers').MailController;
 const ResetPasswordController = require('../controllers').ResetPasswordController;
 const UserTokenController = require('../controllers').UserTokenController;
+const ImageController = require('../controllers').ImageController;
 
 module.exports = (app) => {
 
@@ -81,6 +82,10 @@ module.exports = (app) => {
     app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.update);
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.destroy);
 */
+
+    //routes for image controller
+
+    
     //Login Route
     app.post('/api/login', LoginController.login);
     app.get('/api/login', LoginController.GetToken, UserController.list);

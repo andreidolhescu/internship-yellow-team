@@ -6,32 +6,31 @@ const settings = require('../config/Index');
 module.exports =
     {
         login(req, res) {
-            var Email = req.body.Email;
+            var Mail = req.body.Mail;
             var Password = req.body.Password;
 
-            if (!Email || !Password) {
+            if (!Mail || !Password) {
                 return res.status(400).send(
                     {
-                        message: "Email and password required."
+                        message: "Mail and password required."
                     }
                 )
             }
 
-            Email = Email.toLowerCase();
+            Mail = Mail.toLowerCase();
 
             UserModel.findOne({
                 where: {
-                    Email: Email,
+                    Mail: Mail,
                 }
             }).then(userObj => {
                 //Logic here
                 if (userObj == null) {
                     return res.status(404).send({
-                        message: "Incorect Email",
+                        message: "Incorect Mail",
                     });
                 }
                 else if (bcrypt.compareSync(Password, userObj.Password)) {
-                    console.log('Aici');
 
                     const payload = {
                         Mail: userObj.Mail

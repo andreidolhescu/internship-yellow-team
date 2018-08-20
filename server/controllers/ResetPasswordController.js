@@ -26,7 +26,7 @@ const IfExistMail = (mail, callback) => {
         .findOne({
 
             where: {
-                Email: mail,
+                Mail: mail,
             }
         })
         .then(userTokens => {
@@ -65,7 +65,7 @@ module.exports =
             GetUserByToken(req.params.token, function (response) {
                 console.log(response);
                 return UserModel
-                    .findOne({ Email: response.mail })
+                    .findOne({ Mail: response.mail })
                     .then(function (obj) {
                         if (obj) { // update
                             console.log("Userul a fost gasit, incercam sa facem update");

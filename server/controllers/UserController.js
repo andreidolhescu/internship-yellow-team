@@ -8,13 +8,13 @@ module.exports = {
     register: (req, res) => {
         return UserModel.findAll({
             where: {
-                Email: req.body.Email
+                Mail: req.body.Mail
             }
         })
             .then((user => {
                 if (user.length) {
                     return res.status(400).send({
-                        message: "Email already exists!"
+                        message: "Mail already exists!"
                     });
                 }
 
@@ -27,8 +27,8 @@ module.exports = {
                     err += "Invalid Last Name!"
                 if (!validate.IsPassword(req.body.Password))
                     err += "Invalid Password!"
-                if (!validate.IsMail(req.body.Email))
-                    err += "Invalid Email!"
+                if (!validate.IsMail(req.body.Mail))
+                    err += "Invalid Mail!"
 
 
                 if (String(err) == String("")) {
@@ -38,10 +38,9 @@ module.exports = {
                             FirstName: req.body.FirstName,
                             LastName: req.body.LastName,
                             Password: hash,
-                            Email: req.body.Email,
+                            Mail: req.body.Mail,
                             Admin: req.body.Admin,
-                            Points: req.body.Points,
-                            PathforImage: req.body.PathforImage
+                            Points: req.body.Points
                         })
                         .then(todo => res.status(201).send(todo))
                         .catch(error => res.status(400).send(error));
@@ -88,19 +87,19 @@ module.exports = {
             err += "Invalid Last Name!"
         if (!validate.IsPassword(req.body.Password))
             err += "Invalid Password!"
-        if (!validate.IsMail(req.body.Email))
-            err += "Invalid Email!"
-
+        if (!validate.IsMail(req.body.Mail))
+            err += "Invalid Mail!"
 
         UserModel.findAll({
             where: {
-                Email: req.body.Email
+                Mail: req.body.Mail
             }
         })
+
             .then((user => {
                 if (user.length) {
                     return res.status(400).send({
-                        message: "Email already exists!"
+                        message: "Mail already exists!"
                     });
                 }
 
@@ -120,19 +119,17 @@ module.exports = {
                                     FirstName: req.body.FirstName,
                                     LastName: req.body.LastName,
                                     Password: hash,
-                                    Email: req.body.Email,
+                                    Mail: req.body.Mail,
                                     Admin: req.body.Admin,
-                                    Points: req.body.Points,
-                                    PathforImage: req.body.PathforImage
+                                    Points: req.body.Points
                                 })
                                 .then(() => res.status(200).send(user))
-                                .catch((error) => res.status(400).send(error));
+                                .catch((error) => res.status(404).send(error));
                         }
                         else
                             return res.status(404).send({
                                 message: err,
                             });
-
                     })
             }))
             .catch((error) => res.status(400).send(error));
@@ -140,9 +137,8 @@ module.exports = {
 
     getUserByToken(req, res) {
         var token = req.body.token || req.query.token || req.headers['x-access-token'];
-        if(token)
-        {
-            
+        if (token) {
+
         }
     },
 
