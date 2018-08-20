@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const settings = require('../config/Index');
 
+
 const getUser = (mail, res) =>
     UserModel.findOne({
         where: {
@@ -149,7 +150,7 @@ module.exports =
                     getUser(decoded.Mail, function (result) {
                         if (result != "null") {
                             return res.status(200).send({
-                                id : result.id
+                                id: result.id
                             })
                         }
                         else {
@@ -170,15 +171,15 @@ module.exports =
             });
         },
 
-        Logout(req,res,next)
-        {
-            req.headers['token']="";
+        Logout(req, res, next) {
+            req.headers['token'] = "";
+            console.log("Logout");
             next();
         },
 
-        InitialPage(req,res)
-        {
-            res.writeHead(302, { 'Location': "http://127.0.0.1:8000/" });
+        InitialPage(req, res) {
+            console.log(require('../config/config.json').development.host);
+            res.writeHead(301, { 'Location': require('../config/config.json').development.host });
             return res.end();
         }
     }
