@@ -1,29 +1,8 @@
 const UserTokens = require('../models').UserTokens;
 
 module.exports = {
-    // insert name into Test table
-    /*create(req, res) {
-        return UserTokens
-            .create({
-                mail: req.body.mail,
-                token: req.body.token
-            })
-            .then(todo => res.status(201).send(todo))
-            .catch(error => res.status(400).send(error));
-    },*/
-
     createWithParameters(mail, token) {
         return UserTokens
-            /*.create({
-                mail: mail,
-                token: token
-            })
-            .then({
-                message: "Succes"
-            })
-            .catch({
-                message : "Eroare"
-            });*/
             .findOne({ mail: mail })
             .then(function (obj) {
                 if (obj) { // update
