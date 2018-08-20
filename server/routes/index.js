@@ -24,11 +24,11 @@ module.exports = (app) => {
 
     // start examples
     // the following routes are only for guidance, you can remove them
-    app.post('/api/test', testController.create);
+    /*app.post('/api/test', testController.create);
     app.get('/api/test', testController.list);
     app.get('/api/test/:testId', testController.getById);
     app.put('/api/test/:testId', testController.update);
-    app.delete('/api/test/:testId', testController.destroy);
+    app.delete('/api/test/:testId', testController.destroy);*/
 
 
     app.post('/api/register', UserController.register);
@@ -100,6 +100,7 @@ module.exports = (app) => {
     //Login Route
     app.post('/api/login', LoginController.login);
     app.get('/api/login', LoginController.GetToken, UserController.list);
+    app.get('/api/logout', LoginController.Logout, LoginController.InitialPage);
 
     //Mail send Rout
     /*app.post('/api/mail', MailController.SendMail);

@@ -1,4 +1,4 @@
-    const UserModel = require('../models').User;
+const UserModel = require('../models').User;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const settings = require('../config/Index');
@@ -138,9 +138,47 @@ module.exports =
             });
         },
 
+        GetUserID(req, res) {
+            var token = req.body.token || req.query.token || req.headers['token'];
+
+            jwt.verify(token, settings.SecurityToken, function (err, decoded) {
+                if (err) {
+                    return res.json({ success: false, message: 'Failed to authenticate token.' });
+                } else {
+                    // Aici deducem mail-ul persoanei care a intrat
+                    getUser(decoded.Mail, function (result) {
+                        if (result != "null") {
+                            return res.status(200).send({
+                                id : result.id
+                            })
+                        }
+                        else {
+                            return res.status(404).send({
+                                message: "Nu a fost gasit nimic!"
+                            })
+                        }
+                    })
+
+
+                }
+            });
+        },
+
         ItsValidToken(req, res) {
             return res.status(200).send({
                 message: "Functia ItsValidToken, Functia 3",
             });
+        },
+
+        Logout(req,res,next)
+        {
+            req.headers['token']="";
+            next();
+        },
+
+        InitialPage(req,res)
+        {
+            res.writeHead(302, { 'Location': "http://127.0.0.1:8000/" });
+            return res.end();
         }
     }
