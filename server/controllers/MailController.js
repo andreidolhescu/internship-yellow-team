@@ -54,7 +54,7 @@ module.exports = {
             from: 'klgrakk1@gmail.com',
             to: to,
             subject: subject,
-            html: "Your link is http://127.0.0.1:8000/api/reset/"+ html
+            html: "Your link is http://127.0.0.1:8000/api/reset/"+ html //De modificat in server. ceva ?
         };
 
         transporter.sendMail(mailOptions, function (err, info) {

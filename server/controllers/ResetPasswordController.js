@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const UserTokens = require('../models').UserTokens;
 const UserModel = require('../models').User;
 const validator = require('../validate/Validation');
+const bcrypt = require('bcrypt');
 
 const GetUserByToken = (token, callback) => {
     return UserTokens
@@ -63,15 +64,19 @@ module.exports =
             //Facem update la parola dupa mailul respectiv
 
             GetUserByToken(req.params.token, function (response) {
-                console.log(response);
+                //console.log(response);
                 return UserModel
-                    .findOne({ Mail: response.mail })
+                    .findOne({ Mail: response.Mail })
                     .then(function (obj) {
                         if (obj) { // update
                             console.log("Userul a fost gasit, incercam sa facem update");
                             if (validator.IsPassword(req.body.Password)) {
+
+                                //Criptarea parolei
+                                var hash = bcrypt.hashSync(req.body.Password, 10);
+
                                 obj.update({
-                                    Password: req.body.Password
+                                    Password: hash
                                 });
                                 UserTokens.destroy({
                                     where: {
@@ -171,7 +176,7 @@ module.exports =
                     const MailController = require('../controllers').MailController;
                     MailController.SendMailWithParameters(mail, "Forgot Password", token);
                     const UserTokenController = require('../controllers').UserTokenController;
-                    // NU merge ?
+                    //Trimitem mail
                     UserTokenController.createWithParameters(mail, token);
 
                     return res.json({
