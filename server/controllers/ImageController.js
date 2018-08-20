@@ -1,4 +1,8 @@
 const ImageModel = require('../models').Image;
+const UserModel = require('../models').User;
+const CourseModel = require('../models').Course;
+const Sequelize = require('sequelize');
+// const Op = sequelize.Op;
 
 module.exports = {
     // insert image into Image table -> TREBUIE FACUT SEPARARE INTRE CURS SI USER
@@ -8,7 +12,7 @@ module.exports = {
             courseId: req.params.courseId,
             userId: req.params.userId
         })
-        .then(todo => res.status(201).send(todo))
+        .then(image => res.status(201).send(image))
         .catch(error => {
         	console.log("Eroare: ", error)
         	return res.status(400).send(error);
@@ -21,6 +25,54 @@ module.exports = {
             .all()
             .then(images => res.status(200).send(images))
             .catch(error => res.status(400).send(error));
+    },
+
+    userlist (req, res) {
+    	return ImageModel
+        .findAll({
+            where: {
+                userId: {
+                	[Sequelize.Op.ne]: null
+                	}
+                },
+        	include:[
+        		{
+        		model:UserModel,// as:'u',
+        		// attributes: ['id'],
+        		// where:{userId: !null},
+    		    required:false
+        		}]
+        })
+
+    	.then(image => res.status(201).send(image))
+        .catch(error => {
+        	console.log("Eroare: ", error)
+        	return res.status(400).send(error);
+        });
+    },
+
+    curslist (req, res) {
+    	return ImageModel
+    	.findAll({
+            where: {
+                courseId: {
+                	[Sequelize.Op.ne]: null
+                	}
+                },
+        	include:[
+        		{
+        		model:CourseModel,// as:'u',
+        		// attributes: ['id'],
+        		// where:{userId: !null},
+    		    required:false
+        		}]
+        })
+
+    	.then(image => res.status(201).send(image))
+        .catch(error => {
+        	console.log("Eroare: ", error)
+        	return res.status(400).send(error);
+        });
     },
 
     // get an entry by id
