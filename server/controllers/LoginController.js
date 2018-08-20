@@ -53,7 +53,7 @@ module.exports =
                     const token = jwt.sign(payload, settings.SecurityToken, {
                         expiresIn: 3600
                     });
-                    req.headers['x-access-token'] = token;
+                    req.headers['token'] = token;
                     req.headers['id'] = 1;
 
                     return res.json({
@@ -80,7 +80,7 @@ module.exports =
 
         //Daca este logat merge pentru toti.
         GetToken(req, res, next) {
-            var token = req.body.token || req.query.token || req.headers['x-access-token'];
+            var token = req.body.token || req.query.token || req.headers['token'];
 
             if (token) {
                 jwt.verify(token, settings.SecurityToken, function (err, decoded) {
@@ -107,7 +107,7 @@ module.exports =
 
         //Daca esti logat, merge doar pentru admini
         GetUserRole(req, res, next) {
-            var token = req.body.token || req.query.token || req.headers['x-access-token'];
+            var token = req.body.token || req.query.token || req.headers['token'];
 
             jwt.verify(token, settings.SecurityToken, function (err, decoded) {
                 if (err) {
