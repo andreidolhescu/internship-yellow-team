@@ -87,9 +87,9 @@ module.exports = (app) => {
     app.post('/api/user/:userId/image', ImageController.create); // insert an user image
     app.post('/api/category/:categoryId/course/:courseId/image', ImageController.create); // insert a course image
     app.get('/api/image', ImageController.list); // list all images
-    //TODO: List all users images
+    // List all users images
     app.get('/api/usr/images', ImageController.userlist);
-    //TODO: List images for courses
+    // List images for courses
     app.get('/api/curs/images', ImageController.curslist);
     app.get('/api/image/:imageId', ImageController.getById);
     app.put('/api/user/:userId/image/:imageId', ImageController.update);//update a user image
