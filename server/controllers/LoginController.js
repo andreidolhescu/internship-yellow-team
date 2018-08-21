@@ -122,7 +122,7 @@ module.exports =
                             })
                         }
                     })*/
-                    if (result.Admin) {
+                    if (decoded.Admin) {
                         req.decoded = decoded;
                         next();
                     }
