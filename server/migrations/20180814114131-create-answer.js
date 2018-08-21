@@ -26,6 +26,24 @@ module.exports = {
           as: 'userId'
         }
       },
+      quiz_answerId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Quizzes',
+          key: 'id',
+          as: 'quiz_answerId'
+        }
+      },
+      chapterId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Chapters',
+          key: 'id',
+          as: 'chapterId'
+        }
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

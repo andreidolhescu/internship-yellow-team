@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     	foreignKey: 'quizId',
     	onDelete: 'CASCADE'
     });
+    QuizOptions.hasMany(models.Answer, {
+      foreignKey: 'quizoptionId',
+      as: 'answers'
+    });
   };
   return QuizOptions;
 };

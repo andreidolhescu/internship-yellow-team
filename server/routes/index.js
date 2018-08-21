@@ -80,6 +80,7 @@ module.exports = (app) => {
     app.get('/api/answers', AnswerController.list); // list all answers
     app.get('/api/answers/:answerId', AnswerController.getById);
     app.delete('/api/answers/:answerId', AnswerController.destroy);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/answer',LoginController.IsAdminOrUser, AnswerController.deleteforchapter);
 
     //routes for image controller
 
