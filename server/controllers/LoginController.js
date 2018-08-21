@@ -40,7 +40,6 @@ module.exports =
                     Mail: Mail,
                 }
             }).then(userObj => {
-                //Logic here
                 if (userObj == null) {
                     return res.status(404).send({
                         message: "Incorect Mail",
@@ -56,18 +55,12 @@ module.exports =
                         expiresIn: 3600
                     });
                     req.headers['token'] = token;
-                    req.headers['id'] = 1;
 
                     return res.json({
                         success: true,
                         message: 'Enjoy your token!',
                         token: token,
                     });
-                    //console.log("A modificat tokenul");
-
-                    /*return res.status(200).send({
-                        token: token,
-                    })*/
                 }
                 else {
                     return res.status(404).send({
