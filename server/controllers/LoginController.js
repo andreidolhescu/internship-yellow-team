@@ -4,21 +4,6 @@ const jwt = require('jsonwebtoken');
 const settings = require('../config/Index');
 
 
-
-const getUser = (mail, res) =>
-    UserModel.findOne({
-        where: {
-            Mail: mail
-        }
-    }).then(userTokens => {
-        if (userTokens != null) {
-            return res(userTokens);
-        }
-        else {
-            return res("null");
-        };
-    });
-
 module.exports =
     {
         login(req, res) {
@@ -48,7 +33,9 @@ module.exports =
                 else if (bcrypt.compareSync(Password, userObj.Password)) {
 
                     const payload = {
-                        Mail: userObj.Mail
+                        Mail: userObj.Mail,
+                        ID: userObj.id,
+                        Admin: userObj.Admin
                     }
 
                     const token = jwt.sign(payload, settings.SecurityToken, {
@@ -74,7 +61,7 @@ module.exports =
         },
 
         //Daca este logat merge pentru toti.
-        GetToken(req, res, next) {
+        IsAdminOrUser(req, res, next) {
             var token = req.body.token || req.query.token || req.headers['token'];
 
             if (token) {
@@ -88,8 +75,16 @@ module.exports =
                         //console.log(result);\
                         // Aici deducem mail-ul persoanei care a intrat
                         req.decoded = decoded;
-                        //console.log(decoded.Mail);
+                        /*getUser(decoded.Mail, function (result) {
+                            if (result != "null") {
+                                //console.log("Result ID :",result.id);
+                                req.decoded.id = result.id;
+                                next();
+                            }
+                        });*/
                         next();
+                        //console.log(decoded.Mail);
+
                     }
                 });
             }
@@ -101,7 +96,7 @@ module.exports =
         },
 
         //Daca esti logat, merge doar pentru admini
-        GetUserRole(req, res, next) {
+        IsAdmin(req, res, next) {
             var token = req.body.token || req.query.token || req.headers['token'];
 
             jwt.verify(token, settings.SecurityToken, function (err, decoded) {
@@ -109,7 +104,7 @@ module.exports =
                     return res.json({ success: false, message: 'Failed to authenticate token.' });
                 } else {
                     // Aici deducem mail-ul persoanei care a intrat
-                    getUser(decoded.Mail, function (result) {
+                    /*getUser(decoded.Mail, function (result) {
                         if (result != "null") {
                             if (result.Admin) {
                                 req.decoded = decoded;
@@ -126,14 +121,23 @@ module.exports =
                                 message: "Nu a fost gasit nimic!"
                             })
                         }
-                    })
+                    })*/
+                    if (result.Admin) {
+                        req.decoded = decoded;
+                        next();
+                    }
+                    else {
+                        return res.status(404).send({
+                            message: "You don't have access!"
+                        })
+                    }
 
 
                 }
             });
         },
 
-        GetUserID(req, res) {
+        /*GetUserID(req, res) {
             var token = req.body.token || req.query.token || req.headers['token'];
 
             jwt.verify(token, settings.SecurityToken, function (err, decoded) {
@@ -141,7 +145,7 @@ module.exports =
                     return res.json({ success: false, message: 'Failed to authenticate token.' });
                 } else {
                     // Aici deducem mail-ul persoanei care a intrat
-                    getUser(decoded.Mail, function (result) {
+                    /*getUser(decoded.Mail, function (result) {
                         if (result != "null") {
                             return res.status(200).send({
                                 id: result.id
@@ -153,11 +157,14 @@ module.exports =
                             })
                         }
                     })
+                    return res.status(200).send({
+                        id: decoded.ID
+                    })
 
 
                 }
             });
-        },
+        },*/
 
         ItsValidToken(req, res) {
             return res.status(200).send({

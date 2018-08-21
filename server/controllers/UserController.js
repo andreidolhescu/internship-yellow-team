@@ -135,13 +135,6 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    getUserByToken(req, res) {
-        var token = req.body.token || req.query.token || req.headers['token'];
-        if (token) {
-
-        }
-    },
-
     // delete an entry IF ADMIN -> TODO
     destroy(req, res) {
         return UserModel
