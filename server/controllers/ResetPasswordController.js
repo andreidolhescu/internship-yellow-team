@@ -95,7 +95,7 @@ module.exports =
                             }
                         }
                         else { // insert
-                            console.log("Userul nu a fost gasit");
+                            //console.log("Userul nu a fost gasit");
                             return res.status(400).send({
                                 message: "Nu a fost gasit userul "
                             });
