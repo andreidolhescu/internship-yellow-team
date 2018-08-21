@@ -33,7 +33,6 @@ module.exports =
                 else if (bcrypt.compareSync(Password, userObj.Password)) {
 
                     const payload = {
-                        Mail: userObj.Mail,
                         ID: userObj.id,
                         Admin: userObj.Admin
                     }
@@ -103,26 +102,7 @@ module.exports =
                 if (err) {
                     return res.json({ success: false, message: 'Failed to authenticate token.' });
                 } else {
-                    // Aici deducem mail-ul persoanei care a intrat
-                    /*getUser(decoded.Mail, function (result) {
-                        if (result != "null") {
-                            if (result.Admin) {
-                                req.decoded = decoded;
-                                next();
-                            }
-                            else {
-                                return res.status(404).send({
-                                    message: "You don't have access!"
-                                })
-                            }
-                        }
-                        else {
-                            return res.status(404).send({
-                                message: "Nu a fost gasit nimic!"
-                            })
-                        }
-                    })*/
-                    if (result.Admin) {
+                    if (decoded.Admin) {
                         req.decoded = decoded;
                         next();
                     }

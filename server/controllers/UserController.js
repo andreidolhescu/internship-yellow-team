@@ -77,6 +77,41 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
+    change(req, res) {
+        return UserModel
+            .findById(req.params.userId)
+            .then(user => {
+                if (!user) {
+                    return res.status(404).send({
+                        message: 'User Not Found',
+                    });
+                }
+                if (String(req.decoded.ID) != req.params.userId) {
+                    //console.log(user);
+                    if (user.Admin == true) {
+                        user.update({
+                            Admin:false
+                        });
+                        console.log("True to false");
+                    }
+                    else {
+                        user.update({
+                            Admin:true
+                        });
+                        console.log("False to true");
+                    }
+                    return res.status(200).send(user);
+                }
+                else {
+                    return res.status(404).send({
+                        message: 'Serios? Vrei sa devii user?:)))',
+                    });
+                }
+                
+            })
+            .catch(error => res.status(400).send(error));
+    },
+
     // update an entry
     update(req, res) {
         err = ""
@@ -92,45 +127,67 @@ module.exports = {
 
         UserModel.findAll({
             where: {
-                Mail: req.body.Mail
+                id: req.decoded.ID
             }
         })
-
             .then((user => {
-                if (user.length) {
-                    return res.status(400).send({
-                        message: "Mail already exists!"
-                    });
-                }
+                //console.log(req.body.Mail, req.decoded.Mail);
 
-                return UserModel
-                    .findById(req.params.userId)
-                    .then(user => {
-                        if (!user) {
-                            return res.status(404).send({
-                                message: 'User Not Found',
-                            });
-                        }
+                UserModel.findOne({
+                    where: {
+                        Mail: req.body.Mail
+                    }
+                }).then(obj => {
+                    return UserModel
+                        .findById(req.decoded.ID)
+                        .then(user => {
+                            if (!user) {
+                                return res.status(404).send({
+                                    message: 'User Not Found',
+                                });
+                            }
 
-                        if (String(err) == String("")) {
-                            var hash = bcrypt.hashSync(req.body.Password, 10);
-                            return user
-                                .update({
-                                    FirstName: req.body.FirstName,
-                                    LastName: req.body.LastName,
-                                    Password: hash,
-                                    Mail: req.body.Mail,
-                                    Admin: req.body.Admin,
-                                    Points: req.body.Points
-                                })
-                                .then(() => res.status(200).send(user))
-                                .catch((error) => res.status(404).send(error));
-                        }
-                        else
-                            return res.status(404).send({
-                                message: err,
-                            });
-                    })
+                            if (String(err) == String("")) {
+                                var hash = bcrypt.hashSync(req.body.Password, 10);
+                                if (obj == null)
+                                    return user
+                                        .update({
+                                            FirstName: req.body.FirstName,
+                                            LastName: req.body.LastName,
+                                            Password: hash,
+                                            Mail: req.body.Mail,
+                                            /*Admin: req.body.Admin,
+                                            Points: req.body.Points*/
+                                        })
+                                        .then(() => res.status(200).send(user))
+                                        .catch((error) => res.status(404).send(error));
+                                else if (obj.id == req.decoded.ID) {
+                                    console.log("Functia 2, Mailuile sunt egale");
+                                    return user
+                                        .update({
+                                            FirstName: req.body.FirstName,
+                                            LastName: req.body.LastName,
+                                            Password: hash,
+                                            //Mail: req.decoded.Mail,
+                                            /*Admin: req.body.Admin,
+                                            Points: req.body.Points*/
+                                        })
+                                        .then(() => res.status(200).send(user))
+                                        .catch((error) => res.status(404).send(error));
+                                }
+                                else {
+                                    return res.status(404).send({
+                                        message: 'Incercare de a modifica mail-ul in unul existent in baza de date',
+                                    });
+                                }
+                            }
+                            else
+                                return res.status(404).send({
+                                    message: err,
+                                });
+                        })
+                });
+
             }))
             .catch((error) => res.status(400).send(error));
     },
