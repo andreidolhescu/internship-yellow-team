@@ -76,7 +76,11 @@ module.exports = (app) => {
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', LoginController.GetUserRole, QuizOptionsController.destroy);
 
     //routes for answer controller -> WHAT ROUTES??????
-    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId/answer', LoginController.GetUserRole, QuizOptionsController.create);
+    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId/answer', AnswerController.create);
+    app.get('/api/answers', AnswerController.list); // list all answers
+    app.get('/api/answers/:answerId', AnswerController.getById);
+
+    app.delete('/api/answers/:answerId', AnswerController.destroy);
     /*app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions', QuizOptionsController.list);
     app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.getById);
     app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', QuizOptionsController.update);
@@ -88,9 +92,9 @@ module.exports = (app) => {
     app.post('/api/user/:userId/image', LoginController.GetToken, ImageController.create); // insert an user image
     app.post('/api/category/:categoryId/course/:courseId/image', LoginController.GetUserRole, ImageController.create); // insert a course image
     app.get('/api/image', LoginController.GetUserRole, ImageController.list); // list all images
-    //TODO: List all users images
+    // List all users images
     app.get('/api/usr/images', LoginController.GetUserRole, ImageController.userlist);
-    //TODO: List images for courses
+    // List images for courses
     app.get('/api/curs/images', LoginController.GetToken, ImageController.curslist);
     app.get('/api/image/:imageId', LoginController.GetToken, ImageController.getById);
     app.put('/api/user/:userId/image/:imageId', LoginController.GetToken, ImageController.update);//update a user image
