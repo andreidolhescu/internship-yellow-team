@@ -36,6 +36,8 @@ module.exports = (app) => {
     app.get('/api/user', LoginController.IsAdmin, UserController.list);
     app.get('/api/user/:userId', LoginController.IsAdmin, UserController.getById);
     app.put('/api/user/', LoginController.IsAdminOrUser, UserController.update);
+    //Uprade or downgrade user to admin and revers
+    app.put('/api/user/change/:userId', LoginController.IsAdmin, UserController.change);
     app.delete('/api/user/:userId', LoginController.IsAdmin, UserController.destroy);
 
     //routes for category controller
@@ -83,7 +85,6 @@ module.exports = (app) => {
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/answer',LoginController.IsAdminOrUser, AnswerController.deleteforchapter);
 
     //routes for image controller
-
     app.post('/api/user/:userId/image', LoginController.IsAdminOrUser, ImageController.create); // insert an user image
     app.post('/api/category/:categoryId/course/:courseId/image', LoginController.IsAdmin, ImageController.create); // insert a course image
     app.get('/api/image', LoginController.IsAdmin, ImageController.list); // list all images
@@ -101,7 +102,7 @@ module.exports = (app) => {
     app.get('/api/login', LoginController.IsAdminOrUser, UserController.list);
     app.get('/api/logout', LoginController.InitialPage);
 
-    //Mail send Rout
+    //Mail send Rout, only for testing
     /*app.post('/api/mail', MailController.SendMail);
     app.get('/api/mail', MailController.GetOK);*/
 
@@ -113,6 +114,7 @@ module.exports = (app) => {
 
     //Add user token and mail for reset password
     //app.post('/api/reset/add', UserTokenController.createWithParameters);
-    app.get('/api/reset/all', LoginController.IsAdmin, UserTokenController.list);
-    app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);
+    //Only for testing
+    /*app.get('/api/reset/all', LoginController.IsAdmin, UserTokenController.list);
+    app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);*/
 }

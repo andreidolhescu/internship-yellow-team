@@ -39,7 +39,7 @@ module.exports = {
         });
     },
 
-    SendMailWithParameters(to, subject, html,res) {
+    SendMailWithParameters(to, subject, html, res) {
         var nodemailer = require('nodemailer');
 
         var transporter = nodemailer.createTransport({
@@ -54,7 +54,7 @@ module.exports = {
             from: 'klgrakk1@gmail.com',
             to: to,
             subject: subject,
-            html: "Your link is http://127.0.0.1:8000/api/reset/"+ html //De modificat in server. ceva ?
+            html: "Your link is " + require('../config/config.json').development.host + "/api/reset/" + html //De modificat in server. ceva ?
         };
 
         transporter.sendMail(mailOptions, function (err, info) {

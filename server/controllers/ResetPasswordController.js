@@ -44,30 +44,18 @@ module.exports =
         //Daca trece token-ul, facem redirect
         Redirect(req, res) {
             var mail = req.body.mail;
-            /*return res.status(200).send({
-                message: "Se poate de schimbat parola la mailul respectiv : ", mail,
-            });*/
             res.writeHead(302, { 'Location': req.url + "/change" });
             return res.end();
         },
 
         //Facem update la parola
         NewPassword(req, res) {
-            /*GetMailByToken(req.params.token, function (response) {
-                return res.status(200).send({
-                    message: "Se poate de schimbat parola la mailul respectiv : ", response,
-                });
-
-            })*/
-
             //Facem update la parola dupa mailul respectiv
-
             GetUserByToken(req.params.token, function (response) {
-                //console.log(response);
                 return UserModel
                     .findOne({ Mail: response.Mail })
                     .then(function (obj) {
-                        if (obj) { // update
+                        if (obj) {
                             console.log("Userul a fost gasit, incercam sa facem update");
                             if (validator.IsPassword(req.body.Password)) {
 
@@ -87,15 +75,13 @@ module.exports =
                                     message: "Token Sters "
                                 });
                             }
-                            else
-                            {
+                            else {
                                 return res.status(404).send({
                                     message: "Parola nu a trecut validarea"
                                 });
                             }
                         }
-                        else { // insert
-                            console.log("Userul nu a fost gasit");
+                        else {
                             return res.status(400).send({
                                 message: "Nu a fost gasit userul "
                             });
@@ -109,7 +95,6 @@ module.exports =
 
         //Primim mesaj ca putem modifica parola, adica tokenul si mailul sun valide in baza de date
         ChangePassword(req, res) {
-            //5var mail = req.body.mail;
             return res.status(200).send({
                 message: "Se poate de modificat parola, Metoda ChangePassword"
             });
@@ -120,9 +105,7 @@ module.exports =
 
             var token = req.params.token;
 
-            //console.log("VerifyTOken");
-            //De extras din baza de date mail-ul pentru comparare!
-            //var UserTokenController = require('../controllers').UserTokenController;
+
             var mail;
 
             GetUserByToken(token, function (a) {
@@ -141,21 +124,7 @@ module.exports =
                     return res.json({ success: false, message: 'Nu exista asa token!' });
                 }
             });
-            /*console.log("\n\n", mail, "\n\n");
 
-
-            console.log('\n\nRezultatul\n\n', mail);
-            jwt.verify(token, mail, function (err, decoded) {
-                if (err) {
-                    //console.log("\n\nFunctia 2\n\n", err);
-                    console.log("Token - ", token);
-                    return res.json({ success: false, message: 'Failed to authenticate token.' });
-                } else {
-                    // if everything is good, save to request for use in other routes
-                    req.decoded = decoded;
-                    next();
-                }
-            });*/
         },
 
         //Trimitem token-ul daca este gasit in baza de date.
