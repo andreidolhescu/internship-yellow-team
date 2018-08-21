@@ -33,8 +33,7 @@ module.exports =
                 else if (bcrypt.compareSync(Password, userObj.Password)) {
 
                     const payload = {
-                        ID: userObj.id,
-                        Admin: userObj.Admin
+                        ID: userObj.id
                     }
 
                     const token = jwt.sign(payload, settings.SecurityToken, {
@@ -61,35 +60,25 @@ module.exports =
 
         //Daca este logat merge pentru toti.
         IsAdminOrUser(req, res, next) {
+
             var token = req.body.token || req.query.token || req.headers['token'];
 
             if (token) {
                 jwt.verify(token, settings.SecurityToken, function (err, decoded) {
                     if (err) {
-                        console.log("\n\nFunctia 2\n\n", err);
-                        console.log("Token - ", token);
-                        return res.json({ success: false, message: 'Failed to authenticate token.' });
+                        return res.json({
+                            success: false,
+                            message: 'Failed to authenticate token.'
+                        });
                     } else {
-                        // if everything is good, save to request for use in other routes
-                        //console.log(result);\
-                        // Aici deducem mail-ul persoanei care a intrat
                         req.decoded = decoded;
-                        /*getUser(decoded.Mail, function (result) {
-                            if (result != "null") {
-                                //console.log("Result ID :",result.id);
-                                req.decoded.id = result.id;
-                                next();
-                            }
-                        });*/
                         next();
-                        //console.log(decoded.Mail);
-
                     }
                 });
             }
             else {
                 return res.status(404).send({
-                    message: "No token!",
+                    message: "No token found!",
                 });
             }
         },
@@ -97,21 +86,25 @@ module.exports =
         //Daca esti logat, merge doar pentru admini
         IsAdmin(req, res, next) {
             var token = req.body.token || req.query.token || req.headers['token'];
-
             jwt.verify(token, settings.SecurityToken, function (err, decoded) {
                 if (err) {
-                    return res.json({ success: false, message: 'Failed to authenticate token.' });
-                } else {
-                    if (decoded.Admin) {
-                        req.decoded = decoded;
-                        next();
-                    }
-                    else {
-                        return res.status(404).send({
-                            message: "You don't have access!"
-                        })
-                    }
-
+                    return res.json({
+                        success: false,
+                        message: 'Failed to authenticate token.'
+                    });
+                }
+                else {
+                    UserModel.findById(decoded.ID).then((user) => {
+                        if (user.Admin) {
+                            req.decoded = decoded;
+                            next();
+                        }
+                        else {
+                            return res.status(404).send({
+                                message: "You don't have access!"
+                            })
+                        }
+                    })
 
                 }
             });
