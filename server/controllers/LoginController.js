@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const settings = require('../config/Index');
 
 
+
 const getUser = (mail, res) =>
     UserModel.findOne({
         where: {
@@ -171,15 +172,10 @@ module.exports =
             });
         },
 
-        Logout(req, res, next) {
-            req.headers['token'] = "";
-            console.log("Logout");
-            next();
-        },
-
         InitialPage(req, res) {
+            req.headers['token'] = "";
             console.log(require('../config/config.json').development.host);
-            res.writeHead(301, { 'Location': require('../config/config.json').development.host });
+            res.writeHead(301, { 'Location': 'index.html' });
             return res.end();
         }
     }

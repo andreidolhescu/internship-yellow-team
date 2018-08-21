@@ -3,19 +3,24 @@
 
 const TestModel = require('../models').Test;
 
+
 module.exports = {
+
+
     // insert name into Test table
-    create (req, res) {
-        return TestModel
-            .create({
-                name: req.body.name
-            })
-            .then(todo => res.status(201).send(todo))
-            .catch(error => res.status(400).send(error));
+    create(req, res) {
+        GetUserIdByToken(req.headers['token'], function (result) {
+            return TestModel
+                .create({
+                    name: result
+                })
+                .then(todo => res.status(201).send(todo))
+                .catch(error => res.status(400).send(error));
+        })
     },
 
     // get all entries from Test table
-    list (req, res) {
+    list(req, res) {
         return TestModel
             .all()
             .then(todos => res.status(200).send(todos))
@@ -23,22 +28,22 @@ module.exports = {
     },
 
     // get an entry by id
-    getById (req, res) {
+    getById(req, res) {
         return TestModel
             .findById(req.params.testId)
             .then(test => {
                 if (!test) {
-                  return res.status(404).send({
-                    message: 'Test Not Found',
-                  });
+                    return res.status(404).send({
+                        message: 'Test Not Found',
+                    });
                 }
                 return res.status(200).send(test);
-              })
-              .catch(error => res.status(400).send(error));
+            })
+            .catch(error => res.status(400).send(error));
     },
 
     // update an entry
-    update (req, res) {
+    update(req, res) {
         return TestModel
             .findById(req.params.testId)
             .then(test => {
@@ -59,7 +64,7 @@ module.exports = {
     },
 
     // delete an entry
-    destroy (req, res) {
+    destroy(req, res) {
         return TestModel
             .findById(req.params.testId)
             .then(test => {
