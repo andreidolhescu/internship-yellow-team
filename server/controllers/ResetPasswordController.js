@@ -20,8 +20,7 @@ const GetUserByToken = (token, callback) => {
                 callback(userTokens);
             }
         });
-};
-
+}
 const IfExistMail = (mail, callback) => {
     return UserModel
         .findOne({

@@ -4,53 +4,20 @@ const jwt = require('jsonwebtoken');
 const settings = require('../config/Index');
 const UserModel = require('../models').User;
 
-function GetUserIdByToken(token, callback) {
-    jwt.verify(token, settings.SecurityToken, function (err, decoded) {
-        if (err) {
-            return res.json({ success: false, message: 'Failed to authenticate token.' });
-        } else {
-            getUser(decoded.Mail, function (result) {
-                if (result != "null") {
-                    callback(result.id);
-                }
-                else {
-                    callback(null);
-                }
-            })
-
-
-        }
-    });
-}
-
-const getUser = (mail, res) =>
-    UserModel.findOne({
-        where: {
-            Mail: mail
-        }
-    }).then(userTokens => {
-        if (userTokens != null) {
-            return res(userTokens);
-        }
-        else {
-            return res("null");
-        };
-    });
 
 module.exports = {
     // insert Answer into Answer table
     create: (req, res) => {
-        GetUserIdByToken(req.headers['token'], function (result) {
             return AnswerModel.create({
                 quizoptionId: req.params.quizOptionsId,
-                userId: result
+                userId: req.decoded.ID
             })
                 .then(answer => res.status(201).send(answer))
                 .catch(error => {
                     console.log("Eroare: ", error)
                     return res.status(400).send(error);
                 });
-        })
+        
     },
 
     // get all entries from Answer table

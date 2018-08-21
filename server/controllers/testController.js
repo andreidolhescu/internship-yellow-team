@@ -9,14 +9,14 @@ module.exports = {
 
     // insert name into Test table
     create(req, res) {
-        GetUserIdByToken(req.headers['token'], function (result) {
-            return TestModel
-                .create({
-                    name: result
-                })
-                .then(todo => res.status(201).send(todo))
-                .catch(error => res.status(400).send(error));
-        })
+
+        return TestModel
+            .create({
+                name: "Carl"
+            })
+            .then(todo => res.status(201).send(todo))
+            .catch(error => res.status(400).send(error));
+
     },
 
     // get all entries from Test table

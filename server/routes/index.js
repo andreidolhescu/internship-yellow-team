@@ -29,51 +29,51 @@ module.exports = (app) => {
     app.get('/api/test/:testId', testController.getById);
     app.put('/api/test/:testId', testController.update);
     app.delete('/api/test/:testId', testController.destroy);*/
-    app.post('/api/test', testController.create);
-    app.get('/api/test', LoginController.GetToken, testController.list);
+    app.post('/api/test', LoginController.IsAdminOrUser, testController.create);
+    app.get('/api/test', LoginController.IsAdminOrUser, testController.list);
 
     app.post('/api/register', UserController.register);
-    app.get('/api/user', LoginController.GetUserRole, UserController.list);
-    app.get('/api/user/:userId', LoginController.GetUserRole, UserController.getById);
-    app.put('/api/user/:userId', LoginController.GetToken, UserController.update);
-    app.delete('/api/user/:userId', LoginController.GetUserRole, UserController.destroy);
+    app.get('/api/user', LoginController.IsAdmin, UserController.list);
+    app.get('/api/user/:userId', LoginController.IsAdmin, UserController.getById);
+    app.put('/api/user/', LoginController.IsAdminOrUser, UserController.update);
+    app.delete('/api/user/:userId', LoginController.IsAdmin, UserController.destroy);
 
     //routes for category controller
     //app.post('/api/category', CategoryController.create);
     //Creare categorie doar de admin
-    app.post('/api/category', LoginController.GetUserRole, CategoryController.create);
-    app.get('/api/category', LoginController.GetToken, CategoryController.list);
-    app.get('/api/category/:categoryId', LoginController.GetToken, CategoryController.getById);
-    app.put('/api/category/:categoryId', LoginController.GetUserRole, CategoryController.update);
-    app.delete('/api/category/:categoryId', LoginController.GetUserRole, CategoryController.destroy);
+    app.post('/api/category', LoginController.IsAdmin, CategoryController.create);
+    app.get('/api/category', LoginController.IsAdminOrUser, CategoryController.list);
+    app.get('/api/category/:categoryId', LoginController.IsAdminOrUser, CategoryController.getById);
+    app.put('/api/category/:categoryId', LoginController.IsAdmin, CategoryController.update);
+    app.delete('/api/category/:categoryId', LoginController.IsAdmin, CategoryController.destroy);
 
     //routes for course controller
-    app.post('/api/category/:categoryId/course', LoginController.GetUserRole, CourseController.create);
-    app.get('/api/category/:categoryId/course', LoginController.GetToken, CourseController.list);
-    app.get('/api/category/:categoryId/course/:courseId', LoginController.GetToken, CourseController.getById);
-    app.put('/api/category/:categoryId/course/:courseId', LoginController.GetUserRole, CourseController.update);
-    app.delete('/api/category/:categoryId/course/:courseId', LoginController.GetUserRole, CourseController.destroy);
+    app.post('/api/category/:categoryId/course', LoginController.IsAdmin, CourseController.create);
+    app.get('/api/category/:categoryId/course', LoginController.IsAdminOrUser, CourseController.list);
+    app.get('/api/category/:categoryId/course/:courseId', LoginController.IsAdminOrUser, CourseController.getById);
+    app.put('/api/category/:categoryId/course/:courseId', LoginController.IsAdmin, CourseController.update);
+    app.delete('/api/category/:categoryId/course/:courseId', LoginController.IsAdmin, CourseController.destroy);
 
     //routes for chapter controller
-    app.post('/api/category/:categoryId/course/:courseId/chapter', LoginController.GetUserRole, ChapterController.create);
-    app.get('/api/category/:categoryId/course/:courseId/chapter', LoginController.GetToken, ChapterController.list);
-    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId', LoginController.GetToken, ChapterController.getById);
-    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId', LoginController.GetUserRole, ChapterController.update);
-    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId', LoginController.GetUserRole, ChapterController.destroy);
+    app.post('/api/category/:categoryId/course/:courseId/chapter', LoginController.IsAdmin, ChapterController.create);
+    app.get('/api/category/:categoryId/course/:courseId/chapter', LoginController.IsAdminOrUser, ChapterController.list);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId', LoginController.IsAdminOrUser, ChapterController.getById);
+    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId', LoginController.IsAdmin, ChapterController.update);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId', LoginController.IsAdmin, ChapterController.destroy);
 
     //routes for quiz controller
-    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz', LoginController.GetUserRole, QuizController.create);
-    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz', LoginController.GetToken, QuizController.list);
-    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', LoginController.GetToken, QuizController.getById);
-    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', LoginController.GetUserRole, QuizController.update);
-    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', LoginController.GetUserRole, QuizController.destroy);
+    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz', LoginController.IsAdmin, QuizController.create);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz', LoginController.IsAdminOrUser, QuizController.list);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', LoginController.IsAdminOrUser, QuizController.getById);
+    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', LoginController.IsAdmin, QuizController.update);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId', LoginController.IsAdmin, QuizController.destroy);
 
     //routes for quiz options controller
-    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions', LoginController.GetUserRole, QuizOptionsController.create);
-    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions', LoginController.GetToken, QuizOptionsController.list);
-    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', LoginController.GetToken, QuizOptionsController.getById);
-    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', LoginController.GetUserRole, QuizOptionsController.update);
-    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', LoginController.GetUserRole, QuizOptionsController.destroy);
+    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions', LoginController.IsAdmin, QuizOptionsController.create);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions', LoginController.IsAdminOrUser, QuizOptionsController.list);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', LoginController.IsAdminOrUser, QuizOptionsController.getById);
+    app.put('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', LoginController.IsAdmin, QuizOptionsController.update);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', LoginController.IsAdmin, QuizOptionsController.destroy);
 
     //routes for answer controller -> WHAT ROUTES??????
     app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId/answer', AnswerController.create);
@@ -89,21 +89,21 @@ module.exports = (app) => {
 
     //routes for image controller
 
-    app.post('/api/user/:userId/image', LoginController.GetToken, ImageController.create); // insert an user image
-    app.post('/api/category/:categoryId/course/:courseId/image', LoginController.GetUserRole, ImageController.create); // insert a course image
-    app.get('/api/image', LoginController.GetUserRole, ImageController.list); // list all images
+    app.post('/api/user/:userId/image', LoginController.IsAdminOrUser, ImageController.create); // insert an user image
+    app.post('/api/category/:categoryId/course/:courseId/image', LoginController.IsAdmin, ImageController.create); // insert a course image
+    app.get('/api/image', LoginController.IsAdmin, ImageController.list); // list all images
     // List all users images
-    app.get('/api/usr/images', LoginController.GetUserRole, ImageController.userlist);
+    app.get('/api/usr/images', LoginController.IsAdmin, ImageController.userlist);
     // List images for courses
-    app.get('/api/curs/images', LoginController.GetToken, ImageController.curslist);
-    app.get('/api/image/:imageId', LoginController.GetToken, ImageController.getById);
-    app.put('/api/user/:userId/image/:imageId', LoginController.GetToken, ImageController.update);//update a user image
-    app.put('/api/category/:categoryId/course/:courseId/image/:imageId', LoginController.GetUserRole, ImageController.update);//update a course image
-    app.delete('/api/image/:imageId', LoginController.GetUserRole, ImageController.destroy);
+    app.get('/api/curs/images', LoginController.IsAdminOrUser, ImageController.curslist);
+    app.get('/api/image/:imageId', LoginController.IsAdminOrUser, ImageController.getById);
+    app.put('/api/user/:userId/image/:imageId', LoginController.IsAdminOrUser, ImageController.update);//update a user image
+    app.put('/api/category/:categoryId/course/:courseId/image/:imageId', LoginController.IsAdmin, ImageController.update);//update a course image
+    app.delete('/api/image/:imageId', LoginController.IsAdmin, ImageController.destroy);
 
     //Login Route
     app.post('/api/login', LoginController.login);
-    app.get('/api/login', LoginController.GetToken, UserController.list);
+    app.get('/api/login', LoginController.IsAdminOrUser, UserController.list);
     app.get('/api/logout', LoginController.InitialPage);
 
     //Mail send Rout
@@ -118,6 +118,6 @@ module.exports = (app) => {
 
     //Add user token and mail for reset password
     //app.post('/api/reset/add', UserTokenController.createWithParameters);
-    app.get('/api/reset/all', LoginController.GetUserRole, UserTokenController.list);
-    app.get('/api/reset/:id', LoginController.GetUserRole, UserTokenController.destroy);
+    app.get('/api/reset/all', LoginController.IsAdmin, UserTokenController.list);
+    app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);
 }
