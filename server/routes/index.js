@@ -29,7 +29,8 @@ module.exports = (app) => {
     app.get('/api/test/:testId', testController.getById);
     app.put('/api/test/:testId', testController.update);
     app.delete('/api/test/:testId', testController.destroy);*/
-
+    app.post('/api/test', testController.create);
+    app.get('/api/test', testController.list);
 
     app.post('/api/register', UserController.register);
     app.get('/api/user', UserController.list);
@@ -96,11 +97,11 @@ module.exports = (app) => {
     app.put('/api/user/:userId/image/:imageId', ImageController.update);//update a user image
     app.put('/api/category/:categoryId/course/:courseId/image/:imageId', ImageController.update);//update a course image
     app.delete('/api/image/:imageId', ImageController.destroy);
-    
+
     //Login Route
     app.post('/api/login', LoginController.login);
     app.get('/api/login', LoginController.GetToken, UserController.list);
-    app.get('/api/logout', LoginController.Logout, LoginController.InitialPage);
+    app.get('/api/logout', LoginController.InitialPage);
 
     //Mail send Rout
     /*app.post('/api/mail', MailController.SendMail);
