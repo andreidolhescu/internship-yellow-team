@@ -10,6 +10,14 @@ module.exports = (sequelize, DataTypes) => {
     	foreignKey: 'userId',
     	onDelete: 'CASCADE'
     });
+    Answer.belongsTo(models.Quiz, {
+      foreignKey: 'quiz_answerId',
+      onDelete: 'CASCADE'
+    });
+    Answer.belongsTo(models.Chapter, {
+      foreignKey: 'chapterId',
+      onDelete: 'CASCADE'
+    });
   };
   return Answer;
 };

@@ -1,5 +1,8 @@
 const AnswerModel = require('../models').Answer;
-
+const QuizOptionsModel = require('../models').QuizOptions;
+const QuizModel = require('../models').Quiz;
+const CourseModel = require('../models').Course;
+const ChapterModel = require('../models').Chapter;
 const jwt = require('jsonwebtoken');
 const settings = require('../config/Index');
 const UserModel = require('../models').User;
@@ -8,32 +11,23 @@ const UserModel = require('../models').User;
 module.exports = {
     // insert Answer into Answer table
     create: (req, res) => {
-            return AnswerModel.create({
-                quizoptionId: req.params.quizOptionsId,
-                userId: req.decoded.ID
-            })
-                .then(answer => res.status(201).send(answer))
-                .catch(error => {
-                    console.log("Eroare: ", error)
-                    return res.status(400).send(error);
-                });
-        
+        return AnswerModel.create({
+                    userId: req.decoded.ID,
+                    quizoptionId: req.params.quizOptionsId,
+                    quiz_answerId: req.params.quizId,
+                    chapterId: req.params.chapterId
+                })
+            .then(answer => res.status(201).send(answer))
+            .catch(error => {
+                console.log("Eroare: ", error)
+                return res.status(400).send(error);
+            });
     },
 
     // get all entries from Answer table
     list(req, res) {
-        /*console.log(AnswerModel.rawAttributes);
-        //return AnswerModel
-            .all()
-            .then(answers => res.status(200).send(answers))
-            .catch(error => {
-                    console.log("Eroare: ", error)
-                    return res.status(400).send(error);
-                });*/
-                return AnswerModel
-                .findAll({
-                    attributes: ['id', 'quizoptionId','userId']
-                })
+        return AnswerModel
+                .findAll()
                 .then(answers => res.status(200).send(answers))
             .catch(error => {
                     console.log("Eroare: ", error)
@@ -81,6 +75,20 @@ module.exports = {
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
-    }
+    },
+
+    //delete all answers for a chapter
+    deleteforchapter(req, res) {
+        return AnswerModel
+        .destroy({
+            where: {chapterId: req.params.chapterId}
+        })
+
+        .then(() => res.status(200).send({message: "Deleted",}))
+        .catch(error => {
+                        console.log("Eroare: ", error)
+                        return res.status(400).send(error);
+                    });
+        }
 
 };
