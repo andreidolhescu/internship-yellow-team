@@ -6,9 +6,10 @@ var err;
 module.exports = {
     // insert user into user table
     register: (req, res) => {
+        var mail = String(req.body.Mail).toLowerCase();
         return UserModel.findAll({
             where: {
-                Mail: req.body.Mail
+                Mail: mail
             }
         })
             .then((user => {
@@ -30,7 +31,6 @@ module.exports = {
                 if (!validate.IsMail(req.body.Mail))
                     err += "Invalid Mail!"
 
-
                 if (String(err) == String("")) {
                     var hash = bcrypt.hashSync(req.body.Password, 10);
                     return UserModel
@@ -38,7 +38,7 @@ module.exports = {
                             FirstName: req.body.FirstName,
                             LastName: req.body.LastName,
                             Password: hash,
-                            Mail: req.body.Mail,
+                            Mail: mail,
                             Admin: req.body.Admin,
                             Points: req.body.Points
                         })
@@ -90,13 +90,13 @@ module.exports = {
                     //console.log(user);
                     if (user.Admin == true) {
                         user.update({
-                            Admin:false
+                            Admin: false
                         });
                         console.log("True to false");
                     }
                     else {
                         user.update({
-                            Admin:true
+                            Admin: true
                         });
                         console.log("False to true");
                     }
@@ -107,7 +107,7 @@ module.exports = {
                         message: 'Serios? Vrei sa devii user?:)))',
                     });
                 }
-                
+
             })
             .catch(error => res.status(400).send(error));
     },
@@ -117,13 +117,13 @@ module.exports = {
         err = ""
 
         if (!validate.IsName(req.body.FirstName))
-            err += "Invalid First Name!"
+            err += "Invalid First Name! ";
         if (!validate.IsName(req.body.LastName))
-            err += "Invalid Last Name!"
+            err += "Invalid Last Name! ";
         if (!validate.IsPassword(req.body.Password))
-            err += "Invalid Password!"
+            err += "Invalid Password! ";
         if (!validate.IsMail(req.body.Mail))
-            err += "Invalid Mail!"
+            err += "Invalid Mail! ";
 
         UserModel.findAll({
             where: {
@@ -131,11 +131,10 @@ module.exports = {
             }
         })
             .then((user => {
-                //console.log(req.body.Mail, req.decoded.Mail);
-
+                var mail = String(req.body.Mail).toLowerCase();
                 UserModel.findOne({
                     where: {
-                        Mail: req.body.Mail
+                        Mail: mail
                     }
                 }).then(obj => {
                     return UserModel
@@ -155,7 +154,7 @@ module.exports = {
                                             FirstName: req.body.FirstName,
                                             LastName: req.body.LastName,
                                             Password: hash,
-                                            Mail: req.body.Mail
+                                            Mail: mail
                                         })
                                         .then(() => res.status(200).send(user))
                                         .catch((error) => res.status(404).send(error));
@@ -182,7 +181,6 @@ module.exports = {
                                 });
                         })
                 });
-
             }))
             .catch((error) => res.status(400).send(error));
     },
