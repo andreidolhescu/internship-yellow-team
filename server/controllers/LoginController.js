@@ -104,40 +104,11 @@ module.exports =
                                 message: "You don't have access!"
                             })
                         }
-                    })
+                    }).catch((error) => res.status(404).send(error));
 
                 }
             });
         },
-
-        /*GetUserID(req, res) {
-            var token = req.body.token || req.query.token || req.headers['token'];
-
-            jwt.verify(token, settings.SecurityToken, function (err, decoded) {
-                if (err) {
-                    return res.json({ success: false, message: 'Failed to authenticate token.' });
-                } else {
-                    // Aici deducem mail-ul persoanei care a intrat
-                    /*getUser(decoded.Mail, function (result) {
-                        if (result != "null") {
-                            return res.status(200).send({
-                                id: result.id
-                            })
-                        }
-                        else {
-                            return res.status(404).send({
-                                message: "Nu a fost gasit nimic!"
-                            })
-                        }
-                    })
-                    return res.status(200).send({
-                        id: decoded.ID
-                    })
-
-
-                }
-            });
-        },*/
 
         ItsValidToken(req, res) {
             return res.status(200).send({

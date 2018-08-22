@@ -75,8 +75,7 @@ module.exports =
                                     message: "Token Sters "
                                 });
                             }
-                            else
-                            {
+                            else {
                                 return res.status(404).send({
                                     message: "Parola nu a trecut validarea"
                                 });
@@ -106,7 +105,7 @@ module.exports =
 
             var token = req.params.token;
 
-            
+
             var mail;
 
             GetUserByToken(token, function (a) {
@@ -125,7 +124,7 @@ module.exports =
                     return res.json({ success: false, message: 'Nu exista asa token!' });
                 }
             });
-            
+
         },
 
         //Trimitem token-ul daca este gasit in baza de date.
