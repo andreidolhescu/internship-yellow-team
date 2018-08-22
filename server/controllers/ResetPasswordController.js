@@ -122,7 +122,7 @@ module.exports =
 
         //Trimitem token-ul daca este gasit in baza de date.
         SendToken(req, res) {
-            var mail = req.body.mail;
+            var mail = req.body.Mail;
 
             IfExistMail(String(mail).toLowerCase(), function (response) {
                 if (response == "true") {

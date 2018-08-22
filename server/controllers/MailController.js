@@ -1,3 +1,4 @@
+
 module.exports = {
 
     SendMail(req, res) {
@@ -54,7 +55,7 @@ module.exports = {
             from: 'klgrakk1@gmail.com',
             to: to,
             subject: subject,
-            html: "Your link is " + require('../config/config.json').development.host + "/api/reset/" + html //De modificat in server. ceva ?
+            html: "Your link is " + require('../config/config.json').development.host + ":8000/api/reset/" + html //De modificat in server. ceva ?
         };
 
         transporter.sendMail(mailOptions, function (err, info) {
