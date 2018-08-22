@@ -155,9 +155,7 @@ module.exports = {
                                             FirstName: req.body.FirstName,
                                             LastName: req.body.LastName,
                                             Password: hash,
-                                            Mail: req.body.Mail,
-                                            /*Admin: req.body.Admin,
-                                            Points: req.body.Points*/
+                                            Mail: req.body.Mail
                                         })
                                         .then(() => res.status(200).send(user))
                                         .catch((error) => res.status(404).send(error));
@@ -167,10 +165,7 @@ module.exports = {
                                         .update({
                                             FirstName: req.body.FirstName,
                                             LastName: req.body.LastName,
-                                            Password: hash,
-                                            //Mail: req.decoded.Mail,
-                                            /*Admin: req.body.Admin,
-                                            Points: req.body.Points*/
+                                            Password: hash
                                         })
                                         .then(() => res.status(200).send(user))
                                         .catch((error) => res.status(404).send(error));
