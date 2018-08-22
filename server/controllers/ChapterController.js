@@ -79,8 +79,8 @@ module.exports = {
 
                 return chapter
                     .update({
-                        Title: req.body.Title,
-			            Content: req.body.Content,
+                        Title: req.body.Title || chapter.Title,
+			            Content: req.body.Content || chapter.Content,
 			            courseId: req.params.courseId
                     })
                     .then(() => res.status(200).send(chapter))

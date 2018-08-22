@@ -92,13 +92,13 @@ module.exports = {
                         user.update({
                             Admin:false
                         });
-                        console.log("True to false");
+                        console.log("Admin to user");
                     }
                     else {
                         user.update({
                             Admin:true
                         });
-                        console.log("False to true");
+                        console.log("User to Admin");
                     }
                     return res.status(200).send(user);
                 }
