@@ -77,6 +77,20 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
+    about(req, res) {
+        return UserModel
+            .findById(req.decoded.ID)
+            .then(user => {
+                if (!user) {
+                    return res.status(404).send({
+                        message: 'User Not Found',
+                    });
+                }
+                return res.status(200).send(user);
+            })
+            .catch(error => res.status(400).send(error));
+    },
+
     change(req, res) {
         return UserModel
             .findById(req.params.userId)
@@ -186,7 +200,7 @@ module.exports = {
     },
 
     // delete an entry IF ADMIN -> TODO
-    destroy(req, res) {
+    destroyId(req, res) {
         return UserModel
             .findById(req.params.userId)
             .then(user => {
@@ -196,12 +210,49 @@ module.exports = {
                     });
                 }
 
+                if(user.id == req.decoded.ID)
+                {
+                    return res.status(404).send({
+                        message: 'Fiind admin, nu te poti sterge',
+                    });  
+                }
+
                 return user
                     .destroy()
                     .then(() => res.status(200).send())
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
-    }
+    },
+
+    destroy(req, res) {
+        return UserModel
+            .findById(req.decoded.ID)
+            .then(user => {
+                if (!user) {
+                    return res.status(404).send({
+                        message: 'User Not Found',
+                    });
+                }
+                UserModel.findById(req.decoded.ID)
+                .then((user=>
+                {
+                    if(user.Admin)
+                    {
+                        return res.status(404).send({
+                            message: 'Fiind admin, nu te poti sterge',
+                        }); 
+                    }
+                    else
+                    {
+                        return user
+                        .destroy()
+                        .then(() => res.status(200).send())
+                        .catch((error) => res.status(400).send(error));
+                    }
+                }))
+            })
+            .catch((error) => res.status(400).send(error));
+    },
 
 };

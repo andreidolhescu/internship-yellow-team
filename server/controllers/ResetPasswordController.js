@@ -41,13 +41,6 @@ const IfExistMail = (mail, callback) => {
 
 module.exports =
     {
-        //Daca trece token-ul, facem redirect
-        Redirect(req, res) {
-            var mail = req.body.mail;
-            res.writeHead(302, { 'Location': req.url + "/change" });
-            return res.end();
-        },
-
         //Facem update la parola
         NewPassword(req, res) {
             //Facem update la parola dupa mailul respectiv
@@ -96,7 +89,7 @@ module.exports =
         //Primim mesaj ca putem modifica parola, adica tokenul si mailul sun valide in baza de date
         ChangePassword(req, res) {
             return res.status(200).send({
-                message: "Se poate de modificat parola, Metoda ChangePassword"
+                message: "Token-ul este valid! Aici tre sa fie pagina de login"
             });
         },
 
