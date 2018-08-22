@@ -95,8 +95,8 @@ module.exports = {
                 
             return quizOption
                 .update({
-                    Option: req.body.Option,
-                    isCorrect: req.body.isCorrect,
+                    Option: req.body.Option || quizOption.Option,
+                    isCorrect: req.body.isCorrect || quizOption.isCorrect,
                     quizId: req.params.quizId
                 })
                 .then(() => res.status(200).send(quizOption))

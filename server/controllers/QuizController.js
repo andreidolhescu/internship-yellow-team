@@ -88,7 +88,7 @@ module.exports = {
                 
             return quiz
                 .update({
-                    Question: req.body.Question,
+                    Question: req.body.Question || quiz.Question,
                     chapterId: req.params.chapterId
                 })
                 .then(() => res.status(200).send(quiz))
