@@ -131,7 +131,7 @@ module.exports =
                     }
 
                     const token = jwt.sign(payload, mail, {
-                        expiresIn: 3600
+                        expiresIn: 43200
                     });
 
                     const MailController = require('../controllers').MailController;

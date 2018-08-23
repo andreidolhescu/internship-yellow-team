@@ -37,7 +37,7 @@ module.exports =
                     }
 
                     const token = jwt.sign(payload, settings.SecurityToken, {
-                        expiresIn: 3600
+                        expiresIn: 43200
                     });
                     req.headers['token'] = token;
 

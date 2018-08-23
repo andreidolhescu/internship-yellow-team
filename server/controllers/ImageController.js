@@ -7,10 +7,12 @@ const multer = require('multer');
 //Set storage image
 const storage = multer.diskStorage({
     destination: './public/images',
-    filename : function (req, file, cb) {
-        console.log(req.file),
-        cb(null, file.filename + '-' + Date.now())
-    } 
+    filename: function (req, file, cb) {
+        console.log(file);
+        var name = file.fieldname + '-' + Date.now() + "." + file.mimetype.split('/')[1];
+        //console.log(name);
+        cb(null, name)
+    }
 });
 
 const upload = multer({
@@ -19,35 +21,100 @@ const upload = multer({
 
 module.exports = {
 
-    uploadFile: (req, res) => {
+    /*uploadFile: (req, res) => {
         upload(req, res, (err) => {
             if (err) {
                 return res.status(404).send({
-                    message: "Eroare la imagine uploadFile"
+                    message: err
                 })
             }
             else {
-                //console.log(req.file);
-                return res.status(200).send({
-                    message: "Upload file successful"
-                })
+                if (req.file == null) {
+                    return res.status(404).send({
+                        message: "No file"
+                    })
+                }
+                else {
+                    console.log(req.file.filename);
+                    return res.status(200).send({
+                        message: "Upload file successful : " + req.file.filename
+                    })
+                }
             }
         })
     },
 
-
+*/
     // insert image into Image table -> TREBUIE FACUT SEPARARE INTRE CURS SI USER
     create: (req, res) => {
-        return ImageModel.create({
-            path: req.body.path,
-            courseId: req.params.courseId,
-            userId: req.params.userId
-        })
-            .then(image => res.status(201).send(image))
-            .catch(error => {
-                console.log("Eroare: ", error)
-                return res.status(400).send(error);
-            });
+        if (req.decoded.ID != null) {
+
+            upload(req, res, (err) => {
+                if (err) {
+                    return res.status(404).send({
+                        message: err
+                    })
+                }
+                else {
+
+                    if (req.file != null) {
+                        return ImageModel.create({
+                            path: "pubic/images/" + req.file.filename,
+                            courseId: req.params.courseId,
+                            userId: req.decoded.ID
+                        })
+                            .then(image => res.status(201).send(image))
+                            .catch(error => {
+                                //console.log("Eroare: ", error)
+                                return res.status(400).send(error);
+                            });
+
+                        return res.status(200).send({
+                            message: "Upload file successful : " + req.file.filename
+                        })
+                    }
+                    else {
+                        return res.status(400).send({
+                            message: "No file upload"
+                        })
+                    }
+                }
+            })
+        }
+        else{
+            //Aici trebuie de verificat daca insereaza imagine pentru curs, nu sunt sigur ca functioneaza
+            upload(req, res, (err) => {
+                if (err) {
+                    return res.status(404).send({
+                        message: err
+                    })
+                }
+                else {
+
+                    if (req.file != null) {
+                        return ImageModel.create({
+                            path: "pubic/images/" + req.file.filename,
+                            courseId: req.params.courseId,
+                            userId: null
+                        })
+                            .then(image => res.status(201).send(image))
+                            .catch(error => {
+                                //console.log("Eroare: ", error)
+                                return res.status(400).send(error);
+                            });
+
+                        return res.status(200).send({
+                            message: "Upload file successful : " + req.file.filename
+                        })
+                    }
+                    else {
+                        return res.status(400).send({
+                            message: "No file upload"
+                        })
+                    }
+                }
+            })
+        }
     },
 
     // get all entries from Image table

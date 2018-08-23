@@ -88,7 +88,7 @@ module.exports = (app) => {
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/answer', LoginController.IsAdminOrUser, AnswerController.deleteforchapter);
 
     //routes for image controller
-    app.post('/api/user/:userId/image', LoginController.IsAdminOrUser, ImageController.create); // insert an user image
+    app.post('/api/user/image', LoginController.IsAdminOrUser, ImageController.create); // insert an user image
     app.post('/api/category/:categoryId/course/:courseId/image', LoginController.IsAdmin, ImageController.create); // insert a course image
     app.get('/api/image', LoginController.IsAdmin, ImageController.list); // list all images
     // List all users images
@@ -124,5 +124,5 @@ module.exports = (app) => {
     app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.SetScore);
     app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.GetScore);
 
-    app.post('/api/upload', ImageController.uploadFile);
+    //app.post('/api/upload', ImageController.uploadFile);
 }
