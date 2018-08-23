@@ -108,17 +108,17 @@ module.exports = (app) => {
     //Mail send Rout, only for testing
     /*app.post('/api/mail', MailController.SendMail);
     app.get('/api/mail', MailController.GetOK);*/
-
+    //Add user token and mail for reset password
+    
     //ResetPassword Rout
     app.post('/api/reset', ResetPasswordController.SendToken);
     app.get('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.ChangePassword);
     app.post('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.NewPassword);
 
-    //Add user token and mail for reset password
     //app.post('/api/reset/add', UserTokenController.createWithParameters);
     //Only for testing
-    /*app.get('/api/reset/all', LoginController.IsAdmin, UserTokenController.list);
-    app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);*/
+    app.get('/api/reset/user/all', LoginController.IsAdmin, UserTokenController.list);
+    app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);
 
     //Score -> GetScore // SetScore
     app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.GetScoreChapter);
