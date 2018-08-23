@@ -13,6 +13,7 @@ const MailController = require('../controllers').MailController;
 const ResetPasswordController = require('../controllers').ResetPasswordController;
 const UserTokenController = require('../controllers').UserTokenController;
 const ImageController = require('../controllers').ImageController;
+const ScoreController = require('../controllers').ScoreController;
 
 module.exports = (app) => {
 
@@ -78,11 +79,11 @@ module.exports = (app) => {
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId', LoginController.IsAdmin, QuizOptionsController.destroy);
 
     //routes for answer controller -> WHAT ROUTES??????
-    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId/answer',LoginController.IsAdminOrUser, AnswerController.create);
+    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/quiz/:quizId/quizOptions/:quizOptionsId/answer', LoginController.IsAdminOrUser, AnswerController.create);
     app.get('/api/answers', AnswerController.list); // list all answers
     app.get('/api/answers/:answerId', AnswerController.getById);
     app.delete('/api/answers/:answerId', AnswerController.destroy);
-    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/answer',LoginController.IsAdminOrUser, AnswerController.deleteforchapter);
+    app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/answer', LoginController.IsAdminOrUser, AnswerController.deleteforchapter);
 
     //routes for image controller
     app.post('/api/user/:userId/image', LoginController.IsAdminOrUser, ImageController.create); // insert an user image
@@ -117,4 +118,9 @@ module.exports = (app) => {
     //Only for testing
     /*app.get('/api/reset/all', LoginController.IsAdmin, UserTokenController.list);
     app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);*/
+
+    //Score -> GetScore // SetScore
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.GetScoreChapter);
+    app.get('/api/category/:categoryId/course/:courseId/score', LoginController.IsAdminOrUser, ScoreController.GetScoreCourse);
+    app.get('/api/score', LoginController.IsAdminOrUser, ScoreController.GetUserScore); // get user's score
 }
