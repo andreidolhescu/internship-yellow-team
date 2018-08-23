@@ -49,7 +49,7 @@ module.exports = {
             from: 'klgrakk1@gmail.com',
             to: to,
             subject: subject,
-            html: "Your link is " + "http://192.168.151.36:8000/api/reset/" + html //De modificat in server. ceva ?
+            html: "Your link is " + "http://localhost:4200/resetpassword?token=" + html //De modificat in server. ceva ?
         };
 
         transporter.sendMail(mailOptions, function (err, info) {

@@ -121,7 +121,7 @@ module.exports = {
                 }
                 else {
                     return res.status(400).send({
-                        message: 'Permission denied.',
+                        message: 'Access denied.',
                     });
                 }
             })
@@ -190,7 +190,7 @@ module.exports = {
                                 }
                                 else {
                                     return res.status(404).send({
-                                        message: 'Permission denied. Mail Exist.',
+                                        message: 'Access denied. Mail Exist.',
                                     });
                                 }
                             }
