@@ -66,7 +66,6 @@ module.exports = {
 
            where: {
                 userId: req.decoded.ID,
-                // chapterId: req.params.chapterId,
             }, 
         
 
@@ -76,14 +75,12 @@ module.exports = {
                     console.log("Eroare: ", error)
                     return res.status(400).send(error);
                 });
-    }
+    },
 
-/* TODO
-    GetScoreUser(req, res) {
+    GetUserScore(req, res) {
         AnswerModel.findAndCountAll({
             where: {
                 userId: req.decoded.ID,
-                // chapterId: req.params.chapterId,
             },
             include: [{
                model: QuizOptionsModel,
@@ -99,5 +96,5 @@ module.exports = {
                     console.log("Eroare: ", error)
                     return res.status(400).send(error);
                 });
-    }*/
+    }
 }

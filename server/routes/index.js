@@ -122,5 +122,5 @@ module.exports = (app) => {
     //Score -> GetScore // SetScore
     app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.GetScoreChapter);
     app.get('/api/category/:categoryId/course/:courseId/score', LoginController.IsAdminOrUser, ScoreController.GetScoreCourse);
-
+    app.get('/api/score', LoginController.IsAdminOrUser, ScoreController.GetUserScore); // get user's score
 }
