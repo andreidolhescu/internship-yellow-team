@@ -7,7 +7,7 @@ module.exports = {
             .then(function (obj) {
                 if (obj) { // update
                     return obj.update({
-                        token:token
+                        token: token
                     });
                 }
                 else { // insert
@@ -17,14 +17,14 @@ module.exports = {
                     });
                 }
             }
-        )
+            )
     },
 
     // get all entries from Test table
     list(req, res) {
         return UserTokens
             .all()
-            .then(todos => res.status(200).send(todos))
+            .then(user => res.status(200).send(user))
             .catch(error => res.status(400).send(error));
     },
 
@@ -77,10 +77,11 @@ module.exports = {
 
                 return test
                     .destroy()
-                    .then(() => res.status(200).send())
+                    .then(() => res.status(200).send({
+                        message: "User token deleted."
+                    }))
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
     }
-
 };
