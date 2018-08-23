@@ -6,9 +6,10 @@ var err;
 module.exports = {
     // insert user into user table
     register: (req, res) => {
+        var mail = String(req.body.Mail).toLowerCase();
         return UserModel.findAll({
             where: {
-                Mail: req.body.Mail
+                Mail: mail
             }
         })
             .then((user => {
@@ -30,7 +31,6 @@ module.exports = {
                 if (!validate.IsMail(req.body.Mail))
                     err += "Invalid Mail!"
 
-
                 if (String(err) == String("")) {
                     var hash = bcrypt.hashSync(req.body.Password, 10);
                     return UserModel
@@ -38,7 +38,7 @@ module.exports = {
                             FirstName: req.body.FirstName,
                             LastName: req.body.LastName,
                             Password: hash,
-                            Mail: req.body.Mail,
+                            Mail: mail,
                             Admin: req.body.Admin,
                             Points: req.body.Points
                         })
@@ -77,6 +77,20 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
+    about(req, res) {
+        return UserModel
+            .findById(req.decoded.ID)
+            .then(user => {
+                if (!user) {
+                    return res.status(404).send({
+                        message: 'User Not Found',
+                    });
+                }
+                return res.status(200).send(user);
+            })
+            .catch(error => res.status(400).send(error));
+    },
+
     change(req, res) {
         return UserModel
             .findById(req.params.userId)
@@ -90,13 +104,13 @@ module.exports = {
                     //console.log(user);
                     if (user.Admin == true) {
                         user.update({
-                            Admin:false
+                            Admin: false
                         });
                         console.log("Admin to user");
                     }
                     else {
                         user.update({
-                            Admin:true
+                            Admin: true
                         });
                         console.log("User to Admin");
                     }
@@ -107,7 +121,7 @@ module.exports = {
                         message: 'Serios? Vrei sa devii user?:)))',
                     });
                 }
-                
+
             })
             .catch(error => res.status(400).send(error));
     },
@@ -117,13 +131,13 @@ module.exports = {
         err = ""
 
         if (!validate.IsName(req.body.FirstName))
-            err += "Invalid First Name!"
+            err += "Invalid First Name! ";
         if (!validate.IsName(req.body.LastName))
-            err += "Invalid Last Name!"
+            err += "Invalid Last Name! ";
         if (!validate.IsPassword(req.body.Password))
-            err += "Invalid Password!"
+            err += "Invalid Password! ";
         if (!validate.IsMail(req.body.Mail))
-            err += "Invalid Mail!"
+            err += "Invalid Mail! ";
 
         UserModel.findAll({
             where: {
@@ -131,11 +145,10 @@ module.exports = {
             }
         })
             .then((user => {
-                //console.log(req.body.Mail, req.decoded.Mail);
-
+                var mail = String(req.body.Mail).toLowerCase();
                 UserModel.findOne({
                     where: {
-                        Mail: req.body.Mail
+                        Mail: mail
                     }
                 }).then(obj => {
                     return UserModel
@@ -155,7 +168,7 @@ module.exports = {
                                             FirstName: req.body.FirstName,
                                             LastName: req.body.LastName,
                                             Password: hash,
-                                            Mail: req.body.Mail
+                                            Mail: mail
                                         })
                                         .then(() => res.status(200).send(user))
                                         .catch((error) => res.status(404).send(error));
@@ -182,13 +195,12 @@ module.exports = {
                                 });
                         })
                 });
-
             }))
             .catch((error) => res.status(400).send(error));
     },
 
     // delete an entry IF ADMIN -> TODO
-    destroy(req, res) {
+    destroyId(req, res) {
         return UserModel
             .findById(req.params.userId)
             .then(user => {
@@ -198,12 +210,49 @@ module.exports = {
                     });
                 }
 
+                if(user.id == req.decoded.ID)
+                {
+                    return res.status(404).send({
+                        message: 'Fiind admin, nu te poti sterge',
+                    });  
+                }
+
                 return user
                     .destroy()
                     .then(() => res.status(200).send())
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
-    }
+    },
+
+    destroy(req, res) {
+        return UserModel
+            .findById(req.decoded.ID)
+            .then(user => {
+                if (!user) {
+                    return res.status(404).send({
+                        message: 'User Not Found',
+                    });
+                }
+                UserModel.findById(req.decoded.ID)
+                .then((user=>
+                {
+                    if(user.Admin)
+                    {
+                        return res.status(404).send({
+                            message: 'Fiind admin, nu te poti sterge',
+                        }); 
+                    }
+                    else
+                    {
+                        return user
+                        .destroy()
+                        .then(() => res.status(200).send())
+                        .catch((error) => res.status(400).send(error));
+                    }
+                }))
+            })
+            .catch((error) => res.status(400).send(error));
+    },
 
 };

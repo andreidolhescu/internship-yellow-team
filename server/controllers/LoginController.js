@@ -37,7 +37,7 @@ module.exports =
                     }
 
                     const token = jwt.sign(payload, settings.SecurityToken, {
-                        expiresIn: 3600
+                        expiresIn: 43200
                     });
                     req.headers['token'] = token;
 
@@ -71,8 +71,18 @@ module.exports =
                             message: 'Failed to authenticate token.'
                         });
                     } else {
-                        req.decoded = decoded;
-                        next();
+                        UserModel.findById(decoded.ID)
+                            .then((user => {
+                                if (user != null) {
+                                    req.decoded = decoded;
+                                    next();
+                                }
+                                else {
+                                    return res.status(404).send({
+                                        message: "No user found in database",
+                                    });
+                                }
+                            }));
                     }
                 });
             }
@@ -100,7 +110,7 @@ module.exports =
                             next();
                         }
                         else {
-                            return res.status(404).send({
+                            return res.status(403).send({
                                 message: "You don't have access!"
                             })
                         }
@@ -109,13 +119,13 @@ module.exports =
                 }
             });
         },
-
+        /*
         ItsValidToken(req, res) {
             return res.status(200).send({
                 message: "Functia ItsValidToken, Functia 3",
             });
         },
-
+        */
         InitialPage(req, res) {
             req.headers['token'] = "";
             console.log(require('../config/config.json').development.host);

@@ -1,8 +1,7 @@
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const jsonwebtoken = require('jsonwebtoken');
-const config = require('./server/config/config.json')
+const config = require('./server/config/config.json');
 
 // Set up the express app
 const app = express();
