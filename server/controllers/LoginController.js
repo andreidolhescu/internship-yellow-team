@@ -100,7 +100,8 @@ module.exports =
                 if (err) {
                     return res.json({
                         success: false,
-                        message: 'Failed to authenticate token.'
+                        message: 'Failed to authenticate token.',
+                        message: err
                     });
                 }
                 else {
@@ -119,13 +120,7 @@ module.exports =
                 }
             });
         },
-        /*
-        ItsValidToken(req, res) {
-            return res.status(200).send({
-                message: "Functia ItsValidToken, Functia 3",
-            });
-        },
-        */
+
         InitialPage(req, res) {
             req.headers['token'] = "";
             console.log(require('../config/config.json').development.host);
