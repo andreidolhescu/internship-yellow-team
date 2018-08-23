@@ -123,4 +123,6 @@ module.exports = (app) => {
     //Score -> GetScore // SetScore
     app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.SetScore);
     app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.GetScore);
+
+    app.post('/api/upload', ImageController.uploadFile);
 }

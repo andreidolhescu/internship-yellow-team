@@ -71,8 +71,21 @@ module.exports =
                             message: 'Failed to authenticate token.'
                         });
                     } else {
-                        req.decoded = decoded;
-                        next();
+                        User.findById({
+                            where: {
+                                id: req.decoded.id
+                            }
+                        }).then((user => {
+                            if (user != null) {
+                                req.decoded = decoded;
+                                next();
+                            }
+                            else {
+                                return res.status(404).send({
+                                    message: "No user found in database",
+                                });
+                            }
+                        }));
                     }
                 });
             }
@@ -100,7 +113,7 @@ module.exports =
                             next();
                         }
                         else {
-                            return res.status(404).send({
+                            return res.status(403).send({
                                 message: "You don't have access!"
                             })
                         }
@@ -109,13 +122,13 @@ module.exports =
                 }
             });
         },
-
+        /*
         ItsValidToken(req, res) {
             return res.status(200).send({
                 message: "Functia ItsValidToken, Functia 3",
             });
         },
-
+        */
         InitialPage(req, res) {
             req.headers['token'] = "";
             console.log(require('../config/config.json').development.host);
