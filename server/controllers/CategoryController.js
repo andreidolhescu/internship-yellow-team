@@ -1,11 +1,11 @@
 const CategoryModel = require('../models').Category;
+const Sequelize = require('sequelize');
 const settings = require('../config/Index');
 const JWT = require('jsonwebtoken');
 var err = '';
 
 
 module.exports = {
-    //TODO: Only for admins
     create(req, res) {
 
         err = '';
@@ -75,7 +75,10 @@ module.exports = {
 
         CategoryModel.findAll({
             where: {
-                CategoryName: req.body.CategoryName
+                CategoryName: req.body.CategoryName,
+                id: {
+                  [Sequelize.Op.ne]: req.query.categoryId
+                } 
             }
         })
             .then((category => {
@@ -86,7 +89,7 @@ module.exports = {
                 }
 
                 return CategoryModel
-                    .findById(req.params.categoryId)
+                    .findById(req.query.categoryId)
                     .then(category => {
                         if (!category) {
                             return res.status(404).send({
@@ -113,11 +116,9 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-
-    // delete an entry -> TODO: Only for admins
     destroy(req, res) {
         return CategoryModel
-            .findById(req.params.categoryId)
+            .findById(req.query.categoryId)
             .then(category => {
                 if (!category) {
                     return res.status(404).send({

@@ -49,15 +49,15 @@ module.exports = (app) => {
     app.post('/api/category', LoginController.IsAdmin, CategoryController.create);
     app.get('/api/category', LoginController.IsAdminOrUser, CategoryController.list);
     app.get('/api/category/:categoryId', LoginController.IsAdminOrUser, CategoryController.getById);
-    app.put('/api/category/:categoryId', LoginController.IsAdmin, CategoryController.update);
-    app.delete('/api/category/:categoryId', LoginController.IsAdmin, CategoryController.destroy);
+    app.put('/api/category', LoginController.IsAdmin, CategoryController.update);
+    app.delete('/api/category', LoginController.IsAdmin, CategoryController.destroy);
 
     //routes for course controller
-    app.post('/api/category/:categoryId/course', LoginController.IsAdmin, CourseController.create);
-    app.get('/api/category/:categoryId/course', LoginController.IsAdminOrUser, CourseController.list);
-    app.get('/api/category/:categoryId/course/:courseId', LoginController.IsAdminOrUser, CourseController.getById);
-    app.put('/api/category/:categoryId/course/:courseId', LoginController.IsAdmin, CourseController.update);
-    app.delete('/api/category/:categoryId/course/:courseId', LoginController.IsAdmin, CourseController.destroy);
+    app.post('/api/course', LoginController.IsAdmin, CourseController.create);
+    app.get('/api/course', LoginController.IsAdminOrUser, CourseController.list);
+    app.get('/api/course/:courseId', LoginController.IsAdminOrUser, CourseController.getById);
+    app.put('/api/course', LoginController.IsAdmin, CourseController.update);
+    app.delete('/api/course/', LoginController.IsAdmin, CourseController.destroy);
 
     //routes for chapter controller
     app.post('/api/category/:categoryId/course/:courseId/chapter', LoginController.IsAdmin, ChapterController.create);
@@ -117,8 +117,8 @@ module.exports = (app) => {
     //Add user token and mail for reset password
     //app.post('/api/reset/add', UserTokenController.createWithParameters);
     //Only for testing
-    /*app.get('/api/reset/all', LoginController.IsAdmin, UserTokenController.list);
-    app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);*/
+    app.get('/api/reset/all',/* LoginController.IsAdmin,*/ UserTokenController.list);
+    app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);
 
     //Score -> GetScore // SetScore
     app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.GetScoreChapter);

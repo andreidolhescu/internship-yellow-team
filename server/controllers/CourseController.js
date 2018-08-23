@@ -1,4 +1,5 @@
 const CourseModel = require('../models').Course;
+const Sequelize = require('sequelize');
 var validate = require('../validate/Validation');
 var err;
 
@@ -7,7 +8,8 @@ module.exports = {
     create: (req, res) => {
         return CourseModel.findAll({
             where: {
-                Title: req.body.Title
+                Title: req.body.Title,
+                categoryId: req.query.categoryId
             }
         })
         .then((course => {
@@ -21,7 +23,7 @@ module.exports = {
             Summary: req.body.Summary,
             Description: req.body.Description,
             Tags: req.body.Tags,
-            categoryId: req.params.categoryId
+            categoryId: req.query.categoryId
         })
         .then(todo => res.status(201).send(todo))
         .catch(error => {
@@ -43,7 +45,7 @@ module.exports = {
         return CourseModel
         .findAll({
             where: {
-                categoryId: req.params.categoryId
+                categoryId: req.query.categoryId
                 }
         })
             .then(course => {
@@ -83,7 +85,10 @@ module.exports = {
     update (req, res) {
         CourseModel.findAll({
             where: {
-                Title: req.body.Title
+                Title: req.body.Title,
+                id: {
+                  [Sequelize.Op.ne]: req.query.courseId
+                } 
             }
         })
         .then((course => {
@@ -94,7 +99,7 @@ module.exports = {
             }
 
         return CourseModel
-            .findById(req.params.courseId)
+            .findById(req.query.courseId)
             .then(course => {
                 if (!course) {
                     return res.status(404).send({
@@ -109,7 +114,7 @@ module.exports = {
 		            Summary: req.body.Summary || course.Summary,
 		            Description: req.body.Description || course.Description,
 		            Tags: req.body.Tags || course.Tags,
-		            categoryId: req.params.categoryId || course.categoryId
+		            categoryId: req.query.categoryId
                 })
                 .then(() => res.status(200).send(course))
                 .catch((error) => res.status(400).send(error));
@@ -123,7 +128,7 @@ module.exports = {
     // delete an entry -> TODO: Only for admins
     destroy (req, res) {
         return CourseModel
-            .findById(req.params.courseId)
+            .findById(req.query.courseId)
             .then(user => {
                 if (!user) {
                     return res.status(404).send({
