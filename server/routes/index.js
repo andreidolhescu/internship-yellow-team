@@ -121,8 +121,7 @@ module.exports = (app) => {
     app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);*/
 
     //Score -> GetScore // SetScore
-    app.post('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.SetScore);
-    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.GetScore);
-
-    //app.post('/api/upload', ImageController.uploadFile);
+    app.get('/api/category/:categoryId/course/:courseId/chapter/:chapterId/score', LoginController.IsAdminOrUser, ScoreController.GetScoreChapter);
+    app.get('/api/category/:categoryId/course/:courseId/score', LoginController.IsAdminOrUser, ScoreController.GetScoreCourse);
+    app.get('/api/score', LoginController.IsAdminOrUser, ScoreController.GetUserScore); // get user's score
 }

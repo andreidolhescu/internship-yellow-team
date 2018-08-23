@@ -105,11 +105,11 @@ module.exports = {
                 
             return course
                 .update({
-                    Title: req.body.Title,
-		            Summary: req.body.Summary,
-		            Description: req.body.Description,
-		            Tags: req.body.Tags,
-		            categoryId: req.params.categoryId
+                    Title: req.body.Title || course.Title,
+		            Summary: req.body.Summary || course.Summary,
+		            Description: req.body.Description || course.Description,
+		            Tags: req.body.Tags || course.Tags,
+		            categoryId: req.params.categoryId || course.categoryId
                 })
                 .then(() => res.status(200).send(course))
                 .catch((error) => res.status(400).send(error));

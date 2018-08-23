@@ -97,8 +97,8 @@ module.exports = {
                         if (String(err) == String("")) {
                             return category
                                 .update({
-                                    CategoryName: req.body.CategoryName,
-                                    Background: req.body.Background
+                                    CategoryName: req.body.CategoryName || category.CategoryName,
+                                    Background: req.body.Background || category.Background
                                 })
                                 .then(() => res.status(200).send(category))
                                 .catch((error) => res.status(400).send(error));

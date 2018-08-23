@@ -9,7 +9,8 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       Question: {
-        type: Sequelize.STRING(70)
+        type: Sequelize.STRING(70),
+        allowNull: false
       },
       chapterId: {
         type: Sequelize.INTEGER,
