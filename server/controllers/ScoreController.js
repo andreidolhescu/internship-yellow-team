@@ -1,33 +1,103 @@
-const AnswerModel = require('../models').answer;
+const AnswerModel = require('../models').Answer;
 const QuizOptionsModel = require('../models').QuizOptions;
 const QuizModel = require('../models').Quiz;
 const ChapterModel = require('../models').Chapter;
+const CourseModel = require('../models').Course;
 
 
 module.exports = {
 
-    GetScore(req,res)
+    GetScoreChapter(req,res)
     {
-        
+        AnswerModel.findAndCountAll({
+            include: [{
+                model: QuizOptionsModel,
+                where:
+                {
+                    isCorrect: true,
+                },
+                required: true
+            }],
+            where: {
+            userId: req.decoded.ID,
+            chapterId: req.params.chapterId,
+            }, 
+        })
+        .then(answers => res.status(200).send(answers))
+            .catch(error => {
+                    console.log("Eroare: ", error)
+                    return res.status(400).send(error);
+                });
     },
 
-    SetScore(req,res)
-    {
-        AnswerModel.findAll({
-            Where: {
-            userId: req.decoded.ID,
-            chapterId: req.params.chapterId
-            }})
-            .then((answer =>{
-                var tmp = "";
-                answer.forEach(element => {
-                    tmp += element
+    GetScoreCourse(req, res) {
+        AnswerModel.findAndCountAll({
+           include: [{
+               model: QuizOptionsModel,
+               where:
+               {
+                   isCorrect: true,
+               },
+               required: true,
+
+               include: [{
+                    model:QuizModel,
+                    required:true,
+
+                    include: [{
+                        model: ChapterModel,
+                        where:
+                        {
+                            courseId: req.params.courseId,
+                        },
+                        required: true,
+
+                        include: [{
+                           model: CourseModel,
+                           where:
+                           {
+                               categoryId: req.params.categoryId
+                           },
+                           required: true,
+                       }]
+                    }]
+               }]
+           }],
+
+           where: {
+                userId: req.decoded.ID,
+                // chapterId: req.params.chapterId,
+            }, 
+        
+
+       })
+        .then(answers => res.status(200).send(answers))
+            .catch(error => {
+                    console.log("Eroare: ", error)
+                    return res.status(400).send(error);
                 });
-            }))
-            .catch((err =>{
-                return res.status(404).send({
-                    message:"Not found quiz option"
-                })
-            }))
     }
+
+/* TODO
+    GetScoreUser(req, res) {
+        AnswerModel.findAndCountAll({
+            where: {
+                userId: req.decoded.ID,
+                // chapterId: req.params.chapterId,
+            },
+            include: [{
+               model: QuizOptionsModel,
+               where:
+               {
+                   isCorrect: true,
+               },
+               required: true,
+               }]
+        })
+        .then(answers => res.status(200).send(answers))
+            .catch(error => {
+                    console.log("Eroare: ", error)
+                    return res.status(400).send(error);
+                });
+    }*/
 }

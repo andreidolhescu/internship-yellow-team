@@ -39,8 +39,7 @@ module.exports = {
     getById(req, res) {
         return AnswerModel
             .findOne({
-              where: {id: req.params.answerId},
-              attributes: ['id', 'quizoptionId','userId']
+              where: {id: req.params.answerId}
             })
             .then(answer => {
                 if (!answer) {
@@ -59,8 +58,7 @@ module.exports = {
     destroy(req, res) {
         return AnswerModel
             .findOne({
-              where: {id: req.params.answerId},
-              attributes: ['id', 'quizoptionId','userId']
+              where: {id: req.params.answerId}
             })
             .then(answer => {
                 if (!answer) {
