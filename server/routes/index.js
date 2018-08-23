@@ -17,19 +17,12 @@ const ScoreController = require('../controllers').ScoreController;
 
 module.exports = (app) => {
 
-    app.use(cors()); // do not remove this
+    app.use(cors()); 
 
     app.get('/api', (req, res) => res.status(200).send({
         message: 'Welcome to the Internship',
     }));
 
-    // start examples
-    // the following routes are only for guidance, you can remove them
-    /*app.post('/api/test', testController.create);
-    app.get('/api/test', testController.list);
-    app.get('/api/test/:testId', testController.getById);
-    app.put('/api/test/:testId', testController.update);
-    app.delete('/api/test/:testId', testController.destroy);*/
     app.post('/api/test', LoginController.IsAdminOrUser, testController.create);
     app.get('/api/test', LoginController.IsAdminOrUser, testController.list);
 
@@ -104,18 +97,12 @@ module.exports = (app) => {
     app.post('/api/login', LoginController.login);
     app.get('/api/login', LoginController.IsAdminOrUser, UserController.list);
     app.get('/api/logout', LoginController.InitialPage);
-
-    //Mail send Rout, only for testing
-    /*app.post('/api/mail', MailController.SendMail);
-    app.get('/api/mail', MailController.GetOK);*/
-    //Add user token and mail for reset password
     
     //ResetPassword Rout
     app.post('/api/reset', ResetPasswordController.SendToken);
     app.get('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.ChangePassword);
     app.post('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.NewPassword);
 
-    //app.post('/api/reset/add', UserTokenController.createWithParameters);
     //Only for testing
     app.get('/api/reset/user/all', LoginController.IsAdmin, UserTokenController.list);
     app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);
