@@ -34,12 +34,6 @@ module.exports = {
         });
     },
 
-    GetOK(req, res) {
-        return res.status(200).send({
-            message: "OKAY ROUTE",
-        });
-    },
-
     SendMailWithParameters(to, subject, html, res) {
         var nodemailer = require('nodemailer');
 
@@ -55,7 +49,7 @@ module.exports = {
             from: 'klgrakk1@gmail.com',
             to: to,
             subject: subject,
-            html: "Your link is " + "http://" + require('../config/config.json').development.host + ":8000/api/reset/" + html //De modificat in server. ceva ?
+            html: "Your link is " + "http://192.168.151.36:8000/api/reset/" + html //De modificat in server. ceva ?
         };
 
         transporter.sendMail(mailOptions, function (err, info) {

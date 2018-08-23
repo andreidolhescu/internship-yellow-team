@@ -48,7 +48,6 @@ module.exports = {
     // insert image into Image table -> TREBUIE FACUT SEPARARE INTRE CURS SI USER
     create: (req, res) => {
         if (req.decoded.ID != null) {
-
             upload(req, res, (err) => {
                 if (err) {
                     return res.status(404).send({
@@ -60,18 +59,16 @@ module.exports = {
                     if (req.file != null) {
                         return ImageModel.create({
                             path: "pubic/images/" + req.file.filename,
-                            courseId: req.params.courseId,
+                            courseId: null,
                             userId: req.decoded.ID
                         })
-                            .then(image => res.status(201).send(image))
+                            .then(image => res.status(201).send({
+                                message: "Uploaded successful"
+                            }))
                             .catch(error => {
                                 //console.log("Eroare: ", error)
                                 return res.status(400).send(error);
                             });
-
-                        return res.status(200).send({
-                            message: "Upload file successful : " + req.file.filename
-                        })
                     }
                     else {
                         return res.status(400).send({
@@ -81,7 +78,7 @@ module.exports = {
                 }
             })
         }
-        else{
+        else {
             //Aici trebuie de verificat daca insereaza imagine pentru curs, nu sunt sigur ca functioneaza
             upload(req, res, (err) => {
                 if (err) {
@@ -97,15 +94,12 @@ module.exports = {
                             courseId: req.params.courseId,
                             userId: null
                         })
-                            .then(image => res.status(201).send(image))
+                            .then(image => res.status(201).send({
+                                message: "Uploaded successful"
+                            }))
                             .catch(error => {
-                                //console.log("Eroare: ", error)
                                 return res.status(400).send(error);
                             });
-
-                        return res.status(200).send({
-                            message: "Upload file successful : " + req.file.filename
-                        })
                     }
                     else {
                         return res.status(400).send({
@@ -135,16 +129,12 @@ module.exports = {
                 },
                 include: [
                     {
-                        model: UserModel,// as:'u',
-                        // attributes: ['id'],
-                        // where:{userId: !null},
+                        model: UserModel,
                         required: false
                     }]
             })
-
             .then(image => res.status(201).send(image))
             .catch(error => {
-                console.log("Eroare: ", error)
                 return res.status(400).send(error);
             });
     },
@@ -159,16 +149,13 @@ module.exports = {
                 },
                 include: [
                     {
-                        model: CourseModel,// as:'u',
-                        // attributes: ['id'],
-                        // where:{userId: !null},
+                        model: CourseModel,
                         required: false
                     }]
             })
 
             .then(image => res.status(201).send(image))
             .catch(error => {
-                console.log("Eroare: ", error)
                 return res.status(400).send(error);
             });
     },
@@ -226,7 +213,9 @@ module.exports = {
 
                 return image
                     .destroy()
-                    .then(() => res.status(200).send())
+                    .then(() => res.status(200).send({
+                        message: "Image deleted."
+                    }))
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));

@@ -18,8 +18,6 @@ module.exports = {
                         message: "Mail already exists!"
                     });
                 }
-
-
                 err = ""
 
                 if (!validate.IsName(req.body.FirstName))
@@ -42,11 +40,13 @@ module.exports = {
                             Admin: req.body.Admin,
                             Points: req.body.Points
                         })
-                        .then(todo => res.status(201).send(todo))
+                        .then(todo => res.status(201).send({
+                            message: "User created."
+                        }))
                         .catch(error => res.status(400).send(error));
                 }
                 else
-                    return res.status(404).send({
+                    return res.status(400).send({
                         message: err,
                     });
             }))
@@ -58,7 +58,7 @@ module.exports = {
     list(req, res) {
         return UserModel
             .all()
-            .then(todos => res.status(200).send(todos))
+            .then(user => res.status(200).send(user))
             .catch(error => res.status(400).send(error));
     },
 
@@ -106,22 +106,24 @@ module.exports = {
                         user.update({
                             Admin: false
                         });
-                        console.log("Admin to user");
+                        return res.status(200).send({
+                            message: 'Now, is user.',
+                        });
                     }
                     else {
                         user.update({
                             Admin: true
                         });
-                        console.log("User to Admin");
+                        return res.status(200).send({
+                            message: 'Now, is admin.',
+                        });
                     }
-                    return res.status(200).send(user);
                 }
                 else {
-                    return res.status(404).send({
-                        message: 'Serios? Vrei sa devii user?:)))',
+                    return res.status(400).send({
+                        message: 'Permission denied.',
                     });
                 }
-
             })
             .catch(error => res.status(400).send(error));
     },
@@ -170,27 +172,30 @@ module.exports = {
                                             Password: hash,
                                             Mail: mail
                                         })
-                                        .then(() => res.status(200).send(user))
-                                        .catch((error) => res.status(404).send(error));
+                                        .then(() => res.status(200).send({
+                                            message: "User updated."
+                                        }))
+                                        .catch((error) => res.status(400).send(error));
                                 else if (obj.id == req.decoded.ID) {
-                                    console.log("Functia 2, Mailuile sunt egale");
                                     return user
                                         .update({
                                             FirstName: req.body.FirstName,
                                             LastName: req.body.LastName,
                                             Password: hash
                                         })
-                                        .then(() => res.status(200).send(user))
-                                        .catch((error) => res.status(404).send(error));
+                                        .then(() => res.status(200).send({
+                                            message: "User updated."
+                                        }))
+                                        .catch((error) => res.status(400).send(error));
                                 }
                                 else {
                                     return res.status(404).send({
-                                        message: 'Incercare de a modifica mail-ul in unul existent in baza de date',
+                                        message: 'Permission denied. Mail Exist.',
                                     });
                                 }
                             }
                             else
-                                return res.status(404).send({
+                                return res.status(400).send({
                                     message: err,
                                 });
                         })
@@ -210,16 +215,17 @@ module.exports = {
                     });
                 }
 
-                if(user.id == req.decoded.ID)
-                {
-                    return res.status(404).send({
-                        message: 'Fiind admin, nu te poti sterge',
-                    });  
+                if (user.id == req.decoded.ID) {
+                    return res.status(400).send({
+                        message: 'If you admin, you can\'t delete yourself.',
+                    });
                 }
 
                 return user
                     .destroy()
-                    .then(() => res.status(200).send())
+                    .then(() => res.status(200).send({
+                        message: "User deleted."
+                    }))
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
@@ -235,24 +241,22 @@ module.exports = {
                     });
                 }
                 UserModel.findById(req.decoded.ID)
-                .then((user=>
-                {
-                    if(user.Admin)
-                    {
-                        return res.status(404).send({
-                            message: 'Fiind admin, nu te poti sterge',
-                        }); 
-                    }
-                    else
-                    {
-                        return user
-                        .destroy()
-                        .then(() => res.status(200).send())
-                        .catch((error) => res.status(400).send(error));
-                    }
-                }))
+                    .then((user => {
+                        if (user.Admin) {
+                            return res.status(404).send({
+                                message: 'If you admin, you can\'t delete yourself.',
+                            });
+                        }
+                        else {
+                            return user
+                                .destroy()
+                                .then(() => res.status(200).send({
+                                    message: "User deleted."
+                                }))
+                                .catch((error) => res.status(400).send(error));
+                        }
+                    }))
             })
             .catch((error) => res.status(400).send(error));
     },
-
 };

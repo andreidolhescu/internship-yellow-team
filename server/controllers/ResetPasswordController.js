@@ -7,7 +7,6 @@ const bcrypt = require('bcrypt');
 const GetUserByToken = (token, callback) => {
     return UserTokens
         .findOne({
-
             where: {
                 token: token,
             }
@@ -24,7 +23,6 @@ const GetUserByToken = (token, callback) => {
 const IfExistMail = (mail, callback) => {
     return UserModel
         .findOne({
-
             where: {
                 Mail: mail,
             }
@@ -46,15 +44,14 @@ module.exports =
             //Facem update la parola dupa mailul respectiv
             GetUserByToken(req.params.token, function (response) {
                 return UserModel
-                    .findOne({ Mail: response.Mail })
+                    .findOne({
+                        Mail: response.Mail
+                    })
                     .then(function (obj) {
                         if (obj) {
-                            console.log("Userul a fost gasit, incercam sa facem update");
                             if (validator.IsPassword(req.body.Password)) {
 
-                                //Criptarea parolei
                                 var hash = bcrypt.hashSync(req.body.Password, 10);
-
                                 obj.update({
                                     Password: hash
                                 });
@@ -63,27 +60,24 @@ module.exports =
                                         token: req.params.token
                                     }
                                 });
-                                console.log("Token sters");
                                 return res.status(200).send({
-                                    message: "Token Sters "
+                                    message: "Token deleted from database"
                                 });
                             }
                             else {
                                 return res.status(404).send({
-                                    message: "Parola nu a trecut validarea"
+                                    message: "Password to weak."
                                 });
                             }
                         }
                         else {
                             return res.status(400).send({
-                                message: "Nu a fost gasit userul "
+                                message: "User not found."
                             });
                         }
                     }
                     )
             })
-
-
         },
 
         //Primim mesaj ca putem modifica parola, adica tokenul si mailul sun valide in baza de date
@@ -97,16 +91,16 @@ module.exports =
         VerifyToken(req, res, next) {
 
             var token = req.params.token;
-
-
             var mail;
-
             GetUserByToken(token, function (a) {
                 mail = a.mail;
                 if (mail != "nullable" && mail != "nullable") {
                     jwt.verify(token, mail, function (err, decoded) {
                         if (err) {
-                            return res.json({ success: false, message: 'Failed to authenticate token.' });
+                            return res.status(400).send({
+                                success: false,
+                                message: 'Failed to authenticate token.'
+                            });
                         } else {
                             req.decoded = decoded;
                             next();
@@ -114,10 +108,12 @@ module.exports =
                     });
                 }
                 else {
-                    return res.json({ success: false, message: 'Nu exista asa token!' });
+                    return res.status(404).send({
+                        success: false,
+                        message: 'Token not found.'
+                    });
                 }
             });
-
         },
 
         //Trimitem token-ul daca este gasit in baza de date.
@@ -140,14 +136,17 @@ module.exports =
                     //Trimitem mail
                     UserTokenController.createWithParameters(mail, token);
 
-                    return res.json({
+                    return res.status(200).send({
                         success: true,
-                        message: 'Enjoy your token!',
-                        token: token,
+                        message: 'The token was sent to your mail!',
+                        //token: token,
                     });
                 }
                 else {
-                    return res.json({ success: false, message: 'Nu exista asa mail inregistrat in baza de date!' });
+                    return res.status(404).send({
+                        success: false,
+                        message: 'Not found mail in database!'
+                    });
                 }
             })
         }

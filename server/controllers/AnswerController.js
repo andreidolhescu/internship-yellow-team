@@ -12,12 +12,14 @@ module.exports = {
     // insert Answer into Answer table
     create: (req, res) => {
         return AnswerModel.create({
-                    userId: req.decoded.ID,
-                    quizoptionId: req.params.quizOptionsId,
-                    quiz_answerId: req.params.quizId,
-                    chapterId: req.params.chapterId
-                })
-            .then(answer => res.status(201).send(answer))
+            userId: req.decoded.ID,
+            quizoptionId: req.params.quizOptionsId,
+            quiz_answerId: req.params.quizId,
+            chapterId: req.params.chapterId
+        })
+            .then(answer => res.status(201).send({
+                message: "Answer created."
+            }))
             .catch(error => {
                 console.log("Eroare: ", error)
                 return res.status(400).send(error);
@@ -27,19 +29,19 @@ module.exports = {
     // get all entries from Answer table
     list(req, res) {
         return AnswerModel
-                .findAll()
-                .then(answers => res.status(200).send(answers))
+            .findAll()
+            .then(answers => res.status(200).send(answers))
             .catch(error => {
-                    console.log("Eroare: ", error)
-                    return res.status(400).send(error);
-                });
+                console.log("Eroare: ", error)
+                return res.status(400).send(error);
+            });
     },
 
     // get an entry by id
     getById(req, res) {
         return AnswerModel
             .findOne({
-              where: {id: req.params.answerId}
+                where: { id: req.params.answerId }
             })
             .then(answer => {
                 if (!answer) {
@@ -52,13 +54,11 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    //todo: update
-
     // delete an entry
     destroy(req, res) {
         return AnswerModel
             .findOne({
-              where: {id: req.params.answerId}
+                where: { id: req.params.answerId }
             })
             .then(answer => {
                 if (!answer) {
@@ -69,7 +69,7 @@ module.exports = {
 
                 return answer
                     .destroy()
-                    .then(() => res.status(200).send({message: "Deleted",}))
+                    .then(() => res.status(200).send({ message: "Answer Deleted", }))
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
@@ -78,15 +78,16 @@ module.exports = {
     //delete all answers for a chapter
     deleteforchapter(req, res) {
         return AnswerModel
-        .destroy({
-            where: {chapterId: req.params.chapterId}
-        })
+            .destroy({
+                where: { chapterId: req.params.chapterId }
+            })
 
-        .then(() => res.status(200).send({message: "Deleted",}))
-        .catch(error => {
-                        console.log("Eroare: ", error)
-                        return res.status(400).send(error);
-                    });
-        }
+            .then(() => res.status(200).send({ 
+                message: "Answer deleted.", 
+            }))
+            .catch(error => {
+                return res.status(400).send(error);
+            });
+    }
 
 };
