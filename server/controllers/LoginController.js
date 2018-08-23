@@ -71,21 +71,18 @@ module.exports =
                             message: 'Failed to authenticate token.'
                         });
                     } else {
-                        User.findById({
-                            where: {
-                                id: req.decoded.id
-                            }
-                        }).then((user => {
-                            if (user != null) {
-                                req.decoded = decoded;
-                                next();
-                            }
-                            else {
-                                return res.status(404).send({
-                                    message: "No user found in database",
-                                });
-                            }
-                        }));
+                        UserModel.findById(decoded.ID)
+                            .then((user => {
+                                if (user != null) {
+                                    req.decoded = decoded;
+                                    next();
+                                }
+                                else {
+                                    return res.status(404).send({
+                                        message: "No user found in database",
+                                    });
+                                }
+                            }));
                     }
                 });
             }
