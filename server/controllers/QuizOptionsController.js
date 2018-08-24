@@ -18,6 +18,7 @@ module.exports = {
                 });
         else {
             return res.status(406).send({
+                success: false,
                 message: "Option is null"
             });
         }
@@ -54,12 +55,14 @@ module.exports = {
             .then(quizOption => {
                 if (quizOption == "") {
                     return res.status(404).send({
+                        success: false,
                         message: 'There are not quiz options for this quiz!',
 
                     });
                 }
                 if (!quizOption) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Quiz Option not found!',
                     });
                 }
@@ -77,6 +80,7 @@ module.exports = {
             .then(quizOption => {
                 if (!quizOption) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Quiz Option Not Found',
                     });
                 }
@@ -92,6 +96,7 @@ module.exports = {
             .then(quizOption => {
                 if (!quizOption) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Quiz Option Not Found',
                     });
                 }
@@ -102,6 +107,7 @@ module.exports = {
                         quizId: req.params.quizId
                     })
                     .then(() => res.status(200).send({
+                        success: true,
                         message: "Quiz updated."
                     }))
                     .catch((error) => res.status(400).send(error));
@@ -116,12 +122,14 @@ module.exports = {
             .then(quizOption => {
                 if (!quizOption) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Quiz Option Not Found',
                     });
                 }
                 return quizOption
                     .destroy()
                     .then(() => res.status(200).send({
+                        success: true,
                         message: "Quiz deleted."
                     }))
                     .catch((error) => res.status(400).send(error));

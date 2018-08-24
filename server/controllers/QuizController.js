@@ -11,6 +11,7 @@ module.exports = {
                 chapterId: req.params.chapterId
             })
                 .then(todo => res.status(201).send({
+                    success: true,
                     message: "Quiz created."
                 }))
                 .catch(error => {
@@ -18,6 +19,7 @@ module.exports = {
                 });
         else {
             return res.status(404).send({
+                success: false,
                 message: 'There are not quizzes for this chapter!',
             });
         }
@@ -48,11 +50,13 @@ module.exports = {
             .then(quiz => {
                 if (quiz == "") {
                     return res.status(404).send({
+                        success: false,
                         message: 'There are not quizzes for this chapter!',
                     });
                 }
                 if (!quiz) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Quiz not found!',
                     });
                 }
@@ -70,6 +74,7 @@ module.exports = {
             .then(quiz => {
                 if (!quiz) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Quiz Not Found',
                     });
                 }
@@ -85,6 +90,7 @@ module.exports = {
             .then(quiz => {
                 if (!quiz) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Quiz Not Found',
                     });
                 }
@@ -94,6 +100,7 @@ module.exports = {
                         chapterId: req.params.chapterId
                     })
                     .then(() => res.status(200).send({
+                        success: true,
                         message: "Updated."
                     }))
                     .catch((error) => res.status(400).send(error));
@@ -108,12 +115,14 @@ module.exports = {
             .then(quiz => {
                 if (!quiz) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Quiz Not Found',
                     });
                 }
                 return quiz
                     .destroy()
                     .then(() => res.status(200).send({
+                        success: true,
                         message: "Deleted."
                     }))
                     .catch((error) => res.status(400).send(error));

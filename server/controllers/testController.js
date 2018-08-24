@@ -34,6 +34,7 @@ module.exports = {
             .then(test => {
                 if (!test) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Test Not Found',
                     });
                 }
@@ -49,6 +50,7 @@ module.exports = {
             .then(test => {
                 if (!test) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Test Not Found',
                     });
                 }
@@ -70,6 +72,7 @@ module.exports = {
             .then(test => {
                 if (!test) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Test Not Found',
                     });
                 }

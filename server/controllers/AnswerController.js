@@ -18,6 +18,7 @@ module.exports = {
             chapterId: req.params.chapterId
         })
             .then(answer => res.status(201).send({
+                success: true,
                 message: "Answer created."
             }))
             .catch(error => {
@@ -46,6 +47,7 @@ module.exports = {
             .then(answer => {
                 if (!answer) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Answer Not Found',
                     });
                 }
@@ -63,13 +65,17 @@ module.exports = {
             .then(answer => {
                 if (!answer) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Answer Not Found',
                     });
                 }
 
                 return answer
                     .destroy()
-                    .then(() => res.status(200).send({ message: "Answer Deleted", }))
+                    .then(() => res.status(200).send({ 
+                        success: true,
+                        message: "Answer Deleted"
+                    }))
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
@@ -83,6 +89,7 @@ module.exports = {
             })
 
             .then(() => res.status(200).send({ 
+                success: true,
                 message: "Answer deleted.", 
             }))
             .catch(error => {

@@ -15,6 +15,7 @@ module.exports = {
             .then((user => {
                 if (user.length) {
                     return res.status(400).send({
+                        success: false,
                         message: "Mail already exists!"
                     });
                 }
@@ -41,12 +42,14 @@ module.exports = {
                             Points: req.body.Points
                         })
                         .then(todo => res.status(201).send({
+                            success: true,
                             message: "User created."
                         }))
                         .catch(error => res.status(400).send(error));
                 }
                 else
                     return res.status(400).send({
+                        success: false,
                         message: err,
                     });
             }))
@@ -69,6 +72,7 @@ module.exports = {
             .then(user => {
                 if (!user) {
                     return res.status(404).send({
+                        success: false,
                         message: 'User Not Found',
                     });
                 }
@@ -79,10 +83,14 @@ module.exports = {
 
     about(req, res) {
         return UserModel
-            .findById(req.decoded.ID)
+            .findOne({
+                id: req.decoded.ID,
+                attributes: ['FirstName', 'LastName','Mail','Admin','Points','createdAt','updatedAt']
+            })
             .then(user => {
                 if (!user) {
                     return res.status(404).send({
+                        success: false,
                         message: 'User Not Found',
                     });
                 }
@@ -97,6 +105,7 @@ module.exports = {
             .then(user => {
                 if (!user) {
                     return res.status(404).send({
+                        success: false,
                         message: 'User Not Found',
                     });
                 }
@@ -107,6 +116,7 @@ module.exports = {
                             Admin: false
                         });
                         return res.status(200).send({
+                            success: true,
                             message: 'Now, is user.',
                         });
                     }
@@ -115,12 +125,14 @@ module.exports = {
                             Admin: true
                         });
                         return res.status(200).send({
+                            success: true,
                             message: 'Now, is admin.',
                         });
                     }
                 }
                 else {
                     return res.status(400).send({
+                        success: false,
                         message: 'Access denied.',
                     });
                 }
@@ -158,6 +170,7 @@ module.exports = {
                         .then(user => {
                             if (!user) {
                                 return res.status(404).send({
+                                    success: false,
                                     message: 'User Not Found',
                                 });
                             }
@@ -173,6 +186,7 @@ module.exports = {
                                             Mail: mail
                                         })
                                         .then(() => res.status(200).send({
+                                            success: true,
                                             message: "User updated."
                                         }))
                                         .catch((error) => res.status(400).send(error));
@@ -184,18 +198,21 @@ module.exports = {
                                             Password: hash
                                         })
                                         .then(() => res.status(200).send({
+                                            success: true,
                                             message: "User updated."
                                         }))
                                         .catch((error) => res.status(400).send(error));
                                 }
                                 else {
                                     return res.status(404).send({
+                                        success: false,
                                         message: 'Access denied. Mail Exist.',
                                     });
                                 }
                             }
                             else
                                 return res.status(400).send({
+                                    success: false,
                                     message: err,
                                 });
                         })
@@ -211,12 +228,14 @@ module.exports = {
             .then(user => {
                 if (!user) {
                     return res.status(404).send({
+                        success: false,
                         message: 'User Not Found',
                     });
                 }
 
                 if (user.id == req.decoded.ID) {
                     return res.status(400).send({
+                        success: false,
                         message: 'If you admin, you can\'t delete yourself.',
                     });
                 }
@@ -224,6 +243,7 @@ module.exports = {
                 return user
                     .destroy()
                     .then(() => res.status(200).send({
+                        success: true,
                         message: "User deleted."
                     }))
                     .catch((error) => res.status(400).send(error));
@@ -237,6 +257,7 @@ module.exports = {
             .then(user => {
                 if (!user) {
                     return res.status(404).send({
+                        success: false,
                         message: 'User Not Found',
                     });
                 }
@@ -244,6 +265,7 @@ module.exports = {
                     .then((user => {
                         if (user.Admin) {
                             return res.status(404).send({
+                                success: false,
                                 message: 'If you admin, you can\'t delete yourself.',
                             });
                         }
@@ -251,6 +273,7 @@ module.exports = {
                             return user
                                 .destroy()
                                 .then(() => res.status(200).send({
+                                    success: true,
                                     message: "User deleted."
                                 }))
                                 .catch((error) => res.status(400).send(error));

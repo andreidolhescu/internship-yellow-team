@@ -3,12 +3,13 @@ const UserModel = require('../models').User;
 const CourseModel = require('../models').Course;
 const Sequelize = require('sequelize');
 const multer = require('multer');
+var fs = require('fs');
 
 //Set storage image
 const storage = multer.diskStorage({
     destination: './public/images',
     filename: function (req, file, cb) {
-        console.log(file);
+        //console.log(file);
         var name = file.fieldname + '-' + Date.now() + "." + file.mimetype.split('/')[1];
         //console.log(name);
         cb(null, name)
@@ -47,32 +48,46 @@ module.exports = {
 */
     // insert image into Image table -> TREBUIE FACUT SEPARARE INTRE CURS SI USER
     create: (req, res) => {
-        if (req.decoded.ID != null) {
+        if (req.params.courseId == null) {
             upload(req, res, (err) => {
                 if (err) {
                     return res.status(404).send({
+                        success: false,
                         message: err
                     })
                 }
                 else {
 
                     if (req.file != null) {
-                        return ImageModel.create({
-                            path: "pubic/images/" + req.file.filename,
-                            courseId: null,
-                            userId: req.decoded.ID
-                        })
-                            .then(image => res.status(201).send({
-                                message: "Uploaded successful"
-                            }))
-                            .catch(error => {
-                                //console.log("Eroare: ", error)
-                                return res.status(400).send(error);
-                            });
+                        ImageModel.findOne({
+                            where: {
+                                userId: req.decoded.ID
+                            }
+                        }).then((image => {
+                            if (image != null) {
+                                fs.unlinkSync(image.path);
+                                image.destroy();
+                                console.log("a fost stearsa imaginea precedenta");
+                            }
+                            return ImageModel.create({
+                                path: "public/images/" + req.file.filename,
+                                courseId: null,
+                                userId: req.decoded.ID
+                            })
+                                .then(image => res.status(201).send({
+                                    success: true,
+                                    message: "Uploaded successful image for user."
+                                }))
+                                .catch(error => {
+                                    //console.log("Eroare: ", error)
+                                    return res.status(400).send(error);
+                                });
+                        }))
                     }
                     else {
                         return res.status(400).send({
-                            message: "No file upload"
+                            success: false,
+                            message: "No file uploaded"
                         })
                     }
                 }
@@ -83,27 +98,41 @@ module.exports = {
             upload(req, res, (err) => {
                 if (err) {
                     return res.status(404).send({
+                        success: false,
                         message: err
                     })
                 }
                 else {
-
                     if (req.file != null) {
-                        return ImageModel.create({
-                            path: "pubic/images/" + req.file.filename,
-                            courseId: req.params.courseId,
-                            userId: null
-                        })
-                            .then(image => res.status(201).send({
-                                message: "Uploaded successful"
-                            }))
-                            .catch(error => {
-                                return res.status(400).send(error);
-                            });
+                        ImageModel.findOne({
+                            where: {
+                                courseId: req.params.courseId
+                            }
+                        }).then((image => {
+                            if (image != null) {
+                                fs.unlinkSync(image.path);
+                                image.destroy();
+                                console.log("a fost stearsa imaginea precedenta");
+                            }
+                            return ImageModel.create({
+                                path: "public/images/" + req.file.filename,
+                                courseId: req.params.courseId,
+                                userId: null
+                            })
+                                .then(image => res.status(201).send({
+                                    success: true,
+                                    message: "Uploaded successful image for course."
+                                }))
+                                .catch(error => {
+                                    //console.log("Eroare: ", error)
+                                    return res.status(400).send(error);
+                                });
+                        }))
                     }
                     else {
                         return res.status(400).send({
-                            message: "No file upload"
+                            success: false,
+                            message: "No file uploaded"
                         })
                     }
                 }
@@ -167,6 +196,7 @@ module.exports = {
             .then(image => {
                 if (!image) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Image Not Found',
                     });
                 }
@@ -182,6 +212,7 @@ module.exports = {
             .then(image => {
                 if (!image) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Image Not Found',
                     });
                 }
@@ -207,6 +238,7 @@ module.exports = {
             .then(image => {
                 if (!image) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Image Not Found',
                     });
                 }
@@ -214,6 +246,7 @@ module.exports = {
                 return image
                     .destroy()
                     .then(() => res.status(200).send({
+                        success: true,
                         message: "Image deleted."
                     }))
                     .catch((error) => res.status(400).send(error));
