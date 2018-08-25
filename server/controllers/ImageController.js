@@ -206,7 +206,7 @@ module.exports = {
     },
 
     // update an entry
-    update(req, res) {
+    /*update(req, res) {
         return ImageModel
             .findById(req.params.imageId)
             .then(image => {
@@ -229,6 +229,40 @@ module.exports = {
 
             })
             .catch((error) => res.status(400).send(error));
+    },*/
+
+    getUserImage(req, res) {
+        return ImageModel.findOne({
+            where: {
+                userId: req.decoded.ID
+            }
+        }).then(image => {
+            if (image == null) {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Image Not Found',
+                });
+            }
+            else
+                return res.status(200).send(image);
+        }).catch((error) => res.status(400).send(error));
+    },
+
+    getCourseImage(req, res) {
+        return ImageModel.findOne({
+            where: {
+                courseId: req.params.courseId
+            }
+        }).then(image => {
+            if (image == null) {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Image Not Found',
+                });
+            }
+            else
+                return res.status(200).send(image);
+        }).catch((error) => res.status(400).send(error));
     },
 
     // delete an entry
