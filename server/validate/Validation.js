@@ -4,12 +4,13 @@ module.exports.IsMail = function (email) {
 };
 
 module.exports.IsName = function (name) {
-    var r1 = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/
-
-    return r1.test(String(name)) && name != null && String(name).length > 2;
+    //var r1 = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/
+    //var r1 = /^[a-zA-Z]{3,15}(([ ][a-zA-Z]{1,15})?[a-zA-Z]{2,15})*/;
+    var r1 = /^([a-zA-Z]{3,20})+([ ]?[a-zA-Z]{3,15})?$/;
+    return r1.test(String(name)) && name != null && String(name).length > 2 && String(name).length < 40;
 }
 
 module.exports.IsPassword = function (password) {
-    var r2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?,.:;&#_])[A-Za-z\d$@$!%*?,.:;&#_]{8,15}$/;
+    var r2 = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?,.:;&#_])[A-Za-z\d$@$!%*?,.:;&#_]{8,20}$/;
     return r2.test(String(password));
 }
