@@ -24,6 +24,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
+      Path: {
+        type: Sequelize.STRING,
+        defaultValue: "public/images/defaultcourse.jpg"
+      },
       categoryId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',

@@ -32,6 +32,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
+      Path: {
+        type: Sequelize.STRING,
+        defaultValue: "public/images/defaultuser.jpg"
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

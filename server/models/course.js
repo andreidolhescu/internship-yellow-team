@@ -20,17 +20,15 @@ module.exports = (sequelize, DataTypes) => {
     {
       type: DataTypes.STRING,
       allowNull: true,
-    }
+    },
+    Path: {
+        type: DataTypes.STRING,
+      }
   }, {});
   Course.associate = models => {
     Course.belongsTo(models.Category, {
       foreignKey: 'categoryId',
       onDelete: 'CASCADE'
-    });
-
-    Course.hasMany(models.Image, {
-      foreignKey: 'courseId',
-      as: 'images'
     });
 
     Course.hasMany(models.Chapter, {
