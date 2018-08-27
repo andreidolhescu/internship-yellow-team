@@ -5,19 +5,28 @@ const ChapterModel = require('../models').Chapter;
 module.exports = {
     // insert quiz into Quiz table
     create: (req, res) => {
-        return QuizModel.create({
-            Question: req.body.Question,
-            chapterId: req.query.chapterId
-        })
-        .then(todo => res.status(201).send(todo))
-        .catch(error => {
-        	console.log("Eroare: ", error)
-        	return res.status(400).send(error);
-        });
+        if (req.body.Question != null)
+            return QuizModel.create({
+                Question: req.body.Question,
+                chapterId: req.query.chapterId
+            })
+                .then(todo => res.status(201).send({
+                    success: true,
+                    message: "Quiz created."
+                }))
+                .catch(error => {
+                    return res.status(400).send(error);
+                });
+        else {
+            return res.status(404).send({
+                success: false,
+                message: 'There are not quizzes for this chapter!',
+            });
+        }
     },
 
     // get all entries from Quiz table
-    list (req, res) {
+    list(req, res) {
         return QuizModel
             .findAll({
             where: {
@@ -25,40 +34,39 @@ module.exports = {
                 }
         })
             .then(quiz => {
-                if(quiz == "")
-                {
-                    console.log('\n\n\n', quiz, '\n\n\n')
+                if (quiz == "") {
                     return res.status(404).send({
-                    message: 'There are not quizzes for this chapter!',
-
+                        success: false,
+                        message: 'There are not quizzes for this chapter!',
                     });
                 }
                 if (!quiz) {
-                  return res.status(404).send({
-                    message: 'Quiz not found!',
-                  });
+                    return res.status(404).send({
+                        success: false,
+                        message: 'Quiz not found!',
+                    });
                 }
                 return res.status(200).send(quiz);
-              })
+            })
             .catch(error => {
-                console.log("Eroare: ", error)
                 return res.status(400).send(error);
             });
     },
 
     // get an entry by id
-    getById (req, res) {
+    getById(req, res) {
         return QuizModel
             .findById(req.params.quizId)
             .then(quiz => {
                 if (!quiz) {
-                  return res.status(404).send({
-                    message: 'Quiz Not Found',
-                  });
+                    return res.status(404).send({
+                        success: false,
+                        message: 'Quiz Not Found',
+                    });
                 }
                 return res.status(200).send(quiz);
-              })
-              .catch(error => res.status(400).send(error));
+            })
+            .catch(error => res.status(400).send(error));
     },
 
     update (req, res) {
@@ -67,19 +75,21 @@ module.exports = {
             .then(quiz => {
                 if (!quiz) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Quiz Not Found',
                     });
                 }
-                
-            return quiz
-                .update({
-                    Question: req.body.Question || quiz.Question,
-                    chapterId: req.query.chapterId
-                })
-                .then(() => res.status(200).send(quiz))
-                .catch((error) => res.status(400).send(error));
-            
-                    
+
+                return quiz
+                    .update({
+                        Question: req.body.Question || quiz.Question,
+                        chapterId: req.query.chapterId
+                    })
+                    .then(() => res.status(200).send({
+                        success: true,
+                        message: "Updated."
+                    }))
+                    .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
     },
@@ -90,16 +100,18 @@ module.exports = {
             .then(quiz => {
                 if (!quiz) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Quiz Not Found',
                     });
                 }
-
                 return quiz
                     .destroy()
-                    .then(() => res.status(200).send())
+                    .then(() => res.status(200).send({
+                        success: true,
+                        message: "Deleted."
+                    }))
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
     }
-
 };

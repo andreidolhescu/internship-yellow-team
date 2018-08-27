@@ -4,14 +4,13 @@ const settings = require('../config/Index');
 const JWT = require('jsonwebtoken');
 var err = '';
 
-
 module.exports = {
+    //Create category, only for admin
     create(req, res) {
 
         err = '';
-
-        if (String(req.body.CategoryName).length == 0)
-            err += 'Undefined Category.';
+        if (String(req.body.CategoryName).length == 0 || req.body.CategoryName == null)
+            err += 'Undefined Category. ';
 
         if (String(err).length == 0) {
 
@@ -22,6 +21,7 @@ module.exports = {
             }).then((category => {
                 if (category.length) {
                     return res.status(404).send({
+                        success: false,
                         message: "Category already exist",
                     });
                 }
@@ -31,12 +31,16 @@ module.exports = {
                             CategoryName: req.body.CategoryName,
                             Background: req.body.Background
                         })
-                    .then(todo => res.status(201).send(todo))
+                    .then(todo => res.status(201).send({
+                        success: true,
+                        message: "Category created."
+                    }))
                     .catch(error => res.status(400).send(error));
             }))
         }
         else {
             return res.status(404).send({
+                success: false,
                 message: err,
             });
         }
@@ -46,17 +50,18 @@ module.exports = {
     list(req, res) {
         return CategoryModel
             .all()
-            .then(todos => res.status(200).send(todos))
+            .then(todo => res.status(200).send(todo))
             .catch(error => res.status(400).send(error));
     },
 
-    // get an entry by id
+    // get category by id
     getById(req, res) {
         return CategoryModel
             .findById(req.params.categoryId)
             .then(category => {
                 if (!category) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Category Not Found',
                     });
                 }
@@ -65,13 +70,12 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    // update an entry
+    // update category
     update(req, res) {
         err = '';
 
-        if (String(req.body.CategoryName).length == 0)
+        if (String(req.body.CategoryName).length == 0 || req.body.CategoryName == null)
             err += 'Undefined Category.';
-
 
         CategoryModel.findAll({
             where: {
@@ -84,15 +88,16 @@ module.exports = {
             .then((category => {
                 if (category.length) {
                     return res.status(400).send({
+                        success: false,
                         message: "Category already exists!"
                     });
                 }
-
                 return CategoryModel
                     .findById(req.query.categoryId)
                     .then(category => {
                         if (!category) {
                             return res.status(404).send({
+                                success: false,
                                 message: 'Category Not Found',
                             });
                         }
@@ -103,11 +108,15 @@ module.exports = {
                                     CategoryName: req.body.CategoryName || category.CategoryName,
                                     Background: req.body.Background || category.Background
                                 })
-                                .then(() => res.status(200).send(category))
+                                .then(() => res.status(200).send({
+                                    success: true,
+                                    message: "Update done."
+                                }))
                                 .catch((error) => res.status(400).send(error));
                         }
                         else
-                            return res.status(404).send({
+                            return res.status(400).send({
+                                success: false,
                                 message: err,
                             });
 
@@ -116,22 +125,26 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
+    // delete an entry 
     destroy(req, res) {
         return CategoryModel
             .findById(req.query.categoryId)
             .then(category => {
                 if (!category) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Category Not Found',
                     });
                 }
 
                 return category
                     .destroy()
-                    .then(() => res.status(200).send())
+                    .then(() => res.status(200).send({
+                        success: true,
+                        message: "Category deleted"
+                    }))
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
     }
-
 };

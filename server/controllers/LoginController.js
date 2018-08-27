@@ -6,6 +6,7 @@ const settings = require('../config/Index');
 
 module.exports =
     {
+        //Logare
         login(req, res) {
             var Mail = req.body.Mail;
             var Password = req.body.Password;
@@ -13,6 +14,7 @@ module.exports =
             if (!Mail || !Password) {
                 return res.status(400).send(
                     {
+                        success: false,
                         message: "Mail and password required."
                     }
                 )
@@ -27,6 +29,7 @@ module.exports =
             }).then(userObj => {
                 if (userObj == null) {
                     return res.status(404).send({
+                        success: false,
                         message: "Incorect Mail",
                     });
                 }
@@ -41,19 +44,18 @@ module.exports =
                     });
                     req.headers['token'] = token;
 
-                    return res.json({
+                    return res.status(200).send({
                         success: true,
-                        message: 'Enjoy your token!',
                         token: token,
                     });
                 }
                 else {
                     return res.status(404).send({
-                        message: "Incorect password",
+                        success: false,
+                        message: "Incorrect password",
                     });
                 }
             }).catch(err => {
-                console.log("\n\nEroare functia 1\n\n", err);
                 return res.status(400).send(err);
             });
         },
@@ -66,7 +68,7 @@ module.exports =
             if (token) {
                 jwt.verify(token, settings.SecurityToken, function (err, decoded) {
                     if (err) {
-                        return res.json({
+                        return res.status(404).send({
                             success: false,
                             message: 'Failed to authenticate token.'
                         });
@@ -79,7 +81,8 @@ module.exports =
                                 }
                                 else {
                                     return res.status(404).send({
-                                        message: "No user found in database",
+                                        success: false,
+                                        message: "No user found in database for this token",
                                     });
                                 }
                             }));
@@ -88,6 +91,7 @@ module.exports =
             }
             else {
                 return res.status(404).send({
+                    success: false,
                     message: "No token found!",
                 });
             }
@@ -98,9 +102,10 @@ module.exports =
             var token = req.body.token || req.query.token || req.headers['token'];
             jwt.verify(token, settings.SecurityToken, function (err, decoded) {
                 if (err) {
-                    return res.json({
+                    return res.status(404).send({
                         success: false,
-                        message: 'Failed to authenticate token.'
+                        message: 'Failed to authenticate token.',
+                        message: err
                     });
                 }
                 else {
@@ -110,26 +115,18 @@ module.exports =
                             next();
                         }
                         else {
-                            return res.status(403).send({
+                            return res.status(401).send({
+                                success: false,
                                 message: "You don't have access!"
                             })
                         }
                     }).catch((error) => res.status(404).send(error));
-
                 }
             });
         },
-        /*
-        ItsValidToken(req, res) {
-            return res.status(200).send({
-                message: "Functia ItsValidToken, Functia 3",
-            });
-        },
-        */
+
+        //Cica logout :))
         InitialPage(req, res) {
             req.headers['token'] = "";
-            console.log(require('../config/config.json').development.host);
-            res.writeHead(301, { 'Location': 'index.html' });
-            return res.end();
         }
     }

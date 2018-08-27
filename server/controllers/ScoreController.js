@@ -7,8 +7,7 @@ const CourseModel = require('../models').Course;
 
 module.exports = {
 
-    GetScoreChapter(req,res)
-    {
+    GetScoreChapter(req, res) {
         AnswerModel.findAndCountAll({
             include: [{
                 model: QuizOptionsModel,
@@ -23,27 +22,24 @@ module.exports = {
             chapterId: req.query.chapterId,
             }, 
         })
-        .then(answers => res.status(200).send(answers))
+            .then(answers => res.status(200).send(answers))
             .catch(error => {
-                    console.log("Eroare: ", error)
-                    return res.status(400).send(error);
-                });
+                return res.status(400).send(error);
+            });
     },
 
     GetScoreCourse(req, res) {
         AnswerModel.findAndCountAll({
-           include: [{
-               model: QuizOptionsModel,
-               where:
-               {
-                   isCorrect: true,
-               },
-               required: true,
-
-               include: [{
-                    model:QuizModel,
-                    required:true,
-
+            include: [{
+                model: QuizOptionsModel,
+                where:
+                {
+                    isCorrect: true,
+                },
+                required: true,
+                include: [{
+                    model: QuizModel,
+                    required: true,
                     include: [{
                         model: ChapterModel,
                         where:
@@ -51,7 +47,6 @@ module.exports = {
                             courseId: req.query.courseId,
                         },
                         required: true,
-
                         include: [{
                            model: CourseModel,
                            where:
@@ -61,20 +56,16 @@ module.exports = {
                            required: true,
                        }]
                     }]
-               }]
-           }],
-
-           where: {
+                }]
+            }],
+            where: {
                 userId: req.decoded.ID,
-            }, 
-        
-
-       })
-        .then(answers => res.status(200).send(answers))
+            },
+        })
+            .then(answers => res.status(200).send(answers))
             .catch(error => {
-                    console.log("Eroare: ", error)
-                    return res.status(400).send(error);
-                });
+                return res.status(400).send(error);
+            });
     },
 
     GetUserScore(req, res) {
@@ -83,18 +74,17 @@ module.exports = {
                 userId: req.decoded.ID,
             },
             include: [{
-               model: QuizOptionsModel,
-               where:
-               {
-                   isCorrect: true,
-               },
-               required: true,
-               }]
+                model: QuizOptionsModel,
+                where:
+                {
+                    isCorrect: true,
+                },
+                required: true,
+            }]
         })
-        .then(answers => res.status(200).send(answers))
+            .then(answers => res.status(200).send(answers))
             .catch(error => {
-                    console.log("Eroare: ", error)
-                    return res.status(400).send(error);
-                });
+                return res.status(400).send(error);
+            });
     }
 }

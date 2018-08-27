@@ -3,12 +3,13 @@ const UserModel = require('../models').User;
 const CourseModel = require('../models').Course;
 const Sequelize = require('sequelize');
 const multer = require('multer');
+var fs = require('fs');
 
 //Set storage image
 const storage = multer.diskStorage({
     destination: './public/images',
     filename: function (req, file, cb) {
-        console.log(file);
+        //console.log(file);
         var name = file.fieldname + '-' + Date.now() + "." + file.mimetype.split('/')[1];
         //console.log(name);
         cb(null, name)
@@ -47,69 +48,91 @@ module.exports = {
 */
     // insert image into Image table -> TREBUIE FACUT SEPARARE INTRE CURS SI USER
     create: (req, res) => {
-        if (req.decoded.ID != null) {
-
+        if (req.params.courseId == null) {
             upload(req, res, (err) => {
                 if (err) {
                     return res.status(404).send({
+                        success: false,
                         message: err
                     })
                 }
                 else {
 
                     if (req.file != null) {
-                        return ImageModel.create({
-                            path: "pubic/images/" + req.file.filename,
-                            courseId: req.params.courseId,
-                            userId: req.decoded.ID
-                        })
-                            .then(image => res.status(201).send(image))
-                            .catch(error => {
-                                //console.log("Eroare: ", error)
-                                return res.status(400).send(error);
-                            });
-
-                        return res.status(200).send({
-                            message: "Upload file successful : " + req.file.filename
-                        })
+                        ImageModel.findOne({
+                            where: {
+                                userId: req.decoded.ID
+                            }
+                        }).then((image => {
+                            if (image != null) {
+                                fs.unlinkSync(image.path);
+                                image.destroy();
+                                console.log("a fost stearsa imaginea precedenta");
+                            }
+                            return ImageModel.create({
+                                path: "public/images/" + req.file.filename,
+                                courseId: null,
+                                userId: req.decoded.ID
+                            })
+                                .then(image => res.status(201).send({
+                                    success: true,
+                                    message: "Uploaded successful image for user."
+                                }))
+                                .catch(error => {
+                                    //console.log("Eroare: ", error)
+                                    return res.status(400).send(error);
+                                });
+                        }))
                     }
                     else {
                         return res.status(400).send({
-                            message: "No file upload"
+                            success: false,
+                            message: "No file uploaded"
                         })
                     }
                 }
             })
         }
-        else{
+        else {
             //Aici trebuie de verificat daca insereaza imagine pentru curs, nu sunt sigur ca functioneaza
             upload(req, res, (err) => {
                 if (err) {
                     return res.status(404).send({
+                        success: false,
                         message: err
                     })
                 }
                 else {
-
                     if (req.file != null) {
-                        return ImageModel.create({
-                            path: "pubic/images/" + req.file.filename,
-                            courseId: req.params.courseId,
-                            userId: null
-                        })
-                            .then(image => res.status(201).send(image))
-                            .catch(error => {
-                                //console.log("Eroare: ", error)
-                                return res.status(400).send(error);
-                            });
-
-                        return res.status(200).send({
-                            message: "Upload file successful : " + req.file.filename
-                        })
+                        ImageModel.findOne({
+                            where: {
+                                courseId: req.params.courseId
+                            }
+                        }).then((image => {
+                            if (image != null) {
+                                fs.unlinkSync(image.path);
+                                image.destroy();
+                                console.log("a fost stearsa imaginea precedenta");
+                            }
+                            return ImageModel.create({
+                                path: "public/images/" + req.file.filename,
+                                courseId: req.params.courseId,
+                                userId: null
+                            })
+                                .then(image => res.status(201).send({
+                                    success: true,
+                                    message: "Uploaded successful image for course."
+                                }))
+                                .catch(error => {
+                                    //console.log("Eroare: ", error)
+                                    return res.status(400).send(error);
+                                });
+                        }))
                     }
                     else {
                         return res.status(400).send({
-                            message: "No file upload"
+                            success: false,
+                            message: "No file uploaded"
                         })
                     }
                 }
@@ -135,16 +158,12 @@ module.exports = {
                 },
                 include: [
                     {
-                        model: UserModel,// as:'u',
-                        // attributes: ['id'],
-                        // where:{userId: !null},
+                        model: UserModel,
                         required: false
                     }]
             })
-
             .then(image => res.status(201).send(image))
             .catch(error => {
-                console.log("Eroare: ", error)
                 return res.status(400).send(error);
             });
     },
@@ -159,16 +178,13 @@ module.exports = {
                 },
                 include: [
                     {
-                        model: CourseModel,// as:'u',
-                        // attributes: ['id'],
-                        // where:{userId: !null},
+                        model: CourseModel,
                         required: false
                     }]
             })
 
             .then(image => res.status(201).send(image))
             .catch(error => {
-                console.log("Eroare: ", error)
                 return res.status(400).send(error);
             });
     },
@@ -180,6 +196,7 @@ module.exports = {
             .then(image => {
                 if (!image) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Image Not Found',
                     });
                 }
@@ -189,12 +206,13 @@ module.exports = {
     },
 
     // update an entry
-    update(req, res) {
+    /*update(req, res) {
         return ImageModel
             .findById(req.params.imageId)
             .then(image => {
                 if (!image) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Image Not Found',
                     });
                 }
@@ -211,6 +229,40 @@ module.exports = {
 
             })
             .catch((error) => res.status(400).send(error));
+    },*/
+
+    getUserImage(req, res) {
+        return ImageModel.findOne({
+            where: {
+                userId: req.decoded.ID
+            }
+        }).then(image => {
+            if (image == null) {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Image Not Found',
+                });
+            }
+            else
+                return res.status(200).send(image);
+        }).catch((error) => res.status(400).send(error));
+    },
+
+    getCourseImage(req, res) {
+        return ImageModel.findOne({
+            where: {
+                courseId: req.params.courseId
+            }
+        }).then(image => {
+            if (image == null) {
+                return res.status(404).send({
+                    success: false,
+                    message: 'Image Not Found',
+                });
+            }
+            else
+                return res.status(200).send(image);
+        }).catch((error) => res.status(400).send(error));
     },
 
     // delete an entry
@@ -220,13 +272,17 @@ module.exports = {
             .then(image => {
                 if (!image) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Image Not Found',
                     });
                 }
 
                 return image
                     .destroy()
-                    .then(() => res.status(200).send())
+                    .then(() => res.status(200).send({
+                        success: true,
+                        message: "Image deleted."
+                    }))
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));

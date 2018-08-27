@@ -22,21 +22,17 @@ module.exports = {
         transporter.sendMail(mailOptions, function (err, info) {
             if (err == null) {
                 return res.status(200).send({
+                    success: true,
                     message: "Mail Send",
                 });
             }
             else {
                 console.log(err);
                 return res.status(404).send({
+                    success: false,
                     message: "Fail Mail Send",
                 });
             }
-        });
-    },
-
-    GetOK(req, res) {
-        return res.status(200).send({
-            message: "OKAY ROUTE",
         });
     },
 
@@ -55,18 +51,20 @@ module.exports = {
             from: 'klgrakk1@gmail.com',
             to: to,
             subject: subject,
-            html: "Your link is " + "http://" + require('../config/config.json').development.host + ":8000/api/reset/" + html //De modificat in server. ceva ?
+            html: "Your link is " + "http://localhost:4200/resetpassword?token=" + html //De modificat in server. ceva ?
         };
 
         transporter.sendMail(mailOptions, function (err, info) {
             if (err == null) {
                 return res.status(200).send({
+                    success: true,
                     message: "Mail Send",
                 });
             }
             else {
                 console.log(err);
                 return res.status(404).send({
+                    success: false,
                     message: "Fail Mail Send",
                 });
             }

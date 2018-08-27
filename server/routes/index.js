@@ -17,19 +17,12 @@ const ScoreController = require('../controllers').ScoreController;
 
 module.exports = (app) => {
 
-    app.use(cors()); // do not remove this
+    app.use(cors()); 
 
     app.get('/api', (req, res) => res.status(200).send({
         message: 'Welcome to the Internship',
     }));
 
-    // start examples
-    // the following routes are only for guidance, you can remove them
-    /*app.post('/api/test', testController.create);
-    app.get('/api/test', testController.list);
-    app.get('/api/test/:testId', testController.getById);
-    app.put('/api/test/:testId', testController.update);
-    app.delete('/api/test/:testId', testController.destroy);*/
     app.post('/api/test', LoginController.IsAdminOrUser, testController.create);
     app.get('/api/test', LoginController.IsAdminOrUser, testController.list);
 
@@ -87,37 +80,39 @@ module.exports = (app) => {
     app.delete('/api/answers', AnswerController.destroy);
     app.delete('/api/chapter/answer', LoginController.IsAdminOrUser, AnswerController.deleteforchapter);
 
-    //routes for image controller
+    //routes for image controller, add
     app.post('/api/user/image', LoginController.IsAdminOrUser, ImageController.create); // insert an user image
     app.post('/api/category/:categoryId/course/:courseId/image', LoginController.IsAdmin, ImageController.create); // insert a course image
-    app.get('/api/image', LoginController.IsAdmin, ImageController.list); // list all images
-    // List all users images
+    
+    // list all images (users/courses), only for testing
+    app.get('/api/images', LoginController.IsAdmin, ImageController.list); 
+    
+    // List all users images, only for testing
     app.get('/api/usr/images', LoginController.IsAdmin, ImageController.userlist);
-    // List images for courses
+    app.get('/api/usr/image', LoginController.IsAdminOrUser, ImageController.getUserImage);
+    
+    // List images for courses, only for testing
     app.get('/api/curs/images', LoginController.IsAdminOrUser, ImageController.curslist);
+    app.get('/api/curs/image', LoginController.IsAdminOrUser, ImageController.getCourseImage);
+
+    //Other routes for image
     app.get('/api/image/:imageId', LoginController.IsAdminOrUser, ImageController.getById);
-    app.put('/api/user/:userId/image/:imageId', LoginController.IsAdminOrUser, ImageController.update);//update a user image
-    app.put('/api/category/:categoryId/course/:courseId/image/:imageId', LoginController.IsAdmin, ImageController.update);//update a course image
+    //app.put('/api/user/:userId/image/:imageId', LoginController.IsAdminOrUser, ImageController.update);//update a user image
+    //app.put('/api/category/:categoryId/course/:courseId/image/:imageId', LoginController.IsAdmin, ImageController.update);//update a course image
     app.delete('/api/image/:imageId', LoginController.IsAdmin, ImageController.destroy);
 
     //Login Route
     app.post('/api/login', LoginController.login);
     app.get('/api/login', LoginController.IsAdminOrUser, UserController.list);
     app.get('/api/logout', LoginController.InitialPage);
-
-    //Mail send Rout, only for testing
-    /*app.post('/api/mail', MailController.SendMail);
-    app.get('/api/mail', MailController.GetOK);*/
-
+    
     //ResetPassword Rout
     app.post('/api/reset', ResetPasswordController.SendToken);
     app.get('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.ChangePassword);
     app.post('/api/reset/:token', ResetPasswordController.VerifyToken, ResetPasswordController.NewPassword);
 
-    //Add user token and mail for reset password
-    //app.post('/api/reset/add', UserTokenController.createWithParameters);
     //Only for testing
-    app.get('/api/reset/all',/* LoginController.IsAdmin,*/ UserTokenController.list);
+    app.get('/api/reset/user/all', LoginController.IsAdmin, UserTokenController.list);
     app.get('/api/reset/:id', LoginController.IsAdmin, UserTokenController.destroy);
 
     //Score -> GetScore
