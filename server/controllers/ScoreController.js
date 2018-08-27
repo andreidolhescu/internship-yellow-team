@@ -20,7 +20,7 @@ module.exports = {
             }],
             where: {
             userId: req.decoded.ID,
-            chapterId: req.params.chapterId,
+            chapterId: req.query.chapterId,
             }, 
         })
         .then(answers => res.status(200).send(answers))
@@ -48,7 +48,7 @@ module.exports = {
                         model: ChapterModel,
                         where:
                         {
-                            courseId: req.params.courseId,
+                            courseId: req.query.courseId,
                         },
                         required: true,
 
@@ -56,7 +56,7 @@ module.exports = {
                            model: CourseModel,
                            where:
                            {
-                               categoryId: req.params.categoryId
+                               categoryId: req.query.categoryId
                            },
                            required: true,
                        }]

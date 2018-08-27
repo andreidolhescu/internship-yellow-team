@@ -7,7 +7,7 @@ module.exports = {
     create: (req, res) => {
         return QuizModel.create({
             Question: req.body.Question,
-            chapterId: req.params.chapterId
+            chapterId: req.query.chapterId
         })
         .then(todo => res.status(201).send(todo))
         .catch(error => {
@@ -21,22 +21,8 @@ module.exports = {
         return QuizModel
             .findAll({
             where: {
-                chapterId: req.params.chapterId
-                },
-            include: [{
-                model:ChapterModel,
-                where:
-                {
-                    courseId: req.params.courseId
-                },
-                include: [{
-                    model: CourseModel,
-                    where:
-                    {
-                        categoryId: req.params.categoryId
-                    }
-                }]
-            }]
+                chapterId: req.query.chapterId
+                }
         })
             .then(quiz => {
                 if(quiz == "")
@@ -75,10 +61,9 @@ module.exports = {
               .catch(error => res.status(400).send(error));
     },
 
-    // update an entry -> TODO: Only for admins
     update (req, res) {
         return QuizModel
-            .findById(req.params.quizId)
+            .findById(req.query.quizId)
             .then(quiz => {
                 if (!quiz) {
                     return res.status(404).send({
@@ -89,7 +74,7 @@ module.exports = {
             return quiz
                 .update({
                     Question: req.body.Question || quiz.Question,
-                    chapterId: req.params.chapterId
+                    chapterId: req.query.chapterId
                 })
                 .then(() => res.status(200).send(quiz))
                 .catch((error) => res.status(400).send(error));
@@ -99,10 +84,9 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry -> TODO: Only for admins
     destroy (req, res) {
         return QuizModel
-            .findById(req.params.quizId)
+            .findById(req.query.quizId)
             .then(quiz => {
                 if (!quiz) {
                     return res.status(404).send({

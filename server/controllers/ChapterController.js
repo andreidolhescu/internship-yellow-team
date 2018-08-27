@@ -8,7 +8,7 @@ module.exports = {
            .create({
                 Title: req.body.Title,
                 Content: req.body.Content,
-                courseId: req.params.courseId
+                courseId: req.query.courseId
             })
            .then(todo => res.status(201).send(todo))
            .catch(error => res.status(400).send(error));
@@ -19,16 +19,8 @@ module.exports = {
         return ChapterModel
             .findAll({
        where: {
-           courseId: req.params.courseId
-       },
-       include: [{
-           model: CourseModel,
-           where:
-           {
-               categoryId: req.params.categoryId
-           }
-       }]//
-
+           courseId: req.query.courseId
+       }
    })
             .then(chapter => {
                 if(chapter == "")
@@ -66,10 +58,9 @@ module.exports = {
               .catch(error => res.status(400).send(error));
     },
 
-    // update an entry -> TODO: Only for admins
     update (req, res) {
         return ChapterModel
-            .findById(req.params.chapterId)
+            .findById(req.query.chapterId)
             .then(chapter => {
                 if (!chapter) {
                     return res.status(404).send({
@@ -81,7 +72,7 @@ module.exports = {
                     .update({
                         Title: req.body.Title || chapter.Title,
 			            Content: req.body.Content || chapter.Content,
-			            courseId: req.params.courseId
+			            courseId: req.query.courseId
                     })
                     .then(() => res.status(200).send(chapter))
                     .catch((error) => res.status(400).send(error));
@@ -89,10 +80,9 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry -> TODO: Only for Admins
     destroy (req, res) {
         return ChapterModel
-            .findById(req.params.chapterId)
+            .findById(req.query.chapterId)
             .then(chapter => {
                 if (!chapter) {
                     return res.status(404).send({
