@@ -13,11 +13,13 @@ module.exports = {
                     courseId: req.params.courseId
                 })
                 .then(todo => res.status(201).send({
+                    success: true,
                     message: "Chapter created"
                 }))
                 .catch(error => res.status(400).send(error));
         else {
             return res.status(406).send({
+                success: false,
                 message: 'Need Title and Content',
             });
         }
@@ -41,11 +43,13 @@ module.exports = {
             .then(chapter => {
                 if (chapter == "") {
                     return res.status(404).send({
+                        success: false,
                         message: 'There are no chapters for this course!',
                     });
                 }
                 if (!chapter) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Chapter not found!',
                     });
                 }
@@ -63,6 +67,7 @@ module.exports = {
             .then(chapter => {
                 if (!chapter) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Chapter Not Found',
                     });
                 }
@@ -78,6 +83,7 @@ module.exports = {
             .then(chapter => {
                 if (!chapter) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Chapter Not Found',
                     });
                 }
@@ -100,12 +106,14 @@ module.exports = {
             .then(chapter => {
                 if (!chapter) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Chapter Not Found',
                     });
                 }
                 return chapter
                     .destroy()
                     .then(() => res.status(200).send({
+                        success: true,
                         message: "Chapter deleted."
                     }))
                     .catch((error) => res.status(400).send(error));

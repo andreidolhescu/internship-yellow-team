@@ -61,17 +61,20 @@ module.exports =
                                     }
                                 });
                                 return res.status(200).send({
+                                    success: true,
                                     message: "Token deleted from database"
                                 });
                             }
                             else {
                                 return res.status(404).send({
+                                    success: false,
                                     message: "Password to weak."
                                 });
                             }
                         }
                         else {
                             return res.status(400).send({
+                                success: false,
                                 message: "User not found."
                             });
                         }
@@ -83,6 +86,7 @@ module.exports =
         //Primim mesaj ca putem modifica parola, adica tokenul si mailul sun valide in baza de date
         ChangePassword(req, res) {
             return res.status(200).send({
+                success: true,
                 message: "Token-ul este valid! Aici tre sa fie pagina de login"
             });
         },

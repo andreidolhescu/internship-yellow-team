@@ -22,12 +22,14 @@ module.exports = {
         transporter.sendMail(mailOptions, function (err, info) {
             if (err == null) {
                 return res.status(200).send({
+                    success: true,
                     message: "Mail Send",
                 });
             }
             else {
                 console.log(err);
                 return res.status(404).send({
+                    success: false,
                     message: "Fail Mail Send",
                 });
             }
@@ -55,12 +57,14 @@ module.exports = {
         transporter.sendMail(mailOptions, function (err, info) {
             if (err == null) {
                 return res.status(200).send({
+                    success: true,
                     message: "Mail Send",
                 });
             }
             else {
                 console.log(err);
                 return res.status(404).send({
+                    success: false,
                     message: "Fail Mail Send",
                 });
             }

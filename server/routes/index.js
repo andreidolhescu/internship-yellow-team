@@ -80,17 +80,25 @@ module.exports = (app) => {
     app.delete('/api/answers/:answerId', AnswerController.destroy);
     app.delete('/api/category/:categoryId/course/:courseId/chapter/:chapterId/answer', LoginController.IsAdminOrUser, AnswerController.deleteforchapter);
 
-    //routes for image controller
+    //routes for image controller, add
     app.post('/api/user/image', LoginController.IsAdminOrUser, ImageController.create); // insert an user image
     app.post('/api/category/:categoryId/course/:courseId/image', LoginController.IsAdmin, ImageController.create); // insert a course image
-    app.get('/api/image', LoginController.IsAdmin, ImageController.list); // list all images
-    // List all users images
+    
+    // list all images (users/courses), only for testing
+    app.get('/api/images', LoginController.IsAdmin, ImageController.list); 
+    
+    // List all users images, only for testing
     app.get('/api/usr/images', LoginController.IsAdmin, ImageController.userlist);
-    // List images for courses
+    app.get('/api/usr/image', LoginController.IsAdminOrUser, ImageController.getUserImage);
+    
+    // List images for courses, only for testing
     app.get('/api/curs/images', LoginController.IsAdminOrUser, ImageController.curslist);
+    app.get('/api/curs/image', LoginController.IsAdminOrUser, ImageController.getCourseImage);
+
+    //Other routes for image
     app.get('/api/image/:imageId', LoginController.IsAdminOrUser, ImageController.getById);
-    app.put('/api/user/:userId/image/:imageId', LoginController.IsAdminOrUser, ImageController.update);//update a user image
-    app.put('/api/category/:categoryId/course/:courseId/image/:imageId', LoginController.IsAdmin, ImageController.update);//update a course image
+    //app.put('/api/user/:userId/image/:imageId', LoginController.IsAdminOrUser, ImageController.update);//update a user image
+    //app.put('/api/category/:categoryId/course/:courseId/image/:imageId', LoginController.IsAdmin, ImageController.update);//update a course image
     app.delete('/api/image/:imageId', LoginController.IsAdmin, ImageController.destroy);
 
     //Login Route

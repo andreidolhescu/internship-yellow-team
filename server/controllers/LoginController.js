@@ -14,6 +14,7 @@ module.exports =
             if (!Mail || !Password) {
                 return res.status(400).send(
                     {
+                        success: false,
                         message: "Mail and password required."
                     }
                 )
@@ -28,6 +29,7 @@ module.exports =
             }).then(userObj => {
                 if (userObj == null) {
                     return res.status(404).send({
+                        success: false,
                         message: "Incorect Mail",
                     });
                 }
@@ -44,12 +46,12 @@ module.exports =
 
                     return res.status(200).send({
                         success: true,
-                        message: 'Enjoy your token!',
                         token: token,
                     });
                 }
                 else {
                     return res.status(404).send({
+                        success: false,
                         message: "Incorrect password",
                     });
                 }
@@ -79,6 +81,7 @@ module.exports =
                                 }
                                 else {
                                     return res.status(404).send({
+                                        success: false,
                                         message: "No user found in database for this token",
                                     });
                                 }
@@ -88,6 +91,7 @@ module.exports =
             }
             else {
                 return res.status(404).send({
+                    success: false,
                     message: "No token found!",
                 });
             }
@@ -112,6 +116,7 @@ module.exports =
                         }
                         else {
                             return res.status(401).send({
+                                success: false,
                                 message: "You don't have access!"
                             })
                         }

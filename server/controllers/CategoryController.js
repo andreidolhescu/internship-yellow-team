@@ -21,6 +21,7 @@ module.exports = {
             }).then((category => {
                 if (category.length) {
                     return res.status(404).send({
+                        success: false,
                         message: "Category already exist",
                     });
                 }
@@ -31,6 +32,7 @@ module.exports = {
                             Background: req.body.Background
                         })
                     .then(todo => res.status(201).send({
+                        success: true,
                         message: "Category created."
                     }))
                     .catch(error => res.status(400).send(error));
@@ -38,6 +40,7 @@ module.exports = {
         }
         else {
             return res.status(404).send({
+                success: false,
                 message: err,
             });
         }
@@ -58,6 +61,7 @@ module.exports = {
             .then(category => {
                 if (!category) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Category Not Found',
                     });
                 }
@@ -81,6 +85,7 @@ module.exports = {
             .then((category => {
                 if (category.length) {
                     return res.status(400).send({
+                        success: false,
                         message: "Category already exists!"
                     });
                 }
@@ -89,6 +94,7 @@ module.exports = {
                     .then(category => {
                         if (!category) {
                             return res.status(404).send({
+                                success: false,
                                 message: 'Category Not Found',
                             });
                         }
@@ -100,12 +106,14 @@ module.exports = {
                                     Background: req.body.Background || category.Background
                                 })
                                 .then(() => res.status(200).send({
+                                    success: true,
                                     message: "Update done."
                                 }))
                                 .catch((error) => res.status(400).send(error));
                         }
                         else
                             return res.status(400).send({
+                                success: false,
                                 message: err,
                             });
 
@@ -121,6 +129,7 @@ module.exports = {
             .then(category => {
                 if (!category) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Category Not Found',
                     });
                 }
@@ -128,6 +137,7 @@ module.exports = {
                 return category
                     .destroy()
                     .then(() => res.status(200).send({
+                        success: true,
                         message: "Category deleted"
                     }))
                     .catch((error) => res.status(400).send(error));

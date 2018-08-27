@@ -35,6 +35,7 @@ module.exports = {
             .then(userTokens => {
                 if (!userTokens) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Test Not Found',
                     });
                 }
@@ -50,6 +51,7 @@ module.exports = {
             .then(userTokens => {
                 if (!userTokens) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Test Not Found',
                     });
                 }
@@ -71,6 +73,7 @@ module.exports = {
             .then(userTokens => {
                 if (!userTokens) {
                     return res.status(404).send({
+                        success: false,
                         message: 'Test Not Found',
                     });
                 }
@@ -78,6 +81,7 @@ module.exports = {
                 return test
                     .destroy()
                     .then(() => res.status(200).send({
+                        success: true,
                         message: "User token deleted."
                     }))
                     .catch((error) => res.status(400).send(error));
