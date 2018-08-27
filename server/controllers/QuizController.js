@@ -8,7 +8,7 @@ module.exports = {
         if (req.body.Question != null)
             return QuizModel.create({
                 Question: req.body.Question,
-                chapterId: req.params.chapterId
+                chapterId: req.query.chapterId
             })
                 .then(todo => res.status(201).send({
                     success: true,
@@ -29,24 +29,10 @@ module.exports = {
     list(req, res) {
         return QuizModel
             .findAll({
-                where: {
-                    chapterId: req.params.chapterId
-                },
-                include: [{
-                    model: ChapterModel,
-                    where:
-                    {
-                        courseId: req.params.courseId
-                    },
-                    include: [{
-                        model: CourseModel,
-                        where:
-                        {
-                            categoryId: req.params.categoryId
-                        }
-                    }]
-                }]
-            })
+            where: {
+                chapterId: req.query.chapterId
+                }
+        })
             .then(quiz => {
                 if (quiz == "") {
                     return res.status(404).send({
@@ -83,10 +69,9 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    // update an entry -> TODO: Only for admins
-    update(req, res) {
+    update (req, res) {
         return QuizModel
-            .findById(req.params.quizId)
+            .findById(req.query.quizId)
             .then(quiz => {
                 if (!quiz) {
                     return res.status(404).send({
@@ -94,10 +79,11 @@ module.exports = {
                         message: 'Quiz Not Found',
                     });
                 }
+
                 return quiz
                     .update({
                         Question: req.body.Question || quiz.Question,
-                        chapterId: req.params.chapterId
+                        chapterId: req.query.chapterId
                     })
                     .then(() => res.status(200).send({
                         success: true,
@@ -108,10 +94,9 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry -> TODO: Only for admins
-    destroy(req, res) {
+    destroy (req, res) {
         return QuizModel
-            .findById(req.params.quizId)
+            .findById(req.query.quizId)
             .then(quiz => {
                 if (!quiz) {
                     return res.status(404).send({

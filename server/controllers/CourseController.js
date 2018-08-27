@@ -1,4 +1,5 @@
 const CourseModel = require('../models').Course;
+const Sequelize = require('sequelize');
 var validate = require('../validate/Validation');
 var err;
 
@@ -7,9 +8,11 @@ module.exports = {
     create: (req, res) => {
         return CourseModel.findAll({
             where: {
-                Title: req.body.Title
+                Title: req.body.Title,
+                categoryId: req.query.categoryId
             }
         })
+
             .then((course => {
                 if (course.length) {
                     return res.status(400).send({
@@ -23,7 +26,7 @@ module.exports = {
                         Summary: req.body.Summary,
                         Description: req.body.Description,
                         Tags: req.body.Tags,
-                        categoryId: req.params.categoryId
+                        categoryId: req.query.categoryId
                     })
                         .then(todo => res.status(201).send({
                             success: true,
@@ -48,9 +51,9 @@ module.exports = {
     // get all entries from Course table for a category Id
     list(req, res) {
         return CourseModel
-            .findAll({
-                where: {
-                    categoryId: req.params.categoryId
+        .findAll({
+            where: {
+                categoryId: req.query.categoryId
                 }
             })
             .then(course => {
@@ -87,11 +90,14 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    // update an entry -> TODO: only for admins
+    // update an entry 
     update(req, res) {
         CourseModel.findAll({
             where: {
-                Title: req.body.Title
+                Title: req.body.Title,
+                id: {
+                  [Sequelize.Op.ne]: req.query.courseId
+                } 
             }
         })
             .then((course => {
@@ -103,7 +109,7 @@ module.exports = {
                 }
 
                 return CourseModel
-                    .findById(req.params.courseId)
+                    .findById(req.query.courseId)
                     .then(course => {
                         if (!course) {
                             return res.status(404).send({
@@ -117,21 +123,20 @@ module.exports = {
                                 Summary: req.body.Summary || course.Summary,
                                 Description: req.body.Description || course.Description,
                                 Tags: req.body.Tags || course.Tags,
-                                categoryId: req.params.categoryId || course.categoryId
+                                categoryId: req.query.categoryId || course.categoryId
                             })
                             .then(() => res.status(200).send(course))
                             .catch((error) => res.status(400).send(error));
-
 
                     })
             }))
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry -> TODO: Only for admins
+    // delete an entry 
     destroy(req, res) {
         return CourseModel
-            .findById(req.params.courseId)
+            .findById(req.query.courseId)
             .then(user => {
                 if (!user) {
                     return res.status(404).send({

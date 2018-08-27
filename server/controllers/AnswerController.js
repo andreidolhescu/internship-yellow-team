@@ -13,9 +13,9 @@ module.exports = {
     create: (req, res) => {
         return AnswerModel.create({
             userId: req.decoded.ID,
-            quizoptionId: req.params.quizOptionsId,
-            quiz_answerId: req.params.quizId,
-            chapterId: req.params.chapterId
+            quizoptionId: req.query.quizOptionsId,
+            quiz_answerId: req.query.quizId,
+            chapterId: req.query.chapterId
         })
             .then(answer => res.status(201).send({
                 success: true,
@@ -60,7 +60,7 @@ module.exports = {
     destroy(req, res) {
         return AnswerModel
             .findOne({
-                where: { id: req.params.answerId }
+                where: {id: req.query.answerId}
             })
             .then(answer => {
                 if (!answer) {
@@ -84,10 +84,9 @@ module.exports = {
     //delete all answers for a chapter
     deleteforchapter(req, res) {
         return AnswerModel
-            .destroy({
-                where: { chapterId: req.params.chapterId }
-            })
-
+        .destroy({
+            where: {chapterId: req.query.chapterId}
+        })
             .then(() => res.status(200).send({ 
                 success: true,
                 message: "Answer deleted.", 

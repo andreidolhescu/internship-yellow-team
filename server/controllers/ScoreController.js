@@ -18,9 +18,9 @@ module.exports = {
                 required: true
             }],
             where: {
-                userId: req.decoded.ID,
-                chapterId: req.params.chapterId,
-            },
+            userId: req.decoded.ID,
+            chapterId: req.query.chapterId,
+            }, 
         })
             .then(answers => res.status(200).send(answers))
             .catch(error => {
@@ -44,17 +44,17 @@ module.exports = {
                         model: ChapterModel,
                         where:
                         {
-                            courseId: req.params.courseId,
+                            courseId: req.query.courseId,
                         },
                         required: true,
                         include: [{
-                            model: CourseModel,
-                            where:
-                            {
-                                categoryId: req.params.categoryId
-                            },
-                            required: true,
-                        }]
+                           model: CourseModel,
+                           where:
+                           {
+                               categoryId: req.query.categoryId
+                           },
+                           required: true,
+                       }]
                     }]
                 }]
             }],

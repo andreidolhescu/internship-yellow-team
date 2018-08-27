@@ -3,14 +3,13 @@ const CourseModel = require('../models').Course;
 
 module.exports = {
     // insert chapter into chapter table
-    //todo validari, content,title
     create(req, res) {
         if (req.body.Title != null && req.body.Content != null)
             return ChapterModel
                 .create({
                     Title: req.body.Title,
                     Content: req.body.Content,
-                    courseId: req.params.courseId
+                    courseId: req.query.courseId
                 })
                 .then(todo => res.status(201).send({
                     success: true,
@@ -29,16 +28,9 @@ module.exports = {
     list(req, res) {
         return ChapterModel
             .findAll({
-                where: {
-                    courseId: req.params.courseId
-                },
-                include: [{
-                    model: CourseModel,
-                    where:
-                    {
-                        categoryId: req.params.categoryId
-                    }
-                }]
+               where: {
+                 courseId: req.query.courseId
+               }
             })
             .then(chapter => {
                 if (chapter == "") {
@@ -76,10 +68,9 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    // update an entry -> TODO: Only for admins
-    update(req, res) {
+    update (req, res) {
         return ChapterModel
-            .findById(req.params.chapterId)
+            .findById(req.query.chapterId)
             .then(chapter => {
                 if (!chapter) {
                     return res.status(404).send({
@@ -90,8 +81,8 @@ module.exports = {
                 return chapter
                     .update({
                         Title: req.body.Title || chapter.Title,
-                        Content: req.body.Content || chapter.Content,
-                        courseId: req.params.courseId
+      			            Content: req.body.Content || chapter.Content,
+      			            courseId: req.query.courseId
                     })
                     .then(() => res.status(200).send(chapter))
                     .catch((error) => res.status(400).send(error));
@@ -99,10 +90,9 @@ module.exports = {
             .catch((error) => res.status(400).send(error));
     },
 
-    // delete an entry -> TODO: Only for Admins
-    destroy(req, res) {
+    destroy (req, res) {
         return ChapterModel
-            .findById(req.params.chapterId)
+            .findById(req.query.chapterId)
             .then(chapter => {
                 if (!chapter) {
                     return res.status(404).send({
