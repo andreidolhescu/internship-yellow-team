@@ -12,7 +12,6 @@ const AnswerController = require('../controllers').AnswerController;
 const MailController = require('../controllers').MailController;
 const ResetPasswordController = require('../controllers').ResetPasswordController;
 const UserTokenController = require('../controllers').UserTokenController;
-const ImageController = require('../controllers').ImageController;
 const ScoreController = require('../controllers').ScoreController;
 
 module.exports = (app) => {
@@ -36,8 +35,6 @@ module.exports = (app) => {
     app.delete('/api/user/:userId', LoginController.IsAdmin, UserController.destroyId);
     app.delete('/api/user/', LoginController.IsAdminOrUser, UserController.destroy);
 
-    //routes for category controller
-    //app.post('/api/category', CategoryController.create);
     //Creare categorie doar de admin
     app.post('/api/categories', LoginController.IsAdmin, CategoryController.create);
     app.get('/api/categories', LoginController.IsAdminOrUser, CategoryController.list);
@@ -84,11 +81,11 @@ module.exports = (app) => {
     app.delete('/api/chapter/answer', LoginController.IsAdminOrUser, AnswerController.deleteforchapter);
 
     //routes for image controller, add
-    app.post('/api/user/image', LoginController.IsAdminOrUser, ImageController.create); // insert an user image
+    /*app.post('/api/user/image', LoginController.IsAdminOrUser, ImageController.create); // insert an user image
     app.post('/api/category/:categoryId/course/:courseId/image', LoginController.IsAdmin, ImageController.create); // insert a course image
-    
+    */
     // list all images (users/courses), only for testing
-    app.get('/api/images', LoginController.IsAdmin, ImageController.list); 
+    /*app.get('/api/images', LoginController.IsAdmin, ImageController.list); 
     
     // List all users images, only for testing
     app.get('/api/usr/images', LoginController.IsAdmin, ImageController.userlist);
@@ -103,7 +100,7 @@ module.exports = (app) => {
     //app.put('/api/user/:userId/image/:imageId', LoginController.IsAdminOrUser, ImageController.update);//update a user image
     //app.put('/api/category/:categoryId/course/:courseId/image/:imageId', LoginController.IsAdmin, ImageController.update);//update a course image
     app.delete('/api/image/:imageId', LoginController.IsAdmin, ImageController.destroy);
-
+*/
     //Login Route
     app.post('/api/login', LoginController.login);
     app.get('/api/login', LoginController.IsAdminOrUser, UserController.list);

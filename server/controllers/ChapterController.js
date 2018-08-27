@@ -1,5 +1,6 @@
 const ChapterModel = require('../models').Chapter;
 const CourseModel = require('../models').Course;
+const Sequelize = require('sequelize');
 
 module.exports = {
     // insert chapter into chapter table
@@ -69,6 +70,21 @@ module.exports = {
     },
 
     update (req, res) {
+      ChapterModel.findAll({
+            where: {
+                Title: req.body.Title,
+                id: {
+                  [Sequelize.Op.ne]: req.query.chapterId
+                } 
+            }
+        })
+            .then((chapter => {
+                if (chapter.length) {
+                    return res.status(400).send({
+                        success: false,
+                        message: "Chapter already exists!"
+                    });
+                }
         return ChapterModel
             .findById(req.query.chapterId)
             .then(chapter => {
@@ -88,6 +104,7 @@ module.exports = {
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
+      }))
     },
 
     destroy (req, res) {

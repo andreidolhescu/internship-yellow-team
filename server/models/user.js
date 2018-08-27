@@ -25,12 +25,12 @@ module.exports = (sequelize, DataTypes) => {
     {
       type: DataTypes.INTEGER,
     },
+    Path: 
+    {
+      type: DataTypes.STRING,
+    }
   }, {});
   User.associate = function(models) {
-    User.hasMany(models.Image, {
-      foreignKey: 'userId',
-      as: 'images'
-    });
   };
   return User;
 };
