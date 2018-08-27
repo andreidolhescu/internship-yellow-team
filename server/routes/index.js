@@ -27,6 +27,7 @@ module.exports = (app) => {
 
     app.post('/api/register', UserController.register);
     app.get('/api/user', LoginController.IsAdmin, UserController.list);
+    app.post('/api/user/image', LoginController.IsAdminOrUser, UserController.uploadImage);
     app.get('/api/user/about', LoginController.IsAdminOrUser, UserController.about);
     app.get('/api/user/:userId', LoginController.IsAdmin, UserController.getById);
     app.put('/api/user/', LoginController.IsAdminOrUser, UserController.update);
@@ -45,6 +46,7 @@ module.exports = (app) => {
 
     //routes for course controller
     app.post('/api/courses', LoginController.IsAdmin, CourseController.create);
+    app.post('/api/courses/image', LoginController.IsAdmin, CourseController.uploadImage);
     app.get('/api/courses', LoginController.IsAdminOrUser, CourseController.list);
     app.post('/api/courses/search', LoginController.IsAdminOrUser, CourseController.search);
     app.get('/api/courses/:courseId', LoginController.IsAdminOrUser, CourseController.getById);

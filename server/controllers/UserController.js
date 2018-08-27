@@ -1,7 +1,24 @@
 const UserModel = require('../models').User;
 const bcrypt = require('bcrypt');
 var validate = require('../validate/Validation');
+const multer = require('multer');
+var fs = require('fs');
 var err;
+
+//Set storage image
+const storage = multer.diskStorage({
+    destination: './public/images',
+    filename: function (req, file, cb) {
+        //console.log(file);
+        var name = file.fieldname + '-' + Date.now() + "." + file.mimetype.split('/')[1];
+        //console.log(name);
+        cb(null, name)
+    }
+});
+
+const upload = multer({
+    storage: storage
+}).single('Image');
 
 module.exports = {
     // insert user into user table
@@ -82,10 +99,13 @@ module.exports = {
     },
 
     about(req, res) {
+        console.log("ID :", req.decoded.ID);
         return UserModel
             .findOne({
-                id: req.decoded.ID,
-                attributes: ['FirstName', 'LastName','Mail','Admin','Points','createdAt','updatedAt']
+                where :{
+                    id: req.decoded.ID
+                },
+                attributes: ['FirstName', 'LastName', 'Mail', 'Admin', "Path", 'Points', 'createdAt', 'updatedAt']
             })
             .then(user => {
                 if (!user) {
@@ -219,6 +239,48 @@ module.exports = {
                 });
             }))
             .catch((error) => res.status(400).send(error));
+    },
+
+    uploadImage(req, res) {
+        upload(req, res, (err) => {
+            if (err) {
+                return res.status(404).send({
+                    success: false,
+                    message: err
+                })
+            }
+            else {
+                if (req.file != null) {
+                    UserModel.findById(req.decoded.ID)
+                        .then((user => {
+                            if (user.Path != "public/images/defaultuser.jpg") {
+                                try {
+                                    fs.unlinkSync(user.Path);
+                                }
+                                catch (Exception) {
+                                    console.log("Fisierul nu exista!");
+                                }
+                            }
+                            return user.update({
+                                Path: "public/images/" + req.file.filename
+                            })
+                                .then(user => res.status(201).send({
+                                    success: true,
+                                    message: "Uploaded successful image for user."
+                                }))
+                                .catch(error => {
+                                    return res.status(400).send(error);
+                                });
+                        }))
+                }
+                else {
+                    return res.status(400).send({
+                        success: false,
+                        message: "No file uploaded"
+                    })
+                }
+            }
+        });
     },
 
     // delete an entry IF ADMIN -> TODO

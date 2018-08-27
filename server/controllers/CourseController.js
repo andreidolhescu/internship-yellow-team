@@ -1,7 +1,22 @@
 const CourseModel = require('../models').Course;
 const Sequelize = require('sequelize');
-var validate = require('../validate/Validation');
-var err;
+const multer = require('multer');
+var fs = require('fs');
+
+//Set storage image
+const storage = multer.diskStorage({
+    destination: './public/images',
+    filename: function (req, file, cb) {
+        //console.log(file);
+        var name = file.fieldname + '-' + Date.now() + "." + file.mimetype.split('/')[1];
+        //console.log(name);
+        cb(null, name)
+    }
+});
+
+const upload = multer({
+    storage: storage
+}).single('Image');
 
 module.exports = {
     // insert course into Course table
@@ -45,6 +60,49 @@ module.exports = {
             .catch(error => {
                 return res.status(400).send(error);
             });
+    },
+
+    uploadImage(req, res) {
+        upload(req, res, (err) => {
+            if (err) {
+                return res.status(404).send({
+                    success: false,
+                    message: err
+                })
+            }
+            else {
+                if (req.file != null) {
+                    CourseModel.findById(req.query.courseId)
+                        .then((course => {
+                            console.log(course);
+                            if (course.Path != "public/images/defaultcourse.jpg") {
+                                try {
+                                    fs.unlinkSync(course.Path);
+                                }
+                                catch (Exception) {
+                                    console.log("Fisierul nu exista!");
+                                }
+                            }
+                            return course.update({
+                                Path: "public/images/" + req.file.filename
+                            })
+                                .then(course => res.status(201).send({
+                                    success: true,
+                                    message: "Uploaded successful image for course."
+                                }))
+                                .catch(error => {
+                                    return res.status(400).send(error);
+                                });
+                        }))
+                }
+                else {
+                    return res.status(400).send({
+                        success: false,
+                        message: "No file uploaded"
+                    })
+                }
+            }
+        });
     },
 
 
