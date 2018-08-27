@@ -11,6 +11,7 @@ const MailController = require('./MailController');
 const ResetPasswordController = require('./ResetPasswordController');
 const UserTokenController = require('./UserTokenController');
 const ScoreController = require('./ScoreController');
+const ImagesController = require('./ImagesController');
 
 module.exports = {
     testController,
@@ -25,5 +26,6 @@ module.exports = {
     MailController,
     ResetPasswordController,
     UserTokenController,
-    ScoreController
+    ScoreController,
+    ImagesController
 };
