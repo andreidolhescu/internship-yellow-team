@@ -70,6 +70,7 @@ module.exports = (app) => {
 
     //routes for quiz options controller
     app.post('/api/quizOptions', LoginController.IsAdmin, QuizOptionsController.create);
+    app.get('/api/quizzes/quizOptions', LoginController.IsAdminOrUser, QuizOptionsController.listAll);
     app.get('/api/quizOptions', LoginController.IsAdminOrUser, QuizOptionsController.list);
     app.get('/api/quizOptions/:quizOptionsId', LoginController.IsAdminOrUser, QuizOptionsController.getById);
     app.put('/api/quizOptions', LoginController.IsAdmin, QuizOptionsController.update);

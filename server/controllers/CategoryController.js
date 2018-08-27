@@ -50,7 +50,7 @@ module.exports = {
     list(req, res) {
         return CategoryModel
             .all()
-            .then(todo => res.status(200).send(todo))
+            .then(category => res.status(200).send(category))
             .catch(error => res.status(400).send(error));
     },
 
