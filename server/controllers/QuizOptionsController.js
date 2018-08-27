@@ -24,6 +24,14 @@ module.exports = {
         }
     },
 
+    // get all entries from QuizOptions table
+    listAll(req, res) {
+        return QuizOptionsModel
+            .all()
+            .then(QuizOptions => res.status(200).send(QuizOptions))
+            .catch(error => res.status(400).send(error));
+    },
+
     // get all entries from QuizOptions table for a QuizID
     list(req, res) {
         return QuizOptionsModel
