@@ -41,6 +41,7 @@ module.exports = (app) => {
     //Creare categorie doar de admin
     app.post('/api/categories', LoginController.IsAdmin, CategoryController.create);
     app.get('/api/categories', LoginController.IsAdminOrUser, CategoryController.list);
+    app.post('/api/categories/search', LoginController.IsAdminOrUser, CategoryController.search);
     app.get('/api/categories/:categoryId', LoginController.IsAdminOrUser, CategoryController.getById);
     app.put('/api/categories', LoginController.IsAdmin, CategoryController.update);
     app.delete('/api/categories', LoginController.IsAdmin, CategoryController.destroy);
@@ -48,6 +49,7 @@ module.exports = (app) => {
     //routes for course controller
     app.post('/api/courses', LoginController.IsAdmin, CourseController.create);
     app.get('/api/courses', LoginController.IsAdminOrUser, CourseController.list);
+    app.post('/api/courses/search', LoginController.IsAdminOrUser, CourseController.search);
     app.get('/api/courses/:courseId', LoginController.IsAdminOrUser, CourseController.getById);
     app.put('/api/courses', LoginController.IsAdmin, CourseController.update);
     app.delete('/api/courses/', LoginController.IsAdmin, CourseController.destroy);

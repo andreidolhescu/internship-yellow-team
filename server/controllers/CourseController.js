@@ -74,6 +74,36 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
+    //search by Title
+    search(req,res) {
+        return CourseModel
+        .findAll({
+               where: {
+                 Title: {
+                    [Sequelize.Op.like]: '%' + req.body.Title + '%'
+                 }
+               }
+            })
+            .then(course => {
+                if (course == "") {
+                    return res.status(404).send({
+                        success: false,
+                        message: 'There are no courses with this title!',
+                    });
+                }
+                if (!course) {
+                    return res.status(404).send({
+                        success: false,
+                        message: 'Course not found!',
+                    });
+                }
+                return res.status(200).send(course);
+            })
+            .catch(error => {
+                return res.status(400).send(error);
+            });
+    },
+
     // get an entry by id
     getById(req, res) {
         return CourseModel

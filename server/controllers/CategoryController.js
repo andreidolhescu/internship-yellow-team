@@ -70,6 +70,36 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
+    //search by CategoryName
+    search(req,res) {
+        return CategoryModel
+        .findAll({
+               where: {
+                 CategoryName: {
+                    [Sequelize.Op.like]: '%' + req.body.CategoryName + '%'
+                 }
+               }
+            })
+            .then(category => {
+                if (category == "") {
+                    return res.status(404).send({
+                        success: false,
+                        message: 'There are no categories with this CategoryName!',
+                    });
+                }
+                if (!category) {
+                    return res.status(404).send({
+                        success: false,
+                        message: 'Category not found!',
+                    });
+                }
+                return res.status(200).send(category);
+            })
+            .catch(error => {
+                return res.status(400).send(error);
+            });
+    },
+
     // update category
     update(req, res) {
         err = '';
