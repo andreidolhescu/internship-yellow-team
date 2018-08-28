@@ -71,14 +71,21 @@ module.exports = {
     },
 
     //search by CategoryName
-    search(req,res) {
+    search(req, res) {
         return CategoryModel
-        .findAll({
-               where: {
-                 CategoryName: {
-                    [Sequelize.Op.like]: '%' + req.body.CategoryName + '%'
-                 }
-               }
+            /*.findAll({
+                   where: {
+                     CategoryName: {
+                        [Sequelize.Op.like]: '%' + req.body.CategoryName + '%'
+                     }
+                   }
+                })*/
+            .findAll({
+                where: {
+                    CategoryName: {
+                        $iLike: '%' + req.body.CategoryName + '%'
+                    }
+                }
             })
             .then(category => {
                 if (category == "") {
@@ -111,8 +118,8 @@ module.exports = {
             where: {
                 CategoryName: req.body.CategoryName,
                 id: {
-                  [Sequelize.Op.ne]: req.query.categoryId
-                } 
+                    [Sequelize.Op.ne]: req.query.categoryId
+                }
             }
         })
             .then((category => {

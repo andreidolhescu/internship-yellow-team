@@ -31,7 +31,8 @@ module.exports = (app) => {
     app.post('/api/user/image', LoginController.IsAdminOrUser, UserController.uploadImage);
     app.get('/api/user/about', LoginController.IsAdminOrUser, UserController.about);
     app.get('/api/user/:userId', LoginController.IsAdmin, UserController.getById);
-    app.put('/api/user/', LoginController.IsAdminOrUser, UserController.update);
+    app.put('/api/user/:userId', LoginController.IsAdmin, UserController.updateById)
+    app.put('/api/user', LoginController.IsAdminOrUser, UserController.update);
     //Uprade or downgrade user to admin and revers
     app.put('/api/user/change/:userId', LoginController.IsAdmin, UserController.change);
     app.delete('/api/user/:userId', LoginController.IsAdmin, UserController.destroyId);
