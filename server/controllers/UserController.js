@@ -102,7 +102,7 @@ module.exports = {
         console.log("ID :", req.decoded.ID);
         return UserModel
             .findOne({
-                where :{
+                where: {
                     id: req.decoded.ID
                 },
                 attributes: ['FirstName', 'LastName', 'Mail', 'Admin', "Path", 'Points', 'createdAt', 'updatedAt']
@@ -158,6 +158,86 @@ module.exports = {
                 }
             })
             .catch(error => res.status(400).send(error));
+    },
+
+    updateById(req, res) {
+        err = ""
+
+        if (!validate.IsName(req.body.FirstName))
+            err += "Invalid First Name! ";
+        if (!validate.IsName(req.body.LastName))
+            err += "Invalid Last Name! ";
+        if (!validate.IsPassword(req.body.Password))
+            err += "Invalid Password! ";
+        if (!validate.IsMail(req.body.Mail))
+            err += "Invalid Mail! ";
+
+            UserModel.findAll({
+                where: {
+                    id: req.params.userId
+                }
+            })
+            .then((user => {
+                var mail = String(req.body.Mail).toLowerCase();
+                UserModel.findOne({
+                    where: {
+                        Mail: mail
+                    }
+                }).then(obj => {
+                    return UserModel
+                        .findById(req.params.userId)
+                        .then(user => {
+                            if (!user) {
+                                return res.status(404).send({
+                                    success: false,
+                                    message: 'User Not Found',
+                                });
+                            }
+
+                            if (String(err) == String("")) {
+                                var hash = bcrypt.hashSync(req.body.Password, 10);
+                                if (obj == null)
+                                    return user
+                                        .update({
+                                            FirstName: req.body.FirstName,
+                                            LastName: req.body.LastName,
+                                            Password: hash,
+                                            Mail: mail
+                                        })
+                                        .then(() => res.status(200).send({
+                                            success: true,
+                                            message: "User updated."
+                                        }))
+                                        .catch((error) => res.status(400).send(error));
+                                else if (obj.id == req.params.userId) {
+                                    return user
+                                        .update({
+                                            FirstName: req.body.FirstName,
+                                            LastName: req.body.LastName,
+                                            Password: hash
+                                        })
+                                        .then(() => res.status(200).send({
+                                            success: true,
+                                            message: "User updated."
+                                        }))
+                                        .catch((error) => res.status(400).send(error));
+                                }
+                                else {
+                                    return res.status(404).send({
+                                        success: false,
+                                        message: 'Access denied. Mail Exist.',
+                                    });
+                                }
+                            }
+                            else
+                                return res.status(400).send({
+                                    success: false,
+                                    message: err,
+                                });
+                        })
+                });
+            }))
+            .catch((error) => res.status(400).send(error));
     },
 
     // update an entry

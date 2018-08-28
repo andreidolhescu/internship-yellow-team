@@ -139,7 +139,7 @@ module.exports = {
         .findAll({
                where: {
                  Title: {
-                    [Sequelize.Op.like]: '%' + req.body.Title + '%'
+                    $iLike: '%' + req.body.Title + '%'
                  }
                }
             })
