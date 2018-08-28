@@ -13,6 +13,7 @@ const MailController = require('../controllers').MailController;
 const ResetPasswordController = require('../controllers').ResetPasswordController;
 const UserTokenController = require('../controllers').UserTokenController;
 const ScoreController = require('../controllers').ScoreController;
+const ImagesController = require('../controllers').ImagesController;
 
 module.exports = (app) => {
 
@@ -121,4 +122,6 @@ module.exports = (app) => {
     app.get('/api/chapter/score', LoginController.IsAdminOrUser, ScoreController.GetScoreChapter);
     app.get('/api/course/score', LoginController.IsAdminOrUser, ScoreController.GetScoreCourse);
     app.get('/api/score', LoginController.IsAdminOrUser, ScoreController.GetUserScore); // get user's score
+
+    app.get('/public/images/:name', ImagesController.getByName);
 }

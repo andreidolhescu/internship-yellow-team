@@ -72,6 +72,7 @@ module.exports = {
             }
             else {
                 if (req.file != null) {
+                    console.log(req.query.courseId)
                     CourseModel.findById(req.query.courseId)
                         .then((course => {
                             console.log(course);
