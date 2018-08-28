@@ -45,7 +45,10 @@ module.exports =
             GetUserByToken(req.params.token, function (response) {
                 return UserModel
                     .findOne({
-                        Mail: response.Mail
+                        where: {
+                            Mail: response.mail
+                        }
+
                     })
                     .then(function (obj) {
                         if (obj) {
@@ -122,9 +125,9 @@ module.exports =
 
         //Trimitem token-ul daca este gasit in baza de date.
         SendToken(req, res) {
-            var mail = req.body.Mail;
+            var mail = String(req.body.Mail).toLowerCase();
 
-            IfExistMail(String(mail).toLowerCase(), function (response) {
+            IfExistMail(mail, function (response) {
                 if (response == "true") {
                     const payload = {
                         mail: mail

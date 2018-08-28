@@ -3,7 +3,13 @@ const UserTokens = require('../models').UserTokens;
 module.exports = {
     createWithParameters(mail, token) {
         return UserTokens
-            .findOne({ mail: mail })
+            .findOne(
+                {
+                    where : {
+                        mail : mail
+                    }
+                }
+            )
             .then(function (obj) {
                 if (obj) { // update
                     return obj.update({
