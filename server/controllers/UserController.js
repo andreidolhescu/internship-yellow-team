@@ -206,8 +206,6 @@ module.exports = {
             err += "Invalid First Name! ";
         if (!validate.IsName(req.body.LastName))
             err += "Invalid Last Name! ";
-        if (!validate.IsPassword(req.body.Password))
-            err += "Invalid Password! ";
         if (!validate.IsMail(req.body.Mail))
             err += "Invalid Mail! ";
 
@@ -234,50 +232,98 @@ module.exports = {
                             }
 
                             if (String(err) == String("")) {
-                                var hash = bcrypt.hashSync(req.body.Password, 10);
-                                if (obj == null)
-                                    return user
-                                        .update({
-                                            FirstName: req.body.FirstName,
-                                            LastName: req.body.LastName,
-                                            Password: hash,
-                                            Mail: mail
-                                        })
-                                        .then(() => res.status(200).send({
-                                            success: true,
-                                            message: "User updated."
-                                        }))
-                                        .catch((error) => res.status(400).send(error));
-                                else if (obj.id == req.decoded.ID) {
-                                    return user
-                                        .update({
-                                            FirstName: req.body.FirstName,
-                                            LastName: req.body.LastName,
-                                            Password: hash
-                                        })
-                                        .then(() => res.status(200).send({
-                                            success: true,
-                                            message: "User updated."
-                                        }))
-                                        .catch((error) => res.status(400).send(error));
+                                if (req.body.Password != null && req.body.Password != "") {
+                                    if (validate.IsPassword(req.body.Password)) {
+                                        var hash = bcrypt.hashSync(req.body.Password, 10);
+                                        if (obj == null) {
+                                            return user
+                                                .update({
+                                                    FirstName: req.body.FirstName,
+                                                    LastName: req.body.LastName,
+                                                    Password: hash,
+                                                    Mail: mail
+                                                })
+                                                .then(() => res.status(200).send({
+                                                    success: true,
+                                                    message: "User updated."
+                                                }))
+                                                .catch((error) => res.status(400).send(error));
+                                        }
+                                        else if (obj.id == req.decoded.ID) {
+                                            return user
+                                                .update({
+                                                    FirstName: req.body.FirstName,
+                                                    LastName: req.body.LastName,
+                                                    Password: hash
+                                                })
+                                                .then(() => res.status(200).send({
+                                                    success: true,
+                                                    message: "User updated."
+                                                }))
+                                                .catch((error) => res.status(400).send(error));
+                                        }
+                                        else {
+                                            return res.status(400).send({
+                                                success: false,
+                                                message: 'Mail already exist.',
+                                            });
+                                        }
+                                    }
+                                    else {
+                                        return res.status(404).send({
+                                            success: false,
+                                            message: 'Password to weak.',
+                                        });
+                                    }
                                 }
                                 else {
-                                    return res.status(404).send({
-                                        success: false,
-                                        message: 'Access denied. Mail Exist.',
-                                    });
+                                    if (obj == null) {
+                                        return user
+                                            .update({
+                                                FirstName: req.body.FirstName,
+                                                LastName: req.body.LastName,
+                                                Mail: mail
+                                            })
+                                            .then(() => res.status(200).send({
+                                                success: true,
+                                                message: "User updated."
+                                            }))
+                                            .catch((error) => res.status(400).send(error));
+                                    }
+                                    else if (obj.id == req.decoded.ID) {
+                                        return user
+                                            .update({
+                                                FirstName: req.body.FirstName,
+                                                LastName: req.body.LastName
+                                            })
+                                            .then(() => res.status(200).send({
+                                                success: true,
+                                                message: "User updated."
+                                            }))
+                                            .catch((error) => res.status(400).send(error));
+                                    }
+                                    else {
+                                        return res.status(400).send({
+                                            success: false,
+                                            message: 'Mail already exist.',
+                                        });
+                                    }
                                 }
                             }
-                            else
+                            else {
                                 return res.status(400).send({
                                     success: false,
                                     message: err,
                                 });
-                        })
-                });
+                            }
+                        }
+                        )
+                }
+                )
             }))
-            .catch((error) => res.status(400).send(error));
     },
+
+
 
     uploadImage(req, res) {
         upload(req, res, (err) => {

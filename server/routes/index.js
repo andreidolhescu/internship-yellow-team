@@ -55,6 +55,9 @@ module.exports = (app) => {
     app.put('/api/courses', LoginController.IsAdmin, CourseController.update);
     app.delete('/api/courses/', LoginController.IsAdmin, CourseController.destroy);
 
+    //In testing
+    app.get('/api/cours/all', LoginController.IsAdminOrUser, CourseController.listAll);
+
     //routes for chapter controller
     app.post('/api/chapters', LoginController.IsAdmin, ChapterController.create);
     app.get('/api/chapters', LoginController.IsAdminOrUser, ChapterController.list);
@@ -68,6 +71,9 @@ module.exports = (app) => {
     app.get('/api/quiz/:quizId', LoginController.IsAdminOrUser, QuizController.getById);
     app.put('/api/quiz', LoginController.IsAdmin, QuizController.update);
     app.delete('/api/quiz', LoginController.IsAdmin, QuizController.destroy);
+
+    //TESTING ROUTE FOR QUIZ (ALL IN JSON)
+    app.get('/api/testquiz/', LoginController.IsAdminOrUser, QuizController.getTestQuiz);
 
     //routes for quiz options controller
     app.post('/api/quizOptions', LoginController.IsAdmin, QuizOptionsController.create);
@@ -123,6 +129,9 @@ module.exports = (app) => {
     app.get('/api/chapter/score', LoginController.IsAdminOrUser, ScoreController.GetScoreChapter);
     app.get('/api/course/score', LoginController.IsAdminOrUser, ScoreController.GetScoreCourse);
     app.get('/api/score', LoginController.IsAdminOrUser, ScoreController.GetUserScore); // get user's score
+
+    app.get('/api/chapter/max', LoginController.IsAdminOrUser, ScoreController.GetScoreChapterMax);
+    app.get('/api/course/max', LoginController.IsAdminOrUser, ScoreController.getScoreCourseMax);
 
     app.get('/public/images/:name', ImagesController.getByName);
 }
