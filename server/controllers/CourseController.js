@@ -35,7 +35,8 @@ module.exports = {
                         message: "Course already exists!"
                     });
                 }
-                if (req.body.Title != null && req.body.Summary != null && req.body.Description != null)
+                if (req.body.Title != null && req.body.Summary != null && req.body.Description != null
+                    && req.body.Title != "" && req.body.Summary != "" && req.body.Description != "")
                     return CourseModel.create({
                         Title: req.body.Title,
                         Summary: req.body.Summary,
