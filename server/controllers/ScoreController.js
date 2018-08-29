@@ -18,9 +18,9 @@ module.exports = {
                 required: true
             }],
             where: {
-            userId: req.decoded.ID,
-            chapterId: req.query.chapterId,
-            }, 
+                userId: req.decoded.ID,
+                chapterId: req.query.chapterId,
+            },
         })
             .then(answers => res.status(200).send(answers))
             .catch(error => {
@@ -48,13 +48,13 @@ module.exports = {
                         },
                         required: true,
                         include: [{
-                           model: CourseModel,
-                           where:
-                           {
-                               categoryId: req.query.categoryId
-                           },
-                           required: true,
-                       }]
+                            model: CourseModel,
+                            where:
+                            {
+                                categoryId: req.query.categoryId
+                            },
+                            required: true,
+                        }]
                     }]
                 }]
             }],
@@ -86,5 +86,46 @@ module.exports = {
             .catch(error => {
                 return res.status(400).send(error);
             });
+    },
+
+    GetScoreChapterMax(req, res) {
+        QuizModel.findAndCountAll({
+            where: {
+                chapterId: req.query.chapterId,
+            },
+        })
+            .then(answers => {
+                res.status(200).send({
+                    count: answers.count
+                })
+            })
+            .catch(error => {
+                return res.status(400).send(error);
+            });
+    },
+
+    getScoreCourseMax(req, res) {
+        QuizModel.findAndCountAll({
+            /*include: [{
+                model: QuizOptionsModel,
+                required: true
+            }],*/
+            include: [{
+                model: ChapterModel,
+                where: {
+                    courseId: req.query.courseId
+                }
+            }]
+        })
+            .then(answers => {
+                res.status(200).send({
+                    count: answers.count
+                })
+            })
+            .catch(error => {
+                console.log(error);
+                return res.status(400).send(error);
+            });
     }
+
 }

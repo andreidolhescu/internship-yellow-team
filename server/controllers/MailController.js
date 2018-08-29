@@ -51,7 +51,7 @@ module.exports = {
             from: 'klgrakk1@gmail.com',
             to: to,
             subject: subject,
-            html: "Your link is " + "http://localhost:4200/resetpassword?token=" + html //De modificat in server. ceva ?
+            html: "Your link is " + "http://localhost:4200/resetpassword/" + html //De modificat in server. ceva ?
         };
 
         transporter.sendMail(mailOptions, function (err, info) {

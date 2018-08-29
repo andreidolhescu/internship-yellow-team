@@ -110,9 +110,9 @@ module.exports = {
     // get all entries from Course table for a category Id
     list(req, res) {
         return CourseModel
-        .findAll({
-            where: {
-                categoryId: req.query.categoryId
+            .findAll({
+                where: {
+                    categoryId: req.query.categoryId
                 }
             })
             .then(course => {
@@ -134,14 +134,14 @@ module.exports = {
     },
 
     //search by Title
-    search(req,res) {
+    search(req, res) {
         return CourseModel
-        .findAll({
-               where: {
-                 Title: {
-                    $iLike: '%' + req.body.Title + '%'
-                 }
-               }
+            .findAll({
+                where: {
+                    Title: {
+                        $iLike: '%' + req.body.Title + '%'
+                    }
+                }
             })
             .then(course => {
                 if (course == "") {
@@ -185,8 +185,8 @@ module.exports = {
             where: {
                 Title: req.body.Title,
                 id: {
-                  [Sequelize.Op.ne]: req.query.courseId
-                } 
+                    [Sequelize.Op.ne]: req.query.courseId
+                }
             }
         })
             .then((course => {
@@ -242,5 +242,28 @@ module.exports = {
                     .catch((error) => res.status(400).send(error));
             })
             .catch((error) => res.status(400).send(error));
+    },
+
+    listAll(req, res) {
+        return CourseModel
+            .findAll()
+            .then(course => {
+                if (course == "") {
+                    return res.status(404).send({
+                        success: false,
+                        message: 'There are no courses with this title!',
+                    });
+                }
+                if (!course) {
+                    return res.status(404).send({
+                        success: false,
+                        message: 'Course not found!',
+                    });
+                }
+                return res.status(200).send(course);
+            })
+            .catch(error => {
+                return res.status(400).send(error);
+            });
     }
 };
